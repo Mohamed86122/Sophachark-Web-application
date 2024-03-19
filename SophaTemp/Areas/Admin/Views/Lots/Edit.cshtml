@@ -1,0 +1,69 @@
+﻿@model SophaTemp.Models.Lot
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<div class="container mt-5">
+    <h1>Edit</h1>
+
+    <h4>Lot</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="LotId" />
+                <div class="form-group">
+                    <label asp-for="Montant" class="control-label"></label>
+                    <input asp-for="Montant" class="form-control" />
+                    <span asp-validation-for="Montant" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Quantite" class="control-label"></label>
+                    <input asp-for="Quantite" class="form-control" />
+                    <span asp-validation-for="Quantite" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PrixAchat" class="control-label"></label>
+                    <input asp-for="PrixAchat" class="form-control" />
+                    <span asp-validation-for="PrixAchat" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PrixVente" class="control-label"></label>
+                    <input asp-for="PrixVente" class="form-control" />
+                    <span asp-validation-for="PrixVente" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DateDeProduction" class="control-label"></label>
+                    <input asp-for="DateDeProduction" class="form-control" />
+                    <span asp-validation-for="DateDeProduction" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DateDExpedition" class="control-label"></label>
+                    <input asp-for="DateDExpedition" class="form-control" />
+                    <span asp-validation-for="DateDExpedition" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MedicamentId" class="control-label"></label>
+                    <select asp-for="MedicamentId" class="form-control" asp-items="ViewBag.MedicamentId"></select>
+                    <span asp-validation-for="MedicamentId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FournisseurId" class="control-label"></label>
+                    <select asp-for="FournisseurId" class="form-control" asp-items="ViewBag.FournisseurId"></select>
+                    <span asp-validation-for="FournisseurId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

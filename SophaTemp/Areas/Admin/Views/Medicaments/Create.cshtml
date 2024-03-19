@@ -1,0 +1,67 @@
+﻿@model SophaTemp.Viewmodel.MedicamentAddVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container mt-5">
+    <h1 class="text-center">Create</h1>
+
+    <h4 class="text-center">Medicament</h4>
+    <hr />
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="border p-4 rounded">
+                <form asp-action="Create" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Reference" class="control-label"></label>
+                        <input asp-for="Reference" class="form-control" />
+                        <span asp-validation-for="Reference" class="text-danger"></span>
+                        <div id="referenceFeedback" class="invalid-feedback" style="display: none;">
+                            Cette référence existe déjà.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Nom" class="control-label"></label>
+                        <input asp-for="Nom" class="form-control" />
+                        <span asp-validation-for="Nom" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="SelectedCategorieIds">Catégories</label>
+                        <select asp-for="SelectedCategorieIds" asp-items="ViewBag.CategorieIds" class="form-control"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Image" class="control-label"></label>
+                        <input asp-for="Image" class="form-control" />
+                        <span asp-validation-for="Image" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="QuantiteEnAlerte" class="control-label"></label>
+                        <input asp-for="QuantiteEnAlerte" class="form-control" />
+                        <span asp-validation-for="QuantiteEnAlerte" class="text-danger"></span>
+                    </div>
+                    <div class="form-group text-center">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-3">
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/Checkreference.js"></script>
+}

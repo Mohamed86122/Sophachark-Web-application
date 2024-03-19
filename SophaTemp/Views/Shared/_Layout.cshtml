@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SophaTemp</title>
+    
+    <link rel="stylesheet" href="~/assets/css/style.css" asp-append-version="true" />
+   @RenderSection("Style",false)
+
+</head>
+<body>
+
+
+    <div class="page-wapper home-page-one">
+        <header class="site-header" id="header-one">
+            <div class="top-bar">
+                <div class="container">
+                    <div class="row clearfix">
+                        <div class="col-lg-12">
+                            <div class="float-left">
+                                <p><i class="fa fa-map-marker"></i> 7088 Micaela Cliffs, Thielshire, OK 95062</p>
+                            </div>
+                            <div class="float-right ">
+                                <div class="inner-sec">
+                                    <ul class="social-media">
+                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-vimeo"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-share-alt"></i></a></li>
+                                    </ul>
+                                    <div class="dropdown language-drp">
+                                        <button type="button" class=" btn-primary dropdown-toggle" data-toggle="dropdown">
+                                            <img src="assets/image/language-1.jpg" alt="lan"> Eng
+                                        </button>
+                                        <div class="dropdown-menu">
+
+                                            <a class="dropdown-item" href="#"><img src="assets/image/language-2.jpg" alt="lan"> GER</a>
+                                            <a class="dropdown-item" href="#"><img src="assets/image/language-1.jpg" alt="lan">FR</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            @RenderSection("navbar", required: false)
+            </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            <div class="navbar navbar-expand-lg bsnav bsnav-sticky bsnav-sticky-slide">
+                <div class="container">
+
+
+                        <a class="navbar-brand" href="index.html">
+                            <img src="~/assets/image/SophaLogo.png" class="img-fluid logo" alt="img">
+                        </a>
+
+                    <button class="navbar-toggler toggler-spring">
+                        <span class="navbar-toggler-icon"></span>
+                        </button>
+                    <div class="collapse navbar-collapse">
+                        <ul class="navbar-nav navbar-mobile ml-auto mr-auto">
+                            <li class="nav-item dropdown activee">
+                                <a class="nav-link link_hd" href="@Url.Action("Index", "Home")">Home</a>
+
+
+
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link link_hd" href="#">  Pages  </a>
+                                <ul class="navbar-nav submenu">
+
+                                    <li class="nav-item">
+                                        <a class="nav-link link_hd" href="@Url.Action("AboutUs", "AboutUs")">About us</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link link_hd" href="@Url.Action("Contact", "Contact")">Contact us</a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                            
+                            <li class="nav-item dropdown">
+                                <a class="nav-link link_hd" href="#">  Shop  </a>
+                                <ul class="navbar-nav submenu">
+                                    <li class="nav-item">
+                                        <a class="nav-link link_hd" href="@Url.Action("ShopView", "Shop")">Shop</a>
+
+                                    </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link link_hd" href="@Url.Action("ProdDetails", "ProductDetails")">Product Details</a>
+
+                                        </li>
+
+                                </ul>
+                            </li>
+
+                        </ul>
+                        <ul class="navbar-nav navbar-mobile right-nav ml-auto ">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link" href="#"> <span class="flaticon-search head-icon"></span>   </a>
+                                <ul class="navbar-nav submenu">
+                                    <li>
+                                        <form action="#">
+                                            <div class="form-group">
+                                                <input name="search" type="text" placeholder="Enter a Keywords">
+                                                <button type="submit" class="theme-btn">GO</button>
+                                            </div>
+                                        </form>
+                                    <li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+            
+    </div>
+
+        @RenderBody()
+    <!--------footer-------->
+    <div class="footer home-one">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <div class="footer-widget first">
+                        <h2>ABOUT US</h2>
+                        <div class="footer-text">
+                            <p>As the only hospital in our growing county, things are buzzing as we expand our facilities and services. We are an intimate, 200 licensed bed hospital and the caregivers of neighbors we love.</p>
+
+                            <ul class="social-media">
+                                <li><a href="#" target="_blank"><i class="fa fa-facebook-f"></i></a>  </li>
+                                <li><a href="#" target="_blank"><i class="fa fa-twitter"></i></a>  </li>
+                                <li><a href="#" target="_blank"><i class="fa fa-vimeo"></i></a>  </li>
+                                <li><a href="#" target="_blank"><i class="fa fa-wifi"></i></a>  </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                    <div class="footer-widget two">
+                        <h2>DEPARTMENTS</h2>
+                        <div class="footer-text">
+                            <ul>
+                                <li><a href="#"> Psychiatry</a></li>
+                                <li><a href="#">Ophthalmology</a></li>
+                                <li><a href="#">Cardiology </a></li>
+                                <li><a href="#">Immunology </a></li>
+                                <li><a href="#">Hematology </a></li>
+                                <li><a href="#">Gastroenterology </a></li>
+                                <li><a href="#">Orthopedics </a></li>
+                                <li><a href="#">Pulmonary</a></li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                    <div class="footer-widget two">
+                        <h2>LINKS</h2>
+                        <div class="footer-text">
+                            <ul>
+                                <li><a href="#"> About Us</a></li>
+                                <li><a href="#">Appointment</a></li>
+                                <li><a href="#">Contact Us </a></li>
+                                <li><a href="#">Blog </a></li>
+                                <li><a href="#">Doctors</a></li>
+                                <li><a href="#">Gallery </a></li>
+                                <li><a href="#">Timetable </a></li>
+                                <li><a href="#">FAQs</a></li>
+                            </ul>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <div class="footer-widget third">
+                        <h2>NEWSLETTER</h2>
+                        <div class="footer-text">
+                            <p>Subscribe to our newsletter. We are not spammers.!</p>
+                            <form>
+                                <div class="form-group">
+                                    <input type="email" id="email" placeholder="Enter Your Email*"><br />
+                                    <button class="theme-btn" type="submit">SUBSCRIBE</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-last home-one">
+        <div class="container">
+            <div class="row clearfix">
+                <div class="col-lg-12">
+                    <div class="left">
+                        <p>© 2019 <span>Meditex.</span> All rights reserved.</p>
+                    </div>
+                    <div class="right">
+                        <ul>
+                            <li><a href="#">Privacy Policy    </a></li>
+                            <li><a href="#"> Terms & Conditions   </a></li>
+                            <li><a href="#">  Help Center</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        @RenderBody()
+
+        @RenderSection("footer", required: false)
+    <!--------footer-------->
+        
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

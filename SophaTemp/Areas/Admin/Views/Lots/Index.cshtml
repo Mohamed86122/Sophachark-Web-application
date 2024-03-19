@@ -1,0 +1,78 @@
+﻿@model IEnumerable<SophaTemp.Models.Lot>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="container mt-5">
+    <h1>Index</h1>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Montant)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Quantite)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PrixAchat)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PrixVente)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateDeProduction)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateDExpedition)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Medicament)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Fournisseur)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Montant)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantite)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PrixAchat)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PrixVente)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateDeProduction)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateDExpedition)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Medicament.Nom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fournisseur.NomComplet)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.LotId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.LotId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.LotId">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+</div>

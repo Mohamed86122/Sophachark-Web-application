@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SophaTemp</title>
+
+    <link rel="stylesheet" href="~/assets/css/style.css" asp-append-version="true" />
+    @RenderSection("Style",false)
+
+</head>
+<body>
+
+
+    <div class="page-wapper home-page-one">
+        <header class="site-header" id="header-one">
+            <div class="top-bar">
+                <div class="container">
+                    <div class="row clearfix">
+                        <div class="col-lg-12">
+                            <div class="float-left">
+                                <p><i class="fa fa-map-marker"></i> 7088 Micaela Cliffs, Thielshire, OK 95062</p>
+                            </div>
+                            <div class="float-right ">
+                                <div class="inner-sec">
+                                    <ul class="social-media">
+                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-vimeo"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-share-alt"></i></a></li>
+                                    </ul>
+                                    <div class="dropdown language-drp">
+                                        <button type="button" class=" btn-primary dropdown-toggle" data-toggle="dropdown">
+                                            <img src="assets/image/language-1.jpg" alt="lan"> Eng
+                                        </button>
+                                        <div class="dropdown-menu">
+
+                                            <a class="dropdown-item" href="#"><img src="assets/image/language-2.jpg" alt="lan"> GER</a>
+                                            <a class="dropdown-item" href="#"><img src="assets/image/language-1.jpg" alt="lan">FR</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            @RenderSection("navbar", required: false)
+        </header>
+
+        <div class="container">
+            <main role="main" class="pb-3">
+                <div class="navbar navbar-expand-lg bsnav bsnav-sticky bsnav-sticky-slide">
+                    <div class="container">
+
+
+                        <a class="navbar-brand" href="index.html">
+                            <img src="~/assets/image/SophaLogo.png" class="img-fluid logo" alt="img">
+                        </a>
+
+                        <button class="navbar-toggler toggler-spring">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse">
+                            <ul class="navbar-nav navbar-mobile ml-auto mr-auto">
+                                <li class="nav-item dropdown activee">
+                                    <a class="nav-link link_hd" href="@Url.Action("Index", "Home")">Home</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link link_hd" href="#">  Pages  </a>
+                                    <ul class="navbar-nav submenu">
+
+                                        <li class="nav-item">
+                                            <a class="nav-link link_hd" href="@Url.Action("Index", "Medicaments")">Médicament</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link link_hd" href="@Url.Action("Index", "Lots")">Lots</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link link_hd" href="@Url.Action("Index", "CategoryMedicaments")">Catégorie Médicament</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link link_hd" href="@Url.Action("Index", "Personnes")">Personne</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link link_hd" href="@Url.Action("Index", "Passeports")">Gestion des passeports</a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                            </ul>
+                            <ul class="navbar-nav navbar-mobile right-nav ml-auto ">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link" href="#"> <span class="flaticon-search head-icon"></span>   </a>
+                                    <ul class="navbar-nav submenu">
+                                        <li>
+                                            <form action="#">
+                                                <div class="form-group">
+                                                    <input name="search" type="text" placeholder="Enter a Keywords">
+                                                    <button type="submit" class="theme-btn">GO</button>
+                                                </div>
+                                            </form>
+                                        <li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+        </div>
+
+        @RenderBody()
+      
+        @RenderBody()
+
+        @RenderSection("footer", required: false)
+
+
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
