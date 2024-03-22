@@ -1,67 +1,103 @@
-﻿@model SophaTemp.Models.Lot
+﻿    @model SophaTemp.Viewmodel.LotAddVm
 
-@{
-    ViewData["Title"] = "Create";
-}
-<div class="container mt-5">
-<h1>Create</h1>
+    @{
+        ViewData["Title"] = "Create";
+    }
 
-<h4>Lot</h4>
-<hr />
+    <div class="container mt-5">
+        <h1>Create</h1>
+        <h4>Lot</h4>
+        <hr />
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                
+                    <div class="form-group">
+                        <label asp-for="Quantite" class="control-label"></label>
+                        <input asp-for="Quantite" class="form-control" />
+                        <span asp-validation-for="Quantite" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PrixAchat" class="control-label"></label>
+                        <input asp-for="PrixAchat" class="form-control" id="prixAchat" />
+                        <span asp-validation-for="PrixAchat" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PrixVente" class="control-label"></label>
+                        <input asp-for="PrixVente" class="form-control" id="prixVente" />
+                        <span asp-validation-for="PrixVente" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Gain (Montant)</label>
+                        <span id="affichageMontant" class="form-control"></span>
+                    </div>
 
-    <div class="row justify-content-center">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Montant" class="control-label"></label>
-                <input asp-for="Montant" class="form-control" />
-                <span asp-validation-for="Montant" class="text-danger"></span>
+                    <input type="hidden" asp-for="Montant" id="montant" />
+                    <div class="form-group">
+                        <label asp-for="DateDeProduction" class="control-label"></label>
+                        <input asp-for="DateDeProduction" class="form-control" type="date" />
+                        <span asp-validation-for="DateDeProduction" class="text-danger" ></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DateDExpedition" class="control-label"></label>
+                        <input asp-for="DateDExpedition" class="form-control" type="date" />
+                        <span asp-validation-for="DateDExpedition" class="text-danger"></span>
+                    </div>
+                
+                    <div class="form-group">
+                        <label asp-for="MedicamentId" class="control-label"></label>
+                        <input id="medicamentAutoComplete" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FournisseurId" class="control-label"></label>
+                        <select asp-for="FournisseurId" class="form-control" asp-items="ViewBag.FournisseurId"></select>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Quantite" class="control-label"></label>
-                <input asp-for="Quantite" class="form-control" />
-                <span asp-validation-for="Quantite" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PrixAchat" class="control-label"></label>
-                <input asp-for="PrixAchat" class="form-control" />
-                <span asp-validation-for="PrixAchat" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PrixVente" class="control-label"></label>
-                <input asp-for="PrixVente" class="form-control" />
-                <span asp-validation-for="PrixVente" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateDeProduction" class="control-label"></label>
-                <input asp-for="DateDeProduction" class="form-control" />
-                <span asp-validation-for="DateDeProduction" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateDExpedition" class="control-label"></label>
-                <input asp-for="DateDExpedition" class="form-control" />
-                <span asp-validation-for="DateDExpedition" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MedicamentId" class="control-label"></label>
-                <select asp-for="MedicamentId" class ="form-control" asp-items="ViewBag.MedicamentId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="FournisseurId" class="control-label"></label>
-                <select asp-for="FournisseurId" class ="form-control" asp-items="ViewBag.FournisseurId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+        <div class="text-center mt-3">
+            <a asp-action="Index">Back to List</a>
+        </div>
     </div>
-</div>
 
-    <div class="text-center mt-3">
-        <a asp-action="Index" >Back to List</a>
-</div>
-</div>
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        $(function () {
+            $("#medicamentAutoComplete").autocomplete({
+                source: '@Url.Action("GetMedicaments", "Lots")',
+                select: function (event, ui) {
+                   
+                    $('<input>').attr({
+                        type: 'hidden',
+                        id: 'MedicamentId',
+                        name: 'MedicamentId',
+                        value: ui.item.value
+                    }).appendTo('form');
+                    event.preventDefault();
+                    $(this).val(ui.item.label);
+                }
+            });
+
+            function calculerMontant() {
+                var prixAchat = parseFloat($('#prixAchat').val()) || 0;
+                var prixVente = parseFloat($('#prixVente').val()) || 0;
+                var montant = prixVente - prixAchat;
+                $('#montant').val(montant.toFixed(2)); 
+                $('#affichageMontant').text(montant.toFixed(2) + ' MAD'); 
+            }
+
+            $('#prixAchat, #prixVente').change(calculerMontant);
+            calculerMontant(); 
+        });
+    </script>
+    }
+

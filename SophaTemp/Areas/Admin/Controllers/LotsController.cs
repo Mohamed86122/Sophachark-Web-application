@@ -48,12 +48,22 @@ namespace SophaTemp.Areas.Admin.Controllers
 
             return View(lot);
         }
+        public async Task<IActionResult> GetMedicaments(string term)
+        {
+            var medicaments = await _context.Medicaments
+                .Where(m => m.Nom.Contains(term))
+                .Select(m => new { label = m.Nom, value = m.MedicamentId })
+                .ToListAsync();
+
+            return Json(medicaments);
+        }
 
         // GET: Admin/Lots/Create
         public IActionResult Create()
         {
-            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs, "FournisseurId", "NomComplet");
+            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet",);
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom");
+           
             return View();
         }
 
