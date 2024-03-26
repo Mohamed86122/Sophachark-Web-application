@@ -61,15 +61,13 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Lots/Create
         public IActionResult Create()
         {
-            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet",);
+            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet");
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom");
            
             return View();
         }
 
-        // POST: Admin/Lots/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(LotAddVm lot)
@@ -77,13 +75,14 @@ namespace SophaTemp.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 LotsMapper lotsMapper = new LotsMapper();
-                Lot l = lotsMapper.LotaddVmLot(lot);
-                _context.Add(l);
+                Lot newLot = lotsMapper.LotaddVmLot(lot);
+                _context.Add(newLot);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs, "FournisseurId", "FournisseurId", lot.FournisseurId);
-            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "MedicamentId", lot.MedicamentId);
+
+            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet", lot.FournisseurId);
+            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", lot.MedicamentId);
             return View(lot);
         }
 

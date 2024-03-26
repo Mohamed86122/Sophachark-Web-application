@@ -1,0 +1,107 @@
+﻿@model SophaTemp.Models.Commande
+
+@{
+    ViewData["Title"] = "Create Commande";
+}
+
+<style>
+   
+    /* .container {
+        max-width: 960px;
+        margin: auto;
+        padding: 2rem;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    } */
+
+    .title {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .form-control {
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .lot-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+    }
+
+    .lot {
+        border: 1px solid #000;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .btn {
+        padding: 0.5rem 2rem;
+        margin-right: 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .btn-create {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-back {
+        background-color: #007bff;
+        color: white;
+    }
+</style>
+
+<div class="container">
+    <div class="title">
+        <h1>CREATE Commande</h1>
+    </div>
+
+    <form asp-action="Create">
+        <div class="form-group">
+            <label asp-for="Numero" class="control-label">Pharmacie</label>
+            <input asp-for="Numero" class="form-control" />
+            <span asp-validation-for="Numero" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DateCommande" class="control-label">Médicament</label>
+            <input asp-for="DateCommande" class="form-control" />
+            <span id="stock" class="form-control">QTE EN STOCK : 9</span>
+            <span asp-validation-for="DateCommande" class="text-danger"></span>
+        </div>
+
+        <div class="lot-container">
+            <!-- You'll need to adjust the model properties here to fit your data structure -->
+            @for (int i = 1; i <= 3; i++)
+            {
+                <div class="lot">
+                    <p>DATE EXPIRATION</p>
+                    <p>LOT @i</p>
+                    <p>QTE : </p>
+                    <input type="number" class="form-control" placeholder="Enter quantity" />
+                </div>
+            }
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-create">Create</button>
+            <button type="submit" formaction="@Url.Action("Index")" class="btn btn-back">Create & Back to List</button>
+            <button type="submit" formaction="@Url.Action("CreateAndStay")" class="btn btn-back">Create & Stay</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+    </script>
+}
