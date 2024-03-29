@@ -5,7 +5,8 @@ namespace SophaTemp.Viewmodel
 {
     public class LotAddVm
     {
-        public double Montant { get; set; }
+        [Required]
+        public float Montant { get; set; }
         [Required]
         public int Quantite { get; set; }
         [Required]

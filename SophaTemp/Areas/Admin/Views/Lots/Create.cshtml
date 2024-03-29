@@ -30,7 +30,7 @@
 <div class="container mt-5">
     <h1>Create Lot</h1>
     <hr />
-    <form asp-action="Create">
+    <form asp-action="Create" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -52,12 +52,11 @@
                     <span asp-validation-for="PrixVente" class="text-danger"></span>
                 </div>
 
-                <div class="form-group">
+                @* <div class="form-group">
                     <label>Gain (Montant)</label>
                     <span id="affichageMontant" class="form-control"></span>
                 </div>
-
-                <input type="hidden" asp-for="Montant" id="montant" />
+                <input type="text" asp-for="Montant" id="montant" /> *@
             </div>
 
             <div class="col-md-6">
@@ -90,8 +89,7 @@
 
 
         <div class="text-center">
-@*             <input type="submit" value="Create" class="btn btn-primary" />
- *@            <button asp-action="Index" class="btn btn-secondary">Create & Back to List</button>
+         <input type="submit" value="Create" class="btn btn-primary" />
         </div>
     </form>
 </div>
@@ -119,16 +117,7 @@
                 }
             });
 
-            function calculerMontant() {
-                var prixAchat = parseFloat($('#prixAchat').val()) || 0;
-                var prixVente = parseFloat($('#prixVente').val()) || 0;
-                var montant = prixVente - prixAchat;
-                $('#montant').val(montant.toFixed(2)); 
-                $('#affichageMontant').text(montant.toFixed(2) + ' MAD'); 
-            }
-
-            $('#prixAchat, #prixVente').change(calculerMontant);
-            calculerMontant();
+         
             function calculerJoursRestants() {
                 var dateProd = $('#DateDeProduction').val();
                 var dateExp = $('#DateDExpedition').val();

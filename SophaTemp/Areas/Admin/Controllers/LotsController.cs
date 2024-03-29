@@ -59,7 +59,7 @@ namespace SophaTemp.Areas.Admin.Controllers
         }
 
         // GET: Admin/Lots/Create
-        public IActionResult Create()
+        public IActionResult Create() 
         {
             ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet");
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom");
@@ -78,6 +78,7 @@ namespace SophaTemp.Areas.Admin.Controllers
                 Lot newLot = lotsMapper.LotaddVmLot(lot);
                 _context.Add(newLot);
                 await _context.SaveChangesAsync();
+                Console.WriteLine($"Montant soumis: {lot.Montant}");
                 return RedirectToAction(nameof(Index));
             }
 
@@ -99,7 +100,7 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs, "FournisseurId", "NomComplet", lot.FournisseurId);
+            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet", lot.FournisseurId);
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", lot.MedicamentId);
             return View(lot);
         }
@@ -136,8 +137,8 @@ namespace SophaTemp.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs, "FournisseurId", "FournisseurId", lot.FournisseurId);
-            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "MedicamentId", lot.MedicamentId);
+            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet", lot.FournisseurId);
+            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", lot.MedicamentId);
             return View(lot);
         }
 

@@ -3,18 +3,22 @@
 @{
     ViewData["Title"] = "Index";
 }
+@section Style
+{
+    <link rel="stylesheet" type="text/css" href="~/css/Datatable/style.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+
+}
+
 <div class="container mt-5">
     <h1>Index</h1>
 
     <p>
         <a asp-action="Create">Create New</a>
     </p>
-    <table class="table">
+    <table id="monTableau" class="display" style="width:100%">
         <thead>
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Montant)
-                </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Quantite)
                 </th>
@@ -25,10 +29,16 @@
                     @Html.DisplayNameFor(model => model.PrixVente)
                 </th>
                 <th>
+                    Gain par médicament
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.DateDeProduction)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.DateDExpedition)
+                </th>
+                <th>
+                    Jours restante : 
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Medicament)
@@ -36,7 +46,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Fournisseur)
                 </th>
-                <th></th>
+                <th> Actions </th>
             </tr>
         </thead>
         <tbody>
@@ -52,10 +62,15 @@
                     @Html.DisplayFor(modelItem => item.PrixVente)
                 </td>
                 <td>
+                     <span id="affichageMontant" class="form-control"></span>
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.DateDeProduction)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DateDExpedition)
+                </td>
+                <td>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Medicament.Nom)
@@ -73,3 +88,44 @@
         </tbody>
     </table>
 </div>
+@section Scripts 
+{
+    <script src="~/js/Datatable/script.js"/>
+    <script type="text/javascript"  src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+    <script>
+        $(document).ready(function () {
+            $('#monTableau').DataTable(); 
+
+            $('tr').each(function () {
+                var prixAchat = parseFloat($(this).find('td:eq(1)').text());
+                var prixVente = parseFloat($(this).find('td:eq(2)').text());
+                var dateDeProduction = new Date($(this).find('td:eq(4)').text());
+                var dateDExpedition = new Date($(this).find('td:eq(5)').text());
+
+                var gain = prixVente - prixAchat;
+                $(this).find('td:eq(3)').text(gain + ' MAD'); 
+
+                var aujourdHui = new Date(); 
+                var diffTemps = dateDExpedition.getTime() - aujourdHui.getTime(); 
+                var joursRestants = Math.ceil(diffTemps / (1000 * 3600 * 24));
+
+                if (joursRestants > 0) {
+                    $(this).find('td:eq(6)').text(joursRestants + ' jours restants');
+                } else {
+                    $(this).find('td:eq(6)').text('Expiré');
+                }
+            });
+        });
+    </script>
+
+}
