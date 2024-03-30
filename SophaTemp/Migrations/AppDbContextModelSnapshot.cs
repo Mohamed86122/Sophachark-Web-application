@@ -34,7 +34,7 @@ namespace SophaTemp.Migrations
 
                     b.HasIndex("MedicamentsMedicamentId");
 
-                    b.ToTable("CategoryMedicamentMedicament");
+                    b.ToTable("CategoryMedicamentMedicament", (string)null);
                 });
 
             modelBuilder.Entity("CommandeLivraison", b =>
@@ -49,7 +49,7 @@ namespace SophaTemp.Migrations
 
                     b.HasIndex("LivraisonsLivraisonId");
 
-                    b.ToTable("CommandeLivraison");
+                    b.ToTable("CommandeLivraison", (string)null);
                 });
 
             modelBuilder.Entity("MedicamentWhishlist", b =>
@@ -64,7 +64,7 @@ namespace SophaTemp.Migrations
 
                     b.HasIndex("WhishlistsWhishlistId");
 
-                    b.ToTable("MedicamentWhishlist");
+                    b.ToTable("MedicamentWhishlist", (string)null);
                 });
 
             modelBuilder.Entity("SophaTemp.Models.CategoryMedicament", b =>
@@ -85,7 +85,7 @@ namespace SophaTemp.Migrations
 
                     b.HasKey("CategoryMedicamentId");
 
-                    b.ToTable("CategoryMedicament");
+                    b.ToTable("CategoryMedicament", (string)null);
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Commande", b =>
@@ -122,7 +122,7 @@ namespace SophaTemp.Migrations
 
                     b.HasIndex("LotCommandeId");
 
-                    b.ToTable("Commandes");
+                    b.ToTable("Commandes", (string)null);
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Commentaire", b =>
@@ -161,7 +161,7 @@ namespace SophaTemp.Migrations
 
                     b.HasIndex("PersonneId");
 
-                    b.ToTable("Commentaire");
+                    b.ToTable("Commentaire", (string)null);
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Fournisseur", b =>
@@ -178,7 +178,7 @@ namespace SophaTemp.Migrations
 
                     b.HasKey("FournisseurId");
 
-                    b.ToTable("Fournisseurs");
+                    b.ToTable("Fournisseurs", (string)null);
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Livraison", b =>
@@ -194,7 +194,7 @@ namespace SophaTemp.Migrations
 
                     b.HasKey("LivraisonId");
 
-                    b.ToTable("Livraisons");
+                    b.ToTable("Livraisons", (string)null);
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Lot", b =>
@@ -240,7 +240,7 @@ namespace SophaTemp.Migrations
 
                     b.HasIndex("MedicamentId");
 
-                    b.ToTable("Lots");
+                    b.ToTable("Lots", (string)null);
                 });
 
             modelBuilder.Entity("SophaTemp.Models.LotCommande", b =>
@@ -259,7 +259,7 @@ namespace SophaTemp.Migrations
 
                     b.HasKey("LotCommandeId");
 
-                    b.ToTable("LotCommandes");
+                    b.ToTable("LotCommandes", (string)null);
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Medicament", b =>
@@ -291,7 +291,7 @@ namespace SophaTemp.Migrations
 
                     b.HasKey("MedicamentId");
 
-                    b.ToTable("Medicaments");
+                    b.ToTable("Medicaments", (string)null);
                 });
 
             modelBuilder.Entity("SophaTemp.Models.MedicamentCategoryMedicament", b =>
@@ -306,7 +306,7 @@ namespace SophaTemp.Migrations
 
                     b.HasIndex("CategoryMedicamentId");
 
-                    b.ToTable("categoryMedicaments");
+                    b.ToTable("categoryMedicaments", (string)null);
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Passeport", b =>
@@ -331,7 +331,7 @@ namespace SophaTemp.Migrations
 
                     b.HasKey("PasseportId");
 
-                    b.ToTable("Passeports");
+                    b.ToTable("Passeports", (string)null);
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Personne", b =>
@@ -370,7 +370,7 @@ namespace SophaTemp.Migrations
                     b.HasIndex("PasseportId")
                         .IsUnique();
 
-                    b.ToTable("Personnes");
+                    b.ToTable("Personnes", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Personne");
                 });
@@ -391,7 +391,7 @@ namespace SophaTemp.Migrations
 
                     b.HasKey("WhishlistId");
 
-                    b.ToTable("Whishlists");
+                    b.ToTable("Whishlists", (string)null);
                 });
 
             modelBuilder.Entity("SophaTemp.Models.AdminCommande", b =>

@@ -38,18 +38,20 @@ namespace SophaTemp.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MedicamentCategoryMedicament>()
-     .HasKey(mc => new { mc.MedicamentId, mc.CategoryMedicamentId });
+            base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<MedicamentCategoryMedicament>()
-                .HasOne(mc => mc.Medicament)
+                .HasKey(mcm => new { mcm.MedicamentId, mcm.CategoryMedicamentId });
+
+            modelBuilder.Entity<MedicamentCategoryMedicament>()
+                .HasOne(mcm => mcm.Medicament)
                 .WithMany(m => m.MedicamentCategoryMedicaments)
-                .HasForeignKey(mc => mc.MedicamentId);
+                .HasForeignKey(mcm => mcm.MedicamentId);
 
             modelBuilder.Entity<MedicamentCategoryMedicament>()
-                .HasOne(mc => mc.CategoryMedicament)
-                .WithMany(c => c.MedicamentCategoryMedicaments)
-                .HasForeignKey(mc => mc.CategoryMedicamentId);
+                .HasOne(mcm => mcm.CategoryMedicament)
+                .WithMany(cm => cm.MedicamentCategoryMedicaments)
+                .HasForeignKey(mcm => mcm.CategoryMedicamentId);
 
 
             modelBuilder.Entity<Personne>().HasKey(p => p.PersonneId);
