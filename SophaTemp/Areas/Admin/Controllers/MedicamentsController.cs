@@ -69,19 +69,40 @@ namespace SophaTemp.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MedicamentAddVM medicament)
-        {
+            {
             if (ModelState.IsValid)
             {
-                
-                Medicament m = MedicamentMapper.MedicamentAddVmTpMedicament(medicament,_context);
-                m.Image = UploadFileService.Upload(medicament.Image, "Medicaments", true);
-                _context.Add(m);
+                Medicament newMedicament = new Medicament
+                {
+                    Nom = medicament.Nom,
+                    Description = medicament.Description,
+                    QuantiteEnAlerte = medicament.QuantiteEnAlerte,
+                    Reference = medicament.Reference,
+                };
+
+
+                foreach (int categoryId in medicament.SelectedCategorieIds)
+                {
+                    var categoryAssociation = new MedicamentCategoryMedicament
+                    {
+                        Medicament = newMedicament, // Vous pouvez ajouter directement l'instance de médicament ici
+                        CategoryMedicamentId = categoryId
+                    };
+
+         
+                    _context.categoryMedicaments.Add(categoryAssociation);
+                }
+
+                _context.Medicaments.Add(newMedicament);
+
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategorieIds"] = new SelectList(_context.CategoryMedicament, "CategorieId", "Libelle");
+
+            ViewData["CategorieIds"] = new SelectList(_context.CategoryMedicament, "CategorieId", "Libelle", medicament.SelectedCategorieIds);
             return View(medicament);
-               
+
         }
 
         // GET: Admin/Medicaments/Edit/5

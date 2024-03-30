@@ -33,8 +33,17 @@
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label for="SelectedCategorieIds">Catégories</label>
-                        <select asp-for="SelectedCategorieIds" asp-items="ViewBag.CategorieIds" class="form-control"></select>
+                        @if (ViewBag.CategorieIds != null)
+                        {
+                            <label for="SelectedCategorieIds">Catégories</label>
+                        <select asp-for="SelectedCategorieIds" asp-items="ViewBag.CategorieIds"
+                            class="form-control" multiple></select>
+                        }else
+                        {
+                            <p>La liste des catégories n'est pas disponible.</p>
+
+                        }
+
                     </div>
                     <div class="form-group">
                         <label asp-for="Image" class="control-label"></label>

@@ -30,7 +30,7 @@ namespace SophaTemp.Data
 
         public DbSet<CategoryMedicament> Categories { get; set; } 
 
-
+        public DbSet<MedicamentCategoryMedicament> categoryMedicaments { get; set; }
 
 
 
@@ -38,19 +38,19 @@ namespace SophaTemp.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<MedicamentCategoryMedicament>()
-    .HasKey(mcm => new { mcm.MedicamentId, mcm.CategoryMedicamentId });
+     .HasKey(mc => new { mc.MedicamentId, mc.CategoryMedicamentId });
 
             modelBuilder.Entity<MedicamentCategoryMedicament>()
-                .HasOne(mcm => mcm.Medicament)
+                .HasOne(mc => mc.Medicament)
                 .WithMany(m => m.MedicamentCategoryMedicaments)
-                .HasForeignKey(mcm => mcm.MedicamentId);
+                .HasForeignKey(mc => mc.MedicamentId);
 
             modelBuilder.Entity<MedicamentCategoryMedicament>()
-                .HasOne(mcm => mcm.CategoryMedicament)
-                .WithMany(cm => cm.MedicamentCategoryMedicaments)
-                .HasForeignKey(mcm => mcm.CategoryMedicamentId);
+                .HasOne(mc => mc.CategoryMedicament)
+                .WithMany(c => c.MedicamentCategoryMedicaments)
+                .HasForeignKey(mc => mc.CategoryMedicamentId);
+
 
             modelBuilder.Entity<Personne>().HasKey(p => p.PersonneId);
 

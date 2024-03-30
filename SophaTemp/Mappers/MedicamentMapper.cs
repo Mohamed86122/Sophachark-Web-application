@@ -19,13 +19,12 @@ namespace SophaTemp.Mappers
             };
             foreach (var categoryId in model.SelectedCategorieIds)
             {
-                var categorie = _context.Categories.Find(categoryId);
-                if (categorie != null)
+                medicament.MedicamentCategoryMedicaments.Add(new MedicamentCategoryMedicament
                 {
-                    medicament.Categories.Add(categorie);
-                }
+                    CategoryMedicamentId = categoryId,
+                    Medicament = medicament
+                });
             }
-
             return medicament;
         }
     }
