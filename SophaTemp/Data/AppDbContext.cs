@@ -56,6 +56,11 @@ namespace SophaTemp.Data
 
             modelBuilder.Entity<Personne>().HasKey(p => p.PersonneId);
 
+            modelBuilder.Entity<LotCommande>()
+        .HasOne(lc => lc.Lot)
+        .WithMany()
+        .HasForeignKey(lc => lc.LotId);
+
         }
 
 

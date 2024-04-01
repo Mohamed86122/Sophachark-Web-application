@@ -11,87 +11,90 @@ using SophaTemp.Models;
 namespace SophaTemp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class CategoryMedicamentsController : Controller
+    public class LotCommandesController : Controller
     {
         private readonly AppDbContext _context;
 
-        public CategoryMedicamentsController(AppDbContext context)
+        public LotCommandesController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: Admin/CategoryMedicaments
+        // GET: Admin/LotCommandes
         public async Task<IActionResult> Index()
         {
-              return _context.Categories != null ? 
-                          View(await _context.Categories.ToListAsync()) :
-                          Problem("Entity set 'AppDbContext.Categories'  is null.");
+            var appDbContext = _context.LotCommandes.Include(l => l.Lot);
+            return View(await appDbContext.ToListAsync());
         }
 
-        // GET: Admin/CategoryMedicaments/Details/5
+        // GET: Admin/LotCommandes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (id == null || _context.LotCommandes == null)
             {
                 return NotFound();
             }
 
-            var categoryMedicament = await _context.Categories
-                .FirstOrDefaultAsync(m => m.CategoryMedicamentId == id);
-            if (categoryMedicament == null)
+            var lotCommande = await _context.LotCommandes
+                .Include(l => l.Lot)
+                .FirstOrDefaultAsync(m => m.LotCommandeId == id);
+            if (lotCommande == null)
             {
                 return NotFound();
             }
 
-            return View(categoryMedicament);
+            return View(lotCommande);
         }
 
-        // GET: Admin/CategoryMedicaments/Create
+        // GET: Admin/LotCommandes/Create
         public IActionResult Create()
         {
+            ViewData["LotId"] = new SelectList(_context.Lots, "LotId", "LotId");
             return View();
         }
 
-        // POST: Admin/CategoryMedicaments/Create
+        // POST: Admin/LotCommandes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryMedicamentId,Reference,Libelle")] CategoryMedicament categoryMedicament)
+        public async Task<IActionResult> Create([Bind("LotCommandeId,Frais,Quantite,LotId")] LotCommande lotCommande)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(categoryMedicament);
+                _context.Add(lotCommande);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(categoryMedicament);
+            ViewData["LotId"] = new SelectList(_context.Lots, "LotId", "LotId", lotCommande.LotId);
+            return View(lotCommande);
         }
 
-        // GET: Admin/CategoryMedicaments/Edit/5
+        // GET: Admin/LotCommandes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (id == null || _context.LotCommandes == null)
             {
                 return NotFound();
             }
 
-            var categoryMedicament = await _context.Categories.FindAsync(id);
-            if (categoryMedicament == null)
+            var lotCommande = await _context.LotCommandes.FindAsync(id);
+            if (lotCommande == null)
             {
                 return NotFound();
             }
-            return View(categoryMedicament);
+            ViewData["LotId"] = new SelectList(_context.Lots, "LotId", "LotId", lotCommande.LotId);
+            return View(lotCommande);
         }
 
-        // POST: Admin/CategoryMedicaments/Edit/5
+        // POST: Admin/LotCommandes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CategoryMedicamentId,Reference,Libelle")] CategoryMedicament categoryMedicament)
+        public async Task<IActionResult> Edit(int id, [Bind("LotCommandeId,Frais,Quantite,LotId")] LotCommande lotCommande)
         {
-            if (id != categoryMedicament.CategoryMedicamentId)
+            if (id != lotCommande.LotCommandeId)
             {
                 return NotFound();
             }
@@ -100,12 +103,12 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(categoryMedicament);
+                    _context.Update(lotCommande);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryMedicamentExists(categoryMedicament.CategoryMedicamentId))
+                    if (!LotCommandeExists(lotCommande.LotCommandeId))
                     {
                         return NotFound();
                     }
@@ -116,49 +119,51 @@ namespace SophaTemp.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(categoryMedicament);
+            ViewData["LotId"] = new SelectList(_context.Lots, "LotId", "LotId", lotCommande.LotId);
+            return View(lotCommande);
         }
 
-        // GET: Admin/CategoryMedicaments/Delete/5
+        // GET: Admin/LotCommandes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (id == null || _context.LotCommandes == null)
             {
                 return NotFound();
             }
 
-            var categoryMedicament = await _context.Categories
-                .FirstOrDefaultAsync(m => m.CategoryMedicamentId == id);
-            if (categoryMedicament == null)
+            var lotCommande = await _context.LotCommandes
+                .Include(l => l.Lot)
+                .FirstOrDefaultAsync(m => m.LotCommandeId == id);
+            if (lotCommande == null)
             {
                 return NotFound();
             }
 
-            return View(categoryMedicament);
+            return View(lotCommande);
         }
 
-        // POST: Admin/CategoryMedicaments/Delete/5
+        // POST: Admin/LotCommandes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Categories == null)
+            if (_context.LotCommandes == null)
             {
-                return Problem("Entity set 'AppDbContext.Categories'  is null.");
+                return Problem("Entity set 'AppDbContext.LotCommandes'  is null.");
             }
-            var categoryMedicament = await _context.Categories.FindAsync(id);
-            if (categoryMedicament != null)
+            var lotCommande = await _context.LotCommandes.FindAsync(id);
+            if (lotCommande != null)
             {
-                _context.Categories.Remove(categoryMedicament);
+                _context.LotCommandes.Remove(lotCommande);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryMedicamentExists(int id)
+        private bool LotCommandeExists(int id)
         {
-          return (_context.Categories?.Any(e => e.CategoryMedicamentId == id)).GetValueOrDefault();
+          return (_context.LotCommandes?.Any(e => e.LotCommandeId == id)).GetValueOrDefault();
         }
     }
 }

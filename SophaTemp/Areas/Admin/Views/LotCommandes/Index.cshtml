@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SophaTemp.Models.Commande>
+﻿@model IEnumerable<SophaTemp.Models.LotCommande>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,8 +9,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
 
 }
-<div class="container mt-5">
-    <h1>La liste des Commandes</h1>
+<h1>La liste des Lots commandes</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -19,22 +18,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Numero)
+                @Html.DisplayNameFor(model => model.Frais)
             </th>
             <th>
-                Medicament
+                @Html.DisplayNameFor(model => model.Quantite)
             </th>
             <th>
-                Lot
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateCommande)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdLotCommande)
+                @Html.DisplayNameFor(model => model.Lot)
             </th>
             <th></th>
         </tr>
@@ -43,35 +33,25 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Numero)
+                @Html.DisplayFor(modelItem => item.Frais)
             </td>
             <td>
-                        
+                @Html.DisplayFor(modelItem => item.Quantite)
             </td>
             <td>
-                        
+                @Html.DisplayFor(modelItem => item.Lot.LotId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateCommande)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdLotCommande)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CommandeId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CommandeId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CommandeId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.LotCommandeId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.LotCommandeId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.LotCommandeId">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
-</div>
-@section Scripts 
-{
+@section Scripts
+    {
     <script src="~/js/Datatable/script.js" />
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
 

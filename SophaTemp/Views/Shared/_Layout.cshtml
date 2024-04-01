@@ -4,13 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - SophaTemp</title>
-    
+    <link rel="icon" type="image/png" href="~/assets/image/SophaLogo.png">
+
     <link rel="stylesheet" href="~/assets/css/style.css" asp-append-version="true" />
    @RenderSection("Style",false)
 
 </head>
 <body>
-
+@* 
 
     <div class="page-wapper home-page-one">
         <header class="site-header" id="header-one">
@@ -47,9 +48,9 @@
                 </div>
                 
             </div>
-
+ *@
             @RenderSection("navbar", required: false)
-            </header>
+            @* </header> *@
 
     <div class="container">
         <main role="main" class="pb-3">
