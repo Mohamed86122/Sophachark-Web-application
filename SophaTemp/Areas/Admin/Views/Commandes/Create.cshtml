@@ -67,21 +67,24 @@
     </div>
 
     <form asp-action="Create">
+        <!-- Sélection du client -->
         <div class="form-group">
-            <label asp-for="Numero" class="control-label">Pharmacie</label>
-            <input asp-for="Numero" class="form-control" />
-            <span asp-validation-for="Numero" class="text-danger"></span>
+            <label asp-for="Clie" class="control-label">Pharmacie</label>
+            <select asp-for="ClientId" asp-items="ViewBag.ClientId" class="form-control"></select>
+            <span asp-validation-for="ClientId" class="text-danger"></span>
         </div>
+
+        <!-- Sélection du médicament -->
         <div class="form-group">
-            <label asp-for="Numero" class="control-label">Medicament</label>
-            <input asp-for="Numero" class="form-control" />
-            <span asp-validation-for="Numero" class="text-danger"></span>
+            <label asp-for="MedicamentId" class="control-label">Medicament</label>
+            <select asp-for="MedicamentId" asp-items="ViewBag.MedicamentId" class="form-control" onchange="loadLots(this.value)"></select>
+            <span asp-validation-for="MedicamentId" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="DateCommande" class="control-label">Date Commande</label>
             <input asp-for="DateCommande" class="form-control" type="date"/>
-            <span id="stock" class="form-control">QTE EN STOCK : 9</span>
+            <span id="stock" class="form-control">QTE EN STOCK : </span>
             <span asp-validation-for="DateCommande" class="text-danger"></span>
         </div>
 
@@ -108,6 +111,34 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        function loadLots(medicamentId) {
+            if (medicamentId) {
+                $.ajax({
+                    url: '@Url.Action("GetLotsByMedicamentId", "VotreController")',
+                    type: 'GET',
+                    data: { medicamentId: medicamentId },
+                    success: function (data) {
+                        var lotsContainer = $('.lot-container');
+                        lotsContainer.empty(); // Nettoyer les lots précédents
+
+                        data.forEach(function (lot) {
+                            lotsContainer.append(
+                                '<div class="lot">' +
+                                '<p>DATE EXPIRATION : ' + lot.dateExpiration + '</p>' +
+                                '<p>LOT ' + lot.lotId + '</p>' +
+                                '<p>QTE : ' + lot.quantite + '</p>' +
+                                '</div>'
+                            );
+                        });
+                    }
+                });
+            }
+        }
+    </script>
+}
+
 
     <script>
     </script>

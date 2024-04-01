@@ -27,7 +27,15 @@ namespace SophaTemp.Areas.Admin.Controllers
                           View(await _context.Commandes.ToListAsync()) :
                           Problem("Entity set 'AppDbContext.Commandes'  is null.");
         }
+        public async Task<IActionResult> GetLotsByMedicamentId(int medicamentId)
+        {
+            var lots = await _context.Lots
+                                     .Where(l => l.MedicamentId == medicamentId)
+                                     .Select(l => new { l.Date, l.Quantite })
+                                     .ToListAsync();
 
+            return Json(lots);
+        }
         // GET: Admin/Commandes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -49,6 +57,8 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Commandes/Create
         public IActionResult Create()
         {
+            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom");
+            ViewData["ClientId"] = new SelectList(_context.Clients, "ClientId", "Nom");
             return View();
         }
 
