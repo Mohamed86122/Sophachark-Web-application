@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SophaTemp.Data;
+using SophaTemp.Mappers;
 using SophaTemp.Models;
+using SophaTemp.Viewmodel;
 
 namespace SophaTemp.Areas.Admin.Controllers
 {
@@ -57,15 +59,17 @@ namespace SophaTemp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryMedicamentId,Reference,Libelle")] CategoryMedicament categoryMedicament)
+        public async Task<IActionResult> Create(CategoryMedicamentVM category)
         {
             if (ModelState.IsValid)
             {
+                CategoryMedicamentMapper map = new CategoryMedicamentMapper();
+                CategoryMedicament categoryMedicament = map.CategoryMedicamentAddMap(category);
                 _context.Add(categoryMedicament);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(categoryMedicament);
+            return View(category);
         }
 
         // GET: Admin/CategoryMedicaments/Edit/5

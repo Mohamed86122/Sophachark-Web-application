@@ -9,7 +9,7 @@ namespace SophaTemp.Viewmodel
         public string Description { get; set; }
         public IFormFile Image { get; set; }
         public int QuantiteEnAlerte { get; set; }
-        public List<int> SelectedCategorieIds { get; set; }
+        public List<int>? SelectedCategorieIds { get; set; }
 
         public MedicamentAddVM () 
         {
