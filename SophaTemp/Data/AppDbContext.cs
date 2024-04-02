@@ -26,7 +26,7 @@ namespace SophaTemp.Data
         public DbSet<Lot> Lots { get; set; }
         public DbSet<LotCommande> LotCommandes { get; set; }
 
-
+        public DbSet<Facture> Factures { get; set; }
 
         public DbSet<CategoryMedicament> Categories { get; set; } 
 

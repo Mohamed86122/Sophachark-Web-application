@@ -1,0 +1,90 @@
+﻿@model SophaTemp.Models.Client
+
+@{
+    ViewData["Title"] = "Create";
+}
+<div class="container mt-5">
+    <h1>Create Client</h1>
+
+
+    <hr />
+    <div class="row">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="LibellePharmacie" class="control-label"></label>
+                            <input asp-for="LibellePharmacie" class="form-control" />
+                            <span asp-validation-for="LibellePharmacie" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Ville" class="control-label"></label>
+                            <input asp-for="Ville" class="form-control" />
+                            <span asp-validation-for="Ville" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Telephone" class="control-label"></label>
+                            <input asp-for="Telephone" class="form-control" />
+                            <span asp-validation-for="Telephone" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="X" class="control-label"></label>
+                            <input asp-for="X" class="form-control" />
+                            <span asp-validation-for="X" class="text-danger"></span>
+                        </div>
+                <div class="form-group">
+                    <label asp-for="Y" class="control-label"></label>
+                    <input asp-for="Y" class="form-control" />
+                    <span asp-validation-for="Y" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Adresse" class="control-label"></label>
+                    <input asp-for="Adresse" class="form-control" />
+                    <span asp-validation-for="Adresse" class="text-danger"></span>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="EnGarde" /> @Html.DisplayNameFor(model => model.EnGarde)
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label asp-for="WhishlistId" class="control-label"></label>
+                    <select asp-for="WhishlistId" class ="form-control" asp-items="ViewBag.WhishlistId"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="nom" class="control-label"></label>
+                    <input asp-for="nom" class="form-control" />
+                    <span asp-validation-for="nom" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="prenom" class="control-label"></label>
+                    <input asp-for="prenom" class="form-control" />
+                    <span asp-validation-for="prenom" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="motdepasse" class="control-label"></label>
+                    <input asp-for="motdepasse" class="form-control" />
+                    <span asp-validation-for="motdepasse" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="email" class="control-label"></label>
+                    <input asp-for="email" class="form-control" />
+                    <span asp-validation-for="email" class="text-danger"></span>
+                </div>
+            
+                <div class="form-group">
+                    <label asp-for="PasseportId" class="control-label"></label>
+                    <select asp-for="PasseportId" class ="form-control" asp-items="ViewBag.PasseportId"></select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>

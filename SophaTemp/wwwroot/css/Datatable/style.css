@@ -3,7 +3,7 @@
         font-family: Arial, sans-serif;
     }
     #monTableau thead {
-        background-color: #06663d;
+        background-color: #47cf66;
         color: #ffffff;
     }
     #monTableau thead th {
@@ -61,7 +61,7 @@
 /* Styliser les boutons d'exportation */
 .dt-button {
     margin-right: 5px; /* Ajoute un espace à droite de chaque bouton */
-    background-color: #06663d; /* Couleur de fond bleue */
+    background-color: #47cf66; /* Couleur de fond bleue */
     color: white; /* Texte blanc */
     border: none; /* Supprime les bordures */
     border-radius: 4px; /* Bordures arrondies */
