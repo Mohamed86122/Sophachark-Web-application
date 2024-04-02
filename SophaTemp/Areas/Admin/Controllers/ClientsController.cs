@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SophaTemp.Data;
+using SophaTemp.Mappers;
 using SophaTemp.Models;
 using SophaTemp.Viewmodel;
 
@@ -71,26 +72,11 @@ namespace SophaTemp.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var client = new Client
-                {
-                    //Appel Mn ViewModel
-                    WhishlistId = clientVm.WhishlistId,
-                    PasseportId = clientVm.PasseportId,
-                    LibellePharmacie = clientVm.LibellePharmacie,
-                    Ville=clientVm.Ville,
-                    Telephone=clientVm.Telephone,
-                    X=clientVm.X,
-                    Y=clientVm.Y,
-                    Adresse=clientVm.Adresse,
-                    EnGarde=clientVm.EnGarde,
-                    nom=clientVm.nom,
-                    prenom=clientVm.prenom,
-                    email   =clientVm.email,
-                    motdepasse=clientVm.motdepasse,
-                   
-                };
+                ClientMapper clientMapper = new ClientMapper();
+                Client newclient = clientMapper.ClientVmClient(clientVm);
+               
 
-                _context.Clients.Add(client);
+                _context.Clients.Add(newclient);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

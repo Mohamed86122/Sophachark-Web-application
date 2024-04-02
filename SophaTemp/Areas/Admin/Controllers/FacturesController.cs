@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SophaTemp.Data;
+using SophaTemp.Mappers;
 using SophaTemp.Models;
 using SophaTemp.Viewmodel;
 
@@ -79,15 +80,11 @@ namespace SophaTemp.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var facture = new Facture
-                {
-                    Numero = factureVm.Numero,
-                    Montant = factureVm.Montant,
-                    DateFacturation = factureVm.DateFacturation,
-                    CommandeId = factureVm.CommandeId
-                };
+                FactureMapper factureMapper = new FactureMapper();
+                Facture newfacture = factureMapper.FactureVmFacture(factureVm);
 
-                _context.Add(facture);
+
+                _context.Add(newfacture);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
