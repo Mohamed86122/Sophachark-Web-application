@@ -51,8 +51,9 @@
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
-                        <img src="@item.Image"  alt="Image du médicament" class="img-fluid" style="max-width:100px; height:auto;">
+                        <img src="@Url.Content(item.Image)" alt="Image du médicament" class="img-fluid" style="max-width:100px; height:auto;">
                     </td>
+
                     <td>
                         @Html.DisplayFor(modelItem => item.QuantiteEnAlerte)
                     </td>

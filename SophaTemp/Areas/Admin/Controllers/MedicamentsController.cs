@@ -28,7 +28,7 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Medicaments
         public async Task<IActionResult> Index()
         {
-            List<Medicament> list = await _context.Medicaments.Include(m => m.Categories).ToListAsync();
+            List<Medicament> list = await _context.Medicaments.Include(m => m.MedicamentCategoryMedicaments).ToListAsync();
               return _context.Medicaments != null ? 
                           View(list ) :
                           Problem("Entity set 'AppDbContext.Medicaments'  is null.");
@@ -55,55 +55,36 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Medicaments/Create
         public IActionResult Create()
         {
-            ViewData["CategorieIds"] = new SelectList(_context.CategoryMedicament, "CategorieId", "Libelle");
+            var categories = _context.CategoryMedicament.ToList(); // Assurez-vous d'avoir les catégories depuis la base de données
+            ViewBag.CategorieIds = new SelectList(categories, "CategorieId", "Libelle");
             return View();
         }
-        public async Task<IActionResult> CheckReferenceExists(string reference)
-        {
-            bool exists = await _context.Medicaments.AnyAsync(m => m.Reference == reference);
-            return Json(!exists);
-        }
-        // POST: Admin/Medicaments/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MedicamentAddVM medicament)
-            {
+        {
             if (ModelState.IsValid)
             {
-                Medicament newMedicament = new Medicament
+                Medicament m = MedicamentMapper.MedicamentAddVmTpMedicament(medicament, _context);
+                m.Image = UploadFileService.Upload(medicament.Image, "Medicaments", true);
+                m.MedicamentCategoryMedicaments = new List<MedicamentCategoryMedicament>();
+                foreach (var categoryId in medicament.SelectedCategorieIds)
                 {
-                    Nom = medicament.Nom,
-                    Description = medicament.Description,
-                    QuantiteEnAlerte = medicament.QuantiteEnAlerte,
-                    Reference = medicament.Reference,
-                };
-
-
-                foreach (int categoryId in medicament.SelectedCategorieIds)
-                {
-                    var categoryAssociation = new MedicamentCategoryMedicament
+                    m.MedicamentCategoryMedicaments.Add(new MedicamentCategoryMedicament
                     {
-                        Medicament = newMedicament, // Vous pouvez ajouter directement l'instance de médicament ici
                         CategoryMedicamentId = categoryId
-                    };
-
-         
-                    _context.categoryMedicaments.Add(categoryAssociation);
+                    });
                 }
-
-                _context.Medicaments.Add(newMedicament);
-
+                _context.Add(m);
                 await _context.SaveChangesAsync();
-
                 return RedirectToAction(nameof(Index));
             }
-
-            ViewData["CategorieIds"] = new SelectList(_context.CategoryMedicament, "CategorieId", "Libelle", medicament.SelectedCategorieIds);
+            var categories = _context.CategoryMedicament.ToList();
+            ViewBag.CategorieIds = new SelectList(categories, "CategorieId", "Libelle");
             return View(medicament);
-
         }
+
 
         // GET: Admin/Medicaments/Edit/5
         public async Task<IActionResult> Edit(int? id)
