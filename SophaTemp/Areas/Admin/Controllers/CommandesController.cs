@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SophaTemp.Data;
 using SophaTemp.Models;
+using SophaTemp.Viewmodel;
 
 namespace SophaTemp.Areas.Admin.Controllers
 {
@@ -20,41 +21,22 @@ namespace SophaTemp.Areas.Admin.Controllers
             _context = context;
         }
 
-        // GET: Admin/Commandes
         public async Task<IActionResult> Index()
         {
-              return _context.Commandes != null ? 
-                          View(await _context.Commandes.ToListAsync()) :
-                          Problem("Entity set 'AppDbContext.Commandes'  is null.");
+            return _context.Commandes != null ?
+                View(await _context.Commandes.ToListAsync()) :
+                Problem("Entity set 'AppDbContext.Commandes' is null.");
         }
+
         public async Task<IActionResult> GetLotsByMedicamentId(int medicamentId)
         {
             var lots = await _context.Lots
-                                     .Where(l => l.MedicamentId == medicamentId)
-                                     .Select(l => new { l.DateDExpedition, l.Quantite })
-                                     .ToListAsync();
-
+                .Where(l => l.MedicamentId == medicamentId)
+                .Select(l => new { l.DateDExpedition, l.Quantite })
+                .ToListAsync();
             return Json(lots);
         }
-        // GET: Admin/Commandes/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Commandes == null)
-            {
-                return NotFound();
-            }
 
-            var commande = await _context.Commandes
-                .FirstOrDefaultAsync(m => m.CommandeId == id);
-            if (commande == null)
-            {
-                return NotFound();
-            }
-
-            return View(commande);
-        }
-
-        // GET: Admin/Commandes/Create
         public IActionResult Create()
         {
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom");
@@ -62,23 +44,29 @@ namespace SophaTemp.Areas.Admin.Controllers
             return View();
         }
 
-        // POST: Admin/Commandes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CommandeId,Numero,DateCommande,Status,IdLotCommande")] Commande commande)
+        public async Task<IActionResult> Create(CommandeVm commandeVm)
         {
             if (ModelState.IsValid)
             {
+                var commande = new Commande
+                {
+                    Numero = "Num-" + DateTime.Now.Ticks, // Generate a number for demonstration
+                    DateCommande = commandeVm.DateCommande,
+                    Status = commandeVm.Status,
+                    IdLotCommande = 1 // Assuming you manage to get this ID correctly from the lot selection
+                };
+
                 _context.Add(commande);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(commande);
+            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", commandeVm.MedicamentId);
+            ViewData["ClientId"] = new SelectList(_context.Clients, "ClientId", "Nom", commandeVm.ClientId);
+            return View(commandeVm);
         }
 
-        // GET: Admin/Commandes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Commandes == null)
@@ -94,42 +82,46 @@ namespace SophaTemp.Areas.Admin.Controllers
             return View(commande);
         }
 
-        // POST: Admin/Commandes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CommandeId,Numero,DateCommande,Status,IdLotCommande")] Commande commande)
+        public async Task<IActionResult> Edit(int id, CommandeVm commandeVm)
         {
-            if (id != commande.CommandeId)
+            if (id != commandeVm.ClientId)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
+                var commandeToUpdate = await _context.Commandes.FindAsync(id);
+                if (commandeToUpdate != null)
                 {
-                    _context.Update(commande);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CommandeExists(commande.CommandeId))
+                    commandeToUpdate.DateCommande = commandeVm.DateCommande;
+                    commandeToUpdate.Status = commandeVm.Status;
+                    // Update other properties as needed
+
+                    try
                     {
-                        return NotFound();
+                        _context.Update(commandeToUpdate);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!CommandeExists(commandeToUpdate.CommandeId))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(commande);
+            return View(commandeVm);
         }
 
-        // GET: Admin/Commandes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Commandes == null)
@@ -147,28 +139,26 @@ namespace SophaTemp.Areas.Admin.Controllers
             return View(commande);
         }
 
-        // POST: Admin/Commandes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Commandes == null)
             {
-                return Problem("Entity set 'AppDbContext.Commandes'  is null.");
+                return Problem("Entity set 'AppDbContext.Commandes' is null.");
             }
             var commande = await _context.Commandes.FindAsync(id);
             if (commande != null)
             {
                 _context.Commandes.Remove(commande);
+                await _context.SaveChangesAsync();
             }
-            
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CommandeExists(int id)
         {
-          return (_context.Commandes?.Any(e => e.CommandeId == id)).GetValueOrDefault();
+            return _context.Commandes.Any(e => e.CommandeId == id);
         }
     }
 }
