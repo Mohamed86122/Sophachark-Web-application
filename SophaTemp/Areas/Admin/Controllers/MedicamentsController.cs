@@ -55,8 +55,8 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Medicaments/Create
         public IActionResult Create()
         {
-            var categories = _context.CategoryMedicament.ToList(); // Assurez-vous d'avoir les catégories depuis la base de données
-            ViewBag.CategorieIds = new SelectList(categories, "CategorieId", "Libelle");
+
+            ViewBag.CategorieIds = new SelectList(_context.Categories, "CategoryMedicamentId", "Libelle");
             return View();
         }
 
@@ -80,8 +80,8 @@ namespace SophaTemp.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            var categories = _context.CategoryMedicament.ToList();
-            ViewBag.CategorieIds = new SelectList(categories, "CategorieId", "Libelle");
+            ViewBag.CategorieIds = new SelectList(_context.Categories, "CategoryMedicamentId", "Libelle");
+
             return View(medicament);
         }
 

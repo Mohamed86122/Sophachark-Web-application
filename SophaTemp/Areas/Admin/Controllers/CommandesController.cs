@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SophaTemp.Data;
+using SophaTemp.Mappers;
 using SophaTemp.Models;
 using SophaTemp.Viewmodel;
 
@@ -40,9 +41,10 @@ namespace SophaTemp.Areas.Admin.Controllers
         public IActionResult Create()
         {
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom");
-            ViewData["ClientId"] = new SelectList(_context.Clients, "ClientId", "Nom");
+            ViewData["ClientId"] = new SelectList(_context.Clients, "ClientId", "LibellePharmacie");
             return View();
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -50,18 +52,13 @@ namespace SophaTemp.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var commande = new Commande
-                {
-                    Numero = "Num-" + DateTime.Now.Ticks, // Generate a number for demonstration
-                    DateCommande = commandeVm.DateCommande,
-                    Status = commandeVm.Status,
-                    IdLotCommande = 1 // Assuming you manage to get this ID correctly from the lot selection
-                };
-
+                CommandeMapper commandeMapper = new CommandeMapper();
+                Commande commande = commandeMapper.commandemapperAddVm(commandeVm);
                 _context.Add(commande);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", commandeVm.MedicamentId);
             ViewData["ClientId"] = new SelectList(_context.Clients, "ClientId", "Nom", commandeVm.ClientId);
             return View(commandeVm);
