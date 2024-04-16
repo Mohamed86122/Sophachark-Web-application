@@ -10,7 +10,6 @@
         public int QuantiteEnAlerte { get; set; }
 
         // Propriétés de navigation
-        public virtual ICollection<CategoryMedicament> Categories { get; set; }
         public virtual ICollection<Whishlist> Whishlists { get; set; }
         public virtual ICollection<Commentaire> Commentaires { get; set; }
 
