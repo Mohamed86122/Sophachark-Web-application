@@ -7,6 +7,10 @@ namespace SophaTemp.Viewmodel
     {
         [Required]
         public float Montant { get; set; }
+
+
+        [Required] 
+        public string Libelle { get; set; }
         [Required]
         public int Quantite { get; set; }
         [Required]

@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Security;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace SophaTemp.Models
 {
@@ -9,18 +11,9 @@ namespace SophaTemp.Models
         public string Nom { get; set; }
         public string Prenom { get; set; }
 
-        [Column(TypeName = "nvarchar(max)")]
-        public string PermissionsJson { get; set; }
+		public ICollection<Permission> Permissions { get; set; }
 
-        [NotMapped]
-        public List<Dictionary<string, string>>? Permissions
-        {
-            get => string.IsNullOrEmpty(PermissionsJson)
-                   ? new List<Dictionary<string, string>>()
-                   : JsonSerializer.Deserialize<List<Dictionary<string, string>>>(PermissionsJson);
-            set => PermissionsJson = JsonSerializer.Serialize(value);
-        }
-        public Personne Personne { get; set; }
+		public Personne Personne { get; set; }
 
     }
 }

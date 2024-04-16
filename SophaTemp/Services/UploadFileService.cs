@@ -24,7 +24,7 @@
                     file.CopyTo(stream);
                 }
             }
-            return "~/" + NewName;
+            return "~" + NewName;
         }
     }
 }
