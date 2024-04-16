@@ -57,7 +57,7 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Clients/Create
         public IActionResult Create()
         {
-            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "PasseportId");
+            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Prenom");
             ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId");
             return View();
         }
@@ -80,8 +80,8 @@ namespace SophaTemp.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "NomWhishlist");
-            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "NumeroPasseport");
+            ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "Whishlist");
+            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Prenom");
             return View(clientVm);
         }
         
@@ -98,7 +98,7 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "PasseportId", client.PasseportId);
+            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Prenom", client.PasseportId);
             ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId", client.WhishlistId);
             return View(client);
         }
@@ -135,7 +135,7 @@ namespace SophaTemp.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "PasseportId", client.PasseportId);
+            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Prenom", client.PasseportId);
             ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId", client.WhishlistId);
             return View(client);
         }
