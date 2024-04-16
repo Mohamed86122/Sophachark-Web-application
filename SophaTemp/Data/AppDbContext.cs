@@ -32,6 +32,7 @@ namespace SophaTemp.Data
 
         public DbSet<MedicamentCategoryMedicament> categoryMedicaments { get; set; }
 
+        public DbSet<Permission> permissions { get; set; }
 
 
 
@@ -73,6 +74,5 @@ namespace SophaTemp.Data
 
 
 
-        public DbSet<SophaTemp.Models.CategoryMedicament>? CategoryMedicament { get; set; }
     }
 }

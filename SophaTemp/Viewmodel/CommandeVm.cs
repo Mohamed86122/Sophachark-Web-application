@@ -6,6 +6,7 @@
         public int MedicamentId { get; set; }
         public DateTime DateCommande { get; set; }
         public string Status { get; set; }
+        public string Quantite { get; set; }
         public IEnumerable<int> SelectedLotIds { get; set; } 
     }
 }

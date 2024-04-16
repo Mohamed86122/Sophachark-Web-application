@@ -9,10 +9,9 @@ namespace SophaTemp.Mappers
         {
             return new Commande
             {
-                
-                
                 DateCommande = commande.DateCommande,
                 Status = commande.Status,
+                Quantite = commande.Quantite,
             };
 
         }

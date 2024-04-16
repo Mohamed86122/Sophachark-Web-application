@@ -51,7 +51,7 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/LotCommandes/Create
         public IActionResult Create()
         {
-            ViewData["LotId"] = new SelectList(_context.Lots, "LotId", "LotId");
+            ViewData["LotId"] = new SelectList(_context.Lots, "LotId", "Libelle");
             return View();
         }
 
@@ -70,7 +70,7 @@ namespace SophaTemp.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LotId"] = new SelectList(_context.Lots, "LotId", "LotId", lotc.LotId);
+            ViewData["LotId"] = new SelectList(_context.Lots, "LotId", "Libelle", lotc.LotId);
             return View(lotc);
         }
 

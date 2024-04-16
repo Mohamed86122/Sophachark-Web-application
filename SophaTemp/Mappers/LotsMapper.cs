@@ -11,6 +11,7 @@ namespace SophaTemp.Mappers
             return new Lot
             {
                 Montant = model.Montant,
+                Libelle = model.Libelle,
                 Quantite = model.Quantite,
                 PrixAchat = model.PrixAchat,
                 PrixVente = model.PrixVente,

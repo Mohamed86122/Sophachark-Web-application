@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SophaTemp.Data;
 
@@ -11,9 +12,10 @@ using SophaTemp.Data;
 namespace SophaTemp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240415105440_ModifierJsonPasseport")]
+    partial class ModifierJsonPasseport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -342,6 +344,10 @@ namespace SophaTemp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PermissionsJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Prenom")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -349,32 +355,6 @@ namespace SophaTemp.Migrations
                     b.HasKey("PasseportId");
 
                     b.ToTable("Passeports");
-                });
-
-            modelBuilder.Entity("SophaTemp.Models.Permission", b =>
-                {
-                    b.Property<int>("PermissionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PermissionId"), 1L, 1);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nom")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PasseportId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PermissionId");
-
-                    b.HasIndex("PasseportId");
-
-                    b.ToTable("permissions");
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Personne", b =>
@@ -635,13 +615,6 @@ namespace SophaTemp.Migrations
                     b.Navigation("Medicament");
                 });
 
-            modelBuilder.Entity("SophaTemp.Models.Permission", b =>
-                {
-                    b.HasOne("SophaTemp.Models.Passeport", null)
-                        .WithMany("Permissions")
-                        .HasForeignKey("PasseportId");
-                });
-
             modelBuilder.Entity("SophaTemp.Models.Personne", b =>
                 {
                     b.HasOne("SophaTemp.Models.Passeport", "Passeport")
@@ -688,8 +661,6 @@ namespace SophaTemp.Migrations
 
             modelBuilder.Entity("SophaTemp.Models.Passeport", b =>
                 {
-                    b.Navigation("Permissions");
-
                     b.Navigation("Personne")
                         .IsRequired();
                 });
