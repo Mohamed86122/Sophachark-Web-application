@@ -3,13 +3,18 @@
 @{
     ViewData["Title"] = "Index";
 }
+@section Style
+{
+    <link rel="stylesheet" type="text/css" href="~/css/Datatable/style.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
 
+}
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-outline-primary">Create New</a>
 </p>
-<table class="table" id="FactureTable">
+<table id="FactureTable" class="display">
     <thead>
         <tr>
             <th>
@@ -65,6 +70,7 @@
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+
     <script>
 
         $(document).ready(function () {
