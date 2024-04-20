@@ -11,87 +11,87 @@ using SophaTemp.Models;
 namespace SophaTemp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class PasseportsController : Controller
+    public class PermissionsController : Controller
     {
         private readonly AppDbContext _context;
 
-        public PasseportsController(AppDbContext context)
+        public PermissionsController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: Admin/Passeports
+        // GET: Admin/Permissions
         public async Task<IActionResult> Index()
         {
-              return _context.Passeports != null ? 
-                          View(await _context.Passeports.ToListAsync()) :
-                          Problem("Entity set 'AppDbContext.Passeports'  is null.");
+              return _context.permissions != null ? 
+                          View(await _context.permissions.ToListAsync()) :
+                          Problem("Entity set 'AppDbContext.permissions'  is null.");
         }
 
-        // GET: Admin/Passeports/Details/5
+        // GET: Admin/Permissions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Passeports == null)
+            if (id == null || _context.permissions == null)
             {
                 return NotFound();
             }
 
-            var passeport = await _context.Passeports
-                .FirstOrDefaultAsync(m => m.PasseportId == id);
-            if (passeport == null)
+            var permission = await _context.permissions
+                .FirstOrDefaultAsync(m => m.PermissionId == id);
+            if (permission == null)
             {
                 return NotFound();
             }
 
-            return View(passeport);
+            return View(permission);
         }
 
-        // GET: Admin/Passeports/Create
+        // GET: Admin/Permissions/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Admin/Passeports/Create
+        // POST: Admin/Permissions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PasseportId,Nom,Prenom")] Passeport passeport)
+        public async Task<IActionResult> Create([Bind("PermissionId,Nom,Description")] Permission permission)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(passeport);
+                _context.Add(permission);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(passeport);
+            return View(permission);
         }
 
-        // GET: Admin/Passeports/Edit/5
+        // GET: Admin/Permissions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Passeports == null)
+            if (id == null || _context.permissions == null)
             {
                 return NotFound();
             }
 
-            var passeport = await _context.Passeports.FindAsync(id);
-            if (passeport == null)
+            var permission = await _context.permissions.FindAsync(id);
+            if (permission == null)
             {
                 return NotFound();
             }
-            return View(passeport);
+            return View(permission);
         }
 
-        // POST: Admin/Passeports/Edit/5
+        // POST: Admin/Permissions/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PasseportId,Nom,Prenom")] Passeport passeport)
+        public async Task<IActionResult> Edit(int id, [Bind("PermissionId,Nom,Description")] Permission permission)
         {
-            if (id != passeport.PasseportId)
+            if (id != permission.PermissionId)
             {
                 return NotFound();
             }
@@ -100,12 +100,12 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(passeport);
+                    _context.Update(permission);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PasseportExists(passeport.PasseportId))
+                    if (!PermissionExists(permission.PermissionId))
                     {
                         return NotFound();
                     }
@@ -116,49 +116,49 @@ namespace SophaTemp.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(passeport);
+            return View(permission);
         }
 
-        // GET: Admin/Passeports/Delete/5
+        // GET: Admin/Permissions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Passeports == null)
+            if (id == null || _context.permissions == null)
             {
                 return NotFound();
             }
 
-            var passeport = await _context.Passeports
-                .FirstOrDefaultAsync(m => m.PasseportId == id);
-            if (passeport == null)
+            var permission = await _context.permissions
+                .FirstOrDefaultAsync(m => m.PermissionId == id);
+            if (permission == null)
             {
                 return NotFound();
             }
 
-            return View(passeport);
+            return View(permission);
         }
 
-        // POST: Admin/Passeports/Delete/5
+        // POST: Admin/Permissions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Passeports == null)
+            if (_context.permissions == null)
             {
-                return Problem("Entity set 'AppDbContext.Passeports'  is null.");
+                return Problem("Entity set 'AppDbContext.permissions'  is null.");
             }
-            var passeport = await _context.Passeports.FindAsync(id);
-            if (passeport != null)
+            var permission = await _context.permissions.FindAsync(id);
+            if (permission != null)
             {
-                _context.Passeports.Remove(passeport);
+                _context.permissions.Remove(permission);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PasseportExists(int id)
+        private bool PermissionExists(int id)
         {
-          return (_context.Passeports?.Any(e => e.PasseportId == id)).GetValueOrDefault();
+          return (_context.permissions?.Any(e => e.PermissionId == id)).GetValueOrDefault();
         }
     }
 }
