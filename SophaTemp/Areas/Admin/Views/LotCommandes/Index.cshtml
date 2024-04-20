@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Index";
 }
+
 @section Style
     {
     <link rel="stylesheet" type="text/css" href="~/css/Datatable/style.css" />
@@ -15,6 +16,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
 <table id="monTableau" class="display">
     <thead>
         <tr>
@@ -24,6 +26,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Quantite)
             </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.Lot)
             </th>
@@ -40,6 +43,7 @@
                 @Html.DisplayFor(modelItem => item.Quantite)
             </td>
             <td>
+
                 @Html.DisplayFor(modelItem => item.Lot.LotId)
             </td>
             <td>
@@ -51,6 +55,7 @@
 }
     </tbody>
 </table>
+
 </div>
 @section Scripts
     {
