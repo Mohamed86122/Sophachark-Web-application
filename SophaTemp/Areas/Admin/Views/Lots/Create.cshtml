@@ -1,67 +1,147 @@
-﻿@model SophaTemp.Models.Lot
+﻿@model SophaTemp.Viewmodel.LotAddVm
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Lot";
 }
+
+<style>
+    .btn-primary {
+        background-color: #28a745; 
+        border-color: #28a745;
+    }
+
+        .btn-primary:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+    .btn-secondary {
+        background-color: #007bff; 
+        border-color: #007bff;
+    }
+
+        .btn-secondary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+
+</style>
+
 <div class="container mt-5">
-<h1>Create</h1>
+    <h1>Create Lot</h1>
+    <hr />
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="Quantite" class="control-label">Quantite</label>
+                    <input asp-for="Quantite" placeholder="Entrer la quantité" class="form-control"  />
+                    <span asp-validation-for="Quantite" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Libelle" class="control-label">Libelle de lot</label>
+                    <input asp-for="Libelle" class="form-control" placeholder="Entrer Libelle de lot" id="prixVente" />
+                    <span asp-validation-for="Libelle" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PrixAchat" class="control-label">Prix achat</label>
+                    <input asp-for="PrixAchat" class="form-control" placeholder="Enter purchase price" id="prixAchat" />
+                    <span asp-validation-for="PrixAchat" class="text-danger"></span>
+                </div>
 
-<h4>Lot</h4>
-<hr />
+                <div class="form-group">
+                    <label asp-for="PrixVente" class="control-label">Prix de vente</label>
+                    <input asp-for="PrixVente" class="form-control" placeholder="Enter selling price" id="prixVente" />
+                    <span asp-validation-for="PrixVente" class="text-danger"></span>
+                </div>
+                
 
-    <div class="row justify-content-center">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Montant" class="control-label"></label>
-                <input asp-for="Montant" class="form-control" />
-                <span asp-validation-for="Montant" class="text-danger"></span>
+               
             </div>
-            <div class="form-group">
-                <label asp-for="Quantite" class="control-label"></label>
-                <input asp-for="Quantite" class="form-control" />
-                <span asp-validation-for="Quantite" class="text-danger"></span>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="DateDeProduction" class="control-label">Production Date</label>
+                    <input asp-for="DateDeProduction" class="form-control" type="date" />
+                    <span asp-validation-for="DateDeProduction" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="DateDExpedition" class="control-label">Expedition Date</label>
+                    <input asp-for="DateDExpedition" class="form-control" type="date" />
+                    <span asp-validation-for="DateDExpedition" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                <span id="joursRestants" class="form-control-static"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="MedicamentId" class="control-label"></label>
+                    <input id="medicamentAutoComplete" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FournisseurId" class="control-label">Fournisseur</label>
+                    <select asp-for="FournisseurId" class="form-control" asp-items="ViewBag.FournisseurId"></select>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="PrixAchat" class="control-label"></label>
-                <input asp-for="PrixAchat" class="form-control" />
-                <span asp-validation-for="PrixAchat" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PrixVente" class="control-label"></label>
-                <input asp-for="PrixVente" class="form-control" />
-                <span asp-validation-for="PrixVente" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateDeProduction" class="control-label"></label>
-                <input asp-for="DateDeProduction" class="form-control" />
-                <span asp-validation-for="DateDeProduction" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateDExpedition" class="control-label"></label>
-                <input asp-for="DateDExpedition" class="form-control" />
-                <span asp-validation-for="DateDExpedition" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MedicamentId" class="control-label"></label>
-                <select asp-for="MedicamentId" class ="form-control" asp-items="ViewBag.MedicamentId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="FournisseurId" class="control-label"></label>
-                <select asp-for="FournisseurId" class ="form-control" asp-items="ViewBag.FournisseurId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+
+
+        <div class="text-center">
+         <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </form>
 </div>
 
-    <div class="text-center mt-3">
-        <a asp-action="Index" >Back to List</a>
-</div>
-</div>
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        $(function () {
+            $("#medicamentAutoComplete").autocomplete({
+                source: '@Url.Action("GetMedicaments", "Lots")',
+                select: function (event, ui) {
+                   
+                    $('<input>').attr({
+                        type: 'hidden',
+                        id: 'MedicamentId',
+                        name: 'MedicamentId',
+                        value: ui.item.value
+                    }).appendTo('form');
+                    event.preventDefault();
+                    $(this).val(ui.item.label);
+                }
+            });
+
+         
+            function calculerJoursRestants() {
+                var dateProd = $('#DateDeProduction').val();
+                var dateExp = $('#DateDExpedition').val();
+
+                if (dateProd && dateExp) {
+                    var prodDate = new Date(dateProd);
+                    var expDate = new Date(dateExp);
+
+                    var diff = expDate - prodDate;
+                    var days = Math.round(diff / (1000 * 60 * 60 * 24));
+
+                    $('#joursRestants').text('Jours restants pour l\'expiration : ' + days+'jours');
+                } else {
+                    $('#joursRestants').text('');
+                }
+            }
+
+            $(document).ready(function () {
+                $('#DateDeProduction, #DateDExpedition').change(calculerJoursRestants);
+
+                calculerJoursRestants();
+            });
+        });
+    </script>
+    }
+

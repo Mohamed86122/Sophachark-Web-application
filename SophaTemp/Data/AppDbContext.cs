@@ -26,12 +26,13 @@ namespace SophaTemp.Data
         public DbSet<Lot> Lots { get; set; }
         public DbSet<LotCommande> LotCommandes { get; set; }
 
-
+        public DbSet<Facture> Factures { get; set; }
 
         public DbSet<CategoryMedicament> Categories { get; set; } 
 
+        public DbSet<MedicamentCategoryMedicament> categoryMedicaments { get; set; }
 
-
+        public DbSet<Permission> permissions { get; set; }
 
 
 
@@ -39,8 +40,9 @@ namespace SophaTemp.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<MedicamentCategoryMedicament>()
-    .HasKey(mcm => new { mcm.MedicamentId, mcm.CategoryMedicamentId });
+                .HasKey(mcm => new { mcm.MedicamentId, mcm.CategoryMedicamentId });
 
             modelBuilder.Entity<MedicamentCategoryMedicament>()
                 .HasOne(mcm => mcm.Medicament)
@@ -52,7 +54,13 @@ namespace SophaTemp.Data
                 .WithMany(cm => cm.MedicamentCategoryMedicaments)
                 .HasForeignKey(mcm => mcm.CategoryMedicamentId);
 
+
             modelBuilder.Entity<Personne>().HasKey(p => p.PersonneId);
+
+            modelBuilder.Entity<LotCommande>()
+        .HasOne(lc => lc.Lot)
+        .WithMany()
+        .HasForeignKey(lc => lc.LotId);
 
         }
 
@@ -66,6 +74,5 @@ namespace SophaTemp.Data
 
 
 
-        public DbSet<SophaTemp.Models.CategoryMedicament>? CategoryMedicament { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace SophaTemp.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace SophaTemp.Models
 {
     public class MedicamentCategoryMedicament
     {

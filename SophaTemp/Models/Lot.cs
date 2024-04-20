@@ -4,6 +4,8 @@
     {
         public int LotId { get; set; }
         public double Montant { get; set; }
+
+        public string Libelle { get; set; }
         public int Quantite { get; set; }
         public int PrixAchat { get; set; }
         public int PrixVente { get; set; }

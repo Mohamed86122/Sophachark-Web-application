@@ -2,14 +2,15 @@
 using SophaTemp.Data;
 using SophaTemp.Models;
 using SophaTemp.Viewmodel;
+using System.Linq;
 
 namespace SophaTemp.Mappers
 {
     public class MedicamentMapper
     {
-        public static Medicament MedicamentAddVmTpMedicament(MedicamentAddVM model,AppDbContext _context)
+        public static Medicament MedicamentAddVmTpMedicament(MedicamentAddVM model, AppDbContext _context)
         {
-            var medicament =  new Medicament
+            var medicament = new Medicament
             {
                 Nom = model.Nom,
                 Description = model.Description,
@@ -17,13 +18,15 @@ namespace SophaTemp.Mappers
                 QuantiteEnAlerte = model.QuantiteEnAlerte,
                 Reference = model.Reference,
             };
-            foreach (var categoryId in model.SelectedCategorieIds)
+
+            if (model.SelectedCategorieIds != null && model.SelectedCategorieIds.Any())
             {
-                var categorie = _context.Categories.Find(categoryId);
-                if (categorie != null)
-                {
-                    medicament.Categories.Add(categorie);
-                }
+                medicament.MedicamentCategoryMedicaments = model.SelectedCategorieIds
+                    .Select(categoryId => new MedicamentCategoryMedicament
+                    {
+                        CategoryMedicamentId = categoryId
+                    })
+                    .ToList();
             }
 
             return medicament;

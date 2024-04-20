@@ -7,7 +7,6 @@
         public string Libelle { get; set; }
 
         // Propriété de navigation
-        public virtual ICollection<Medicament> Medicaments { get; set; }
         public ICollection<MedicamentCategoryMedicament> MedicamentCategoryMedicaments { get; set; }
 
 

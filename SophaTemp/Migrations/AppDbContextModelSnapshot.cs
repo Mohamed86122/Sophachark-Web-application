@@ -22,21 +22,6 @@ namespace SophaTemp.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("CategoryMedicamentMedicament", b =>
-                {
-                    b.Property<int>("CategoriesCategoryMedicamentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MedicamentsMedicamentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CategoriesCategoryMedicamentId", "MedicamentsMedicamentId");
-
-                    b.HasIndex("MedicamentsMedicamentId");
-
-                    b.ToTable("CategoryMedicamentMedicament");
-                });
-
             modelBuilder.Entity("CommandeLivraison", b =>
                 {
                     b.Property<int>("CommandesCommandeId")
@@ -85,7 +70,7 @@ namespace SophaTemp.Migrations
 
                     b.HasKey("CategoryMedicamentId");
 
-                    b.ToTable("CategoryMedicament");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Commande", b =>
@@ -102,7 +87,17 @@ namespace SophaTemp.Migrations
                     b.Property<DateTime>("DateCommande")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("IdLotCommande")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LotCommandeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Numero")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Quantite")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -113,6 +108,8 @@ namespace SophaTemp.Migrations
                     b.HasKey("CommandeId");
 
                     b.HasIndex("ClientPersonneId");
+
+                    b.HasIndex("LotCommandeId");
 
                     b.ToTable("Commandes");
                 });
@@ -154,6 +151,34 @@ namespace SophaTemp.Migrations
                     b.HasIndex("PersonneId");
 
                     b.ToTable("Commentaire");
+                });
+
+            modelBuilder.Entity("SophaTemp.Models.Facture", b =>
+                {
+                    b.Property<int>("FactureId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FactureId"), 1L, 1);
+
+                    b.Property<int>("CommandeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateFacturation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Montant")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Numero")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FactureId");
+
+                    b.HasIndex("CommandeId");
+
+                    b.ToTable("Factures");
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Fournisseur", b =>
@@ -206,8 +231,9 @@ namespace SophaTemp.Migrations
                     b.Property<int>("FournisseurId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("LotCommandeId")
-                        .HasColumnType("int");
+                    b.Property<string>("Libelle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MedicamentId")
                         .HasColumnType("int");
@@ -228,8 +254,6 @@ namespace SophaTemp.Migrations
 
                     b.HasIndex("FournisseurId");
 
-                    b.HasIndex("LotCommandeId");
-
                     b.HasIndex("MedicamentId");
 
                     b.ToTable("Lots");
@@ -243,18 +267,18 @@ namespace SophaTemp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LotCommandeId"), 1L, 1);
 
-                    b.Property<int?>("CommandeId")
-                        .HasColumnType("int");
-
                     b.Property<double>("Frais")
                         .HasColumnType("float");
+
+                    b.Property<int>("LotId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantite")
                         .HasColumnType("int");
 
                     b.HasKey("LotCommandeId");
 
-                    b.HasIndex("CommandeId");
+                    b.HasIndex("LotId");
 
                     b.ToTable("LotCommandes");
                 });
@@ -303,7 +327,7 @@ namespace SophaTemp.Migrations
 
                     b.HasIndex("CategoryMedicamentId");
 
-                    b.ToTable("MedicamentCategoryMedicament");
+                    b.ToTable("categoryMedicaments");
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Passeport", b =>
@@ -318,10 +342,6 @@ namespace SophaTemp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PermissionsJson")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Prenom")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -329,6 +349,32 @@ namespace SophaTemp.Migrations
                     b.HasKey("PasseportId");
 
                     b.ToTable("Passeports");
+                });
+
+            modelBuilder.Entity("SophaTemp.Models.Permission", b =>
+                {
+                    b.Property<int>("PermissionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PermissionId"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nom")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PasseportId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PermissionId");
+
+                    b.HasIndex("PasseportId");
+
+                    b.ToTable("permissions");
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Personne", b =>
@@ -423,7 +469,21 @@ namespace SophaTemp.Migrations
                 {
                     b.HasBaseType("SophaTemp.Models.Personne");
 
+                    b.Property<string>("Adresse")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("EnGarde")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LibellePharmacie")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telephone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -434,24 +494,15 @@ namespace SophaTemp.Migrations
                     b.Property<int>("WhishlistId")
                         .HasColumnType("int");
 
+                    b.Property<double>("X")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Y")
+                        .HasColumnType("float");
+
                     b.HasIndex("WhishlistId");
 
                     b.HasDiscriminator().HasValue("Client");
-                });
-
-            modelBuilder.Entity("CategoryMedicamentMedicament", b =>
-                {
-                    b.HasOne("SophaTemp.Models.CategoryMedicament", null)
-                        .WithMany()
-                        .HasForeignKey("CategoriesCategoryMedicamentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SophaTemp.Models.Medicament", null)
-                        .WithMany()
-                        .HasForeignKey("MedicamentsMedicamentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("CommandeLivraison", b =>
@@ -489,6 +540,14 @@ namespace SophaTemp.Migrations
                     b.HasOne("SophaTemp.Models.Client", null)
                         .WithMany("Commandes")
                         .HasForeignKey("ClientPersonneId");
+
+                    b.HasOne("SophaTemp.Models.LotCommande", "lotCommande")
+                        .WithMany()
+                        .HasForeignKey("LotCommandeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("lotCommande");
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Commentaire", b =>
@@ -516,6 +575,17 @@ namespace SophaTemp.Migrations
                     b.Navigation("Personne");
                 });
 
+            modelBuilder.Entity("SophaTemp.Models.Facture", b =>
+                {
+                    b.HasOne("SophaTemp.Models.Commande", "Commande")
+                        .WithMany()
+                        .HasForeignKey("CommandeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Commande");
+                });
+
             modelBuilder.Entity("SophaTemp.Models.Lot", b =>
                 {
                     b.HasOne("SophaTemp.Models.Fournisseur", "Fournisseur")
@@ -523,10 +593,6 @@ namespace SophaTemp.Migrations
                         .HasForeignKey("FournisseurId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("SophaTemp.Models.LotCommande", null)
-                        .WithMany("Lots")
-                        .HasForeignKey("LotCommandeId");
 
                     b.HasOne("SophaTemp.Models.Medicament", "Medicament")
                         .WithMany()
@@ -541,9 +607,13 @@ namespace SophaTemp.Migrations
 
             modelBuilder.Entity("SophaTemp.Models.LotCommande", b =>
                 {
-                    b.HasOne("SophaTemp.Models.Commande", null)
-                        .WithMany("LotCommandes")
-                        .HasForeignKey("CommandeId");
+                    b.HasOne("SophaTemp.Models.Lot", "Lot")
+                        .WithMany()
+                        .HasForeignKey("LotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Lot");
                 });
 
             modelBuilder.Entity("SophaTemp.Models.MedicamentCategoryMedicament", b =>
@@ -565,6 +635,13 @@ namespace SophaTemp.Migrations
                     b.Navigation("Medicament");
                 });
 
+            modelBuilder.Entity("SophaTemp.Models.Permission", b =>
+                {
+                    b.HasOne("SophaTemp.Models.Passeport", null)
+                        .WithMany("Permissions")
+                        .HasForeignKey("PasseportId");
+                });
+
             modelBuilder.Entity("SophaTemp.Models.Personne", b =>
                 {
                     b.HasOne("SophaTemp.Models.Passeport", "Passeport")
@@ -579,7 +656,7 @@ namespace SophaTemp.Migrations
             modelBuilder.Entity("SophaTemp.Models.Client", b =>
                 {
                     b.HasOne("SophaTemp.Models.Whishlist", "Whishlist")
-                        .WithMany()
+                        .WithMany("Clients")
                         .HasForeignKey("WhishlistId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -592,22 +669,12 @@ namespace SophaTemp.Migrations
                     b.Navigation("MedicamentCategoryMedicaments");
                 });
 
-            modelBuilder.Entity("SophaTemp.Models.Commande", b =>
-                {
-                    b.Navigation("LotCommandes");
-                });
-
             modelBuilder.Entity("SophaTemp.Models.Commentaire", b =>
                 {
                     b.Navigation("Reponses");
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Fournisseur", b =>
-                {
-                    b.Navigation("Lots");
-                });
-
-            modelBuilder.Entity("SophaTemp.Models.LotCommande", b =>
                 {
                     b.Navigation("Lots");
                 });
@@ -621,8 +688,15 @@ namespace SophaTemp.Migrations
 
             modelBuilder.Entity("SophaTemp.Models.Passeport", b =>
                 {
+                    b.Navigation("Permissions");
+
                     b.Navigation("Personne")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SophaTemp.Models.Whishlist", b =>
+                {
+                    b.Navigation("Clients");
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Client", b =>

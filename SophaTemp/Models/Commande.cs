@@ -7,8 +7,9 @@
         public DateTime DateCommande { get; set; }
         public string Status { get; set; }
 
-        // Propriétés de navigation
-        public virtual ICollection<LotCommande> LotCommandes { get; set; }
+        public string Quantite {  get; set; }
+        public int IdLotCommande { get; set; }
+        public LotCommande lotCommande { get; set; }
         public virtual ICollection<Livraison> Livraisons { get; set; }
     }
 }

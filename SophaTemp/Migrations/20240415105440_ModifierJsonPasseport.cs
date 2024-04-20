@@ -4,7 +4,7 @@
 
 namespace SophaTemp.Migrations
 {
-    public partial class AddCategoryToDb : Migration
+    public partial class ModifierJsonPasseport : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

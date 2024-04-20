@@ -8,5 +8,7 @@
 
         // Propriété de navigation
         public virtual ICollection<Medicament> Medicaments { get; set; }
+        public virtual ICollection<Client> Clients { get; set; }
+
     }
 }

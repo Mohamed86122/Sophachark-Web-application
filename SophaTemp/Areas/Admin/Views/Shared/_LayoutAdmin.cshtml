@@ -3,16 +3,14 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SophaTemp</title>
-
+    <title>@ViewData["Title"]  Sophachark</title>
+    <link rel="icon" type="image/png" href="~/assets/image/SophaLogo.png">
     <link rel="stylesheet" href="~/assets/css/style.css" asp-append-version="true" />
     @RenderSection("Style",false)
 
 </head>
 <body>
-
-
-    <div class="page-wapper home-page-one">
+   @*  <div class="page-wapper home-page-one">
         <header class="site-header" id="header-one">
             <div class="top-bar">
                 <div class="container">
@@ -46,11 +44,11 @@
                     </div>
                 </div>
 
-            </div>
+            </div> *@
 
             @RenderSection("navbar", required: false)
-        </header>
-
+@*         </header>
+ *@
         <div class="container">
             <main role="main" class="pb-3">
                 <div class="navbar navbar-expand-lg bsnav bsnav-sticky bsnav-sticky-slide">
@@ -82,16 +80,35 @@
                                             <a class="nav-link link_hd" href="@Url.Action("Index", "CategoryMedicaments")">Catégorie Médicament</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link link_hd" href="@Url.Action("Index", "Personnes")">Personne</a>
+                                            <a class="nav-link link_hd" href="@Url.Action("Index", "Clients")">Clients</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link link_hd" href="@Url.Action("Index", "Passeports")">Gestion des passeports</a>
+                                            <a class="nav-link link_hd" href="@Url.Action("Index", "Factures")">Factures</a>
+                                        </li>
+                                       
+
+                                    </ul>
+                                </li><li class="nav-item dropdown">
+                                    <a class="nav-link link_hd" href="#">  Pages 2  </a>
+                                    <ul class="navbar-nav submenu">
+
+                                        <li class="nav-item">
+                                            <a class="nav-link link_hd" href="@Url.Action("Index", "Passeports")">Passeports</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link link_hd" href="@Url.Action("Index", "Commandes")">Commande</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link link_hd" href="@Url.Action("Index", "Fournisseurs")">Fournisseur</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link link_hd" href="@Url.Action("Index", "LotCommandes")">Lot Commandes</a>
                                         </li>
 
                                     </ul>
                                 </li>
                             </ul>
-                            <ul class="navbar-nav navbar-mobile right-nav ml-auto ">
+                            @* <ul class="navbar-nav navbar-mobile right-nav ml-auto ">
                                 <li class="nav-item dropdown">
                                     <a class="nav-link" href="#"> <span class="flaticon-search head-icon"></span>   </a>
                                     <ul class="navbar-nav submenu">
@@ -105,7 +122,7 @@
                                         <li>
                                     </ul>
                                 </li>
-                            </ul>
+                            </ul> *@
                         </div>
                     </div>
                 </div>

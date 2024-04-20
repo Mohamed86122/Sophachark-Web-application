@@ -1,4 +1,6 @@
-﻿namespace SophaTemp.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace SophaTemp.Models
 {
     public class Facture
     {
@@ -7,12 +9,12 @@
         public double Montant { get; set; }
         public DateTime DateFacturation { get; set; }
 
-        public ICollection<Commande> Commandes { get; set; }
+        public int CommandeId { get; set; }
 
-        public Facture()
-        {
-            Commandes = new HashSet<Commande>();
-        }
+        [ForeignKey("CommandeId")]
+        public Commande Commande { get; set; }
+
+        
 
         public void GenerationFacture()
         {

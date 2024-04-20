@@ -48,18 +48,26 @@ namespace SophaTemp.Areas.Admin.Controllers
 
             return View(lot);
         }
+        public async Task<IActionResult> GetMedicaments(string term)
+        {
+            var medicaments = await _context.Medicaments
+                .Where(m => m.Nom.Contains(term))
+                .Select(m => new { label = m.Nom, value = m.MedicamentId })
+                .ToListAsync();
+
+            return Json(medicaments);
+        }
 
         // GET: Admin/Lots/Create
-        public IActionResult Create()
+        public IActionResult Create() 
         {
-            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs, "FournisseurId", "NomComplet");
+            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet");
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom");
+           
             return View();
         }
 
-        // POST: Admin/Lots/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(LotAddVm lot)
@@ -67,13 +75,15 @@ namespace SophaTemp.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 LotsMapper lotsMapper = new LotsMapper();
-                Lot l = lotsMapper.LotaddVmLot(lot);
-                _context.Add(l);
+                Lot newLot = lotsMapper.LotaddVmLot(lot);
+                _context.Add(newLot);
                 await _context.SaveChangesAsync();
+                Console.WriteLine($"Montant soumis: {lot.Montant}");
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs, "FournisseurId", "FournisseurId", lot.FournisseurId);
-            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "MedicamentId", lot.MedicamentId);
+
+            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet", lot.FournisseurId);
+            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", lot.MedicamentId);
             return View(lot);
         }
 
@@ -90,7 +100,7 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs, "FournisseurId", "NomComplet", lot.FournisseurId);
+            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet", lot.FournisseurId);
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", lot.MedicamentId);
             return View(lot);
         }
@@ -127,8 +137,8 @@ namespace SophaTemp.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs, "FournisseurId", "FournisseurId", lot.FournisseurId);
-            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "MedicamentId", lot.MedicamentId);
+            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet", lot.FournisseurId);
+            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", lot.MedicamentId);
             return View(lot);
         }
 

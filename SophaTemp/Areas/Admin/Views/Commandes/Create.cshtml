@@ -1,0 +1,151 @@
+﻿@model SophaTemp.Viewmodel.CommandeVm
+
+@{
+    ViewData["Title"] = "Create Commande";
+}
+
+<style>
+   
+    /* .container {
+        max-width: 960px;
+        margin: auto;
+        padding: 2rem;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    } */
+
+    .title {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .form-control {
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .lot-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+    }
+
+    .lot {
+        border: 1px solid #000;
+        padding: 1rem;
+        text-align: center;
+    }   
+    .lot:hover
+    {
+        background-color:green;
+    }
+
+    .btn {
+        padding: 0.5rem 2rem;
+        margin-right: 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .btn-create {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-back {
+        background-color: #007bff;
+        color: white;
+    }
+</style>
+
+<div class="container">
+    <div class="title">
+        <h1>CREATE Commande</h1>
+    </div>
+
+    <form asp-action="Create">
+        <!-- Sélection du client -->
+        <div class="form-group">
+            <label asp-for="ClientId" class="control-label">Pharmacie</label>
+            <select asp-for="ClientId" asp-items="ViewBag.ClientId" class="form-control"></select>
+            <span asp-validation-for="ClientId" class="text-danger"></span>
+        </div>
+
+        <!-- Sélection du médicament -->
+        <div class="form-group">
+            <label asp-for="MedicamentId" class="control-label">Medicament</label>
+            <select asp-for="MedicamentId" asp-items="ViewBag.MedicamentId" class="form-control" onchange="loadLots(this.value)"></select>
+            <span asp-validation-for="MedicamentId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DateCommande" class="control-label">Date Commande</label>
+            <input asp-for="DateCommande" class="form-control" type="date"/>
+            <span asp-validation-for="DateCommande" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Quantite" class="control-label">Quantité</label>
+            <input asp-for="Quantite" class="form-control" placeholder="Quantité" id="prixAchat" />
+            <span asp-validation-for="Quantite" class="text-danger"></span>
+        </div>
+
+        <div class="lot-container">
+            @for (int i = 1; i <= 3; i++)
+            {
+                <div class="lot">
+                    <p>DATE EXPIRATION : </p>
+                    <p>LOT @i</p>
+                    <p>QTE : </p>
+                </div>
+            }
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-create">Create</button>
+            <button type="submit" formaction="@Url.Action("Index")" class="btn btn-back">Create & Back to List</button>
+            <button type="submit" formaction="@Url.Action("CreateAndStay")" class="btn btn-back">Create & Stay</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function loadLots(medicamentId) {
+            $.ajax({
+                url: '@Url.Action("GetLotsByMedicamentId", "Commandes")',
+                data: { medicamentId: medicamentId },
+                success: function (data) {
+                    var container = $('.lot-container');
+                    container.empty(); // Clear previous lots
+
+                    data.forEach(function (lot, index) {
+                        var isSelected = index === 0; // Select the first lot by default
+                        var lotClass = isSelected ? 'lot selected' : 'lot';
+
+                        container.append(
+                            `<div class="${lotClass}" data-lot-id="${lot.id}" data-lot-quantity="${lot.quantite}">
+                        <p>Date Expiration: ${lot.dateDExpedition}</p>
+                        <p>Quantité: ${lot.quantite}</p>
+                      </div>`
+                        );
+                    });
+
+                    // Handle lot selection and quantity update
+                    $('.lot').click(function () {
+                        $('.lot').removeClass('selected'); // Deselect all
+                        $(this).addClass('selected');
+
+                        // Update quantity input based on selected lot quantity
+                        $('#quantite').val($(this).data('lotQuantity'));
+                    });
+                }
+            });
+        }
+    </script>
+}

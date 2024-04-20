@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SophaTemp.Data;
+using SophaTemp.Mappers;
 using SophaTemp.Models;
+using SophaTemp.Viewmodel;
 
 namespace SophaTemp.Areas.Admin.Controllers
 {
@@ -23,20 +25,20 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/CategoryMedicaments
         public async Task<IActionResult> Index()
         {
-              return _context.CategoryMedicament != null ? 
-                          View(await _context.CategoryMedicament.ToListAsync()) :
-                          Problem("Entity set 'AppDbContext.CategoryMedicament'  is null.");
+              return _context.Categories != null ? 
+                          View(await _context.Categories.ToListAsync()) :
+                          Problem("Entity set 'AppDbContext.Categories'  is null.");
         }
 
         // GET: Admin/CategoryMedicaments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.CategoryMedicament == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var categoryMedicament = await _context.CategoryMedicament
+            var categoryMedicament = await _context.Categories
                 .FirstOrDefaultAsync(m => m.CategoryMedicamentId == id);
             if (categoryMedicament == null)
             {
@@ -57,26 +59,28 @@ namespace SophaTemp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryMedicamentId,Reference,Libelle")] CategoryMedicament categoryMedicament)
+        public async Task<IActionResult> Create(CategoryMedicamentVM category)
         {
             if (ModelState.IsValid)
             {
+                CategoryMedicamentMapper map = new CategoryMedicamentMapper();
+                CategoryMedicament categoryMedicament = map.CategoryMedicamentAddMap(category);
                 _context.Add(categoryMedicament);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(categoryMedicament);
+            return View(category);
         }
 
         // GET: Admin/CategoryMedicaments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.CategoryMedicament == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var categoryMedicament = await _context.CategoryMedicament.FindAsync(id);
+            var categoryMedicament = await _context.Categories.FindAsync(id);
             if (categoryMedicament == null)
             {
                 return NotFound();
@@ -122,12 +126,12 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/CategoryMedicaments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.CategoryMedicament == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var categoryMedicament = await _context.CategoryMedicament
+            var categoryMedicament = await _context.Categories
                 .FirstOrDefaultAsync(m => m.CategoryMedicamentId == id);
             if (categoryMedicament == null)
             {
@@ -142,14 +146,14 @@ namespace SophaTemp.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.CategoryMedicament == null)
+            if (_context.Categories == null)
             {
-                return Problem("Entity set 'AppDbContext.CategoryMedicament'  is null.");
+                return Problem("Entity set 'AppDbContext.Categories'  is null.");
             }
-            var categoryMedicament = await _context.CategoryMedicament.FindAsync(id);
+            var categoryMedicament = await _context.Categories.FindAsync(id);
             if (categoryMedicament != null)
             {
-                _context.CategoryMedicament.Remove(categoryMedicament);
+                _context.Categories.Remove(categoryMedicament);
             }
             
             await _context.SaveChangesAsync();
@@ -158,7 +162,7 @@ namespace SophaTemp.Areas.Admin.Controllers
 
         private bool CategoryMedicamentExists(int id)
         {
-          return (_context.CategoryMedicament?.Any(e => e.CategoryMedicamentId == id)).GetValueOrDefault();
+          return (_context.Categories?.Any(e => e.CategoryMedicamentId == id)).GetValueOrDefault();
         }
     }
 }
