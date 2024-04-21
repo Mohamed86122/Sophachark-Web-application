@@ -1,4 +1,4 @@
-﻿@model SophaTemp.Models.Passeport
+﻿@model SophaTemp.Viewmodel.PasseportVm
 
 @{
     ViewData["Title"] = "Create";
@@ -18,10 +18,10 @@
                 <span asp-validation-for="Nom" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Prenom" class="control-label"></label>
-                <input asp-for="Prenom" class="form-control" />
-                <span asp-validation-for="Prenom" class="text-danger"></span>
+                <label for="">Catégories</label>
+                <select asp-for="SelectedpasseportIds" asp-items="ViewBag.Permission" class="form-control" ></select>
             </div>
+            
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

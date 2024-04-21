@@ -1,47 +1,33 @@
-﻿<div class="jumbotron jumbotron-fluid">
-    <div class="container">
-        <h1 class="display-4">Bienvenue, Admin !</h1>
-        <p class="lead">Ceci est votre tableau de bord, d'où vous pouvez gérer l'ensemble de l'application.</p>
-    </div>
-</div>
+﻿@model SophaTemp.Viewmodel.LoginVm
 
-<div class="container">
-    <div class="row">
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Gérer les Utilisateurs</h5>
-                    <p class="card-text">Ajouter, modifier ou supprimer des utilisateurs de l'application.</p>
-                    <a href="/Admin/GestionUtilisateurs" class="btn btn-primary">Explorer</a>
-                </div>
-            </div>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="border p-4 rounded">
+                <form method="post" asp-action="Login">
+        <!-- Email input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="form2Example1">Email</label>
+
+            <input asp-for="Email" id="form2Example1" class="form-control" placeholder="Entrer votre mail" />
         </div>
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Voir les Rapports</h5>
-                    <p class="card-text">Accéder et analyser les derniers rapports.</p>
-                    <a href="/Admin/Rapports" class="btn btn-primary">Explorer</a>
-                </div>
-            </div>
+
+        <!-- Password input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="form2Example2">Password</label>
+
+            <input asp-for="MotDePasse" id="form2Example2" class="form-control" placeholder="Entrer Votre mot de passe"/>
         </div>
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Paramètres</h5>
-                    <p class="card-text">Ajuster les paramètres de l'application.</p>
-                    <a href="/Admin/Parametres" class="btn btn-primary">Explorer</a>
-                </div>
+
+        
+
+        <!-- Submit button -->
+        <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Sign in</button>
+
+
+    </form>
             </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Paramètres</h5>
-                    <p class="card-text">Ajuster les paramètres de l'application.</p>
-                    <a href="/Admin/Parametres" class="btn btn-primary">Explorer</a>
-                </div>
-            </div>
-        </div>
+       </div>
     </div>
 </div>

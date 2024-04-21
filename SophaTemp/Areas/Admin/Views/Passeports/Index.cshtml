@@ -16,9 +16,8 @@
                 @Html.DisplayNameFor(model => model.Nom)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Prenom)
+                Permissions
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -27,9 +26,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Nom)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Prenom)
-            </td>
+                <td>
+                    @foreach (var permission in item.Permissions)
+                    {
+                        <div>@permission.Nom</div> 
+                    }
+                </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PasseportId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.PasseportId">Details</a> |
