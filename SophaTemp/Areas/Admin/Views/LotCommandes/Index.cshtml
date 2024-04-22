@@ -4,20 +4,12 @@
     ViewData["Title"] = "Index";
 }
 
-@section Style
-    {
-    <link rel="stylesheet" type="text/css" href="~/css/Datatable/style.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
-
-}
-<div class="container mt-5">
-<h1>La liste des Lots commandes</h1>
+<h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-
-<table id="monTableau" class="display">
+<table class="table">
     <thead>
         <tr>
             <th>
@@ -26,11 +18,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Quantite)
             </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.Lot)
-            </th>
-            <th>Actions</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -43,10 +31,6 @@
                 @Html.DisplayFor(modelItem => item.Quantite)
             </td>
             <td>
-
-                @Html.DisplayFor(modelItem => item.Lot.LotId)
-            </td>
-            <td>
                 <a asp-action="Edit" asp-route-id="@item.LotCommandeId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.LotCommandeId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.LotCommandeId">Delete</a>
@@ -55,20 +39,3 @@
 }
     </tbody>
 </table>
-
-</div>
-@section Scripts
-    {
-    <script src="~/js/Datatable/script.js" />
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
-
-    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
-}

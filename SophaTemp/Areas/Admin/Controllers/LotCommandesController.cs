@@ -6,10 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SophaTemp.Data;
-
-using SophaTemp.Mappers;
 using SophaTemp.Models;
-using SophaTemp.Viewmodel;
 
 namespace SophaTemp.Areas.Admin.Controllers
 {
@@ -29,7 +26,6 @@ namespace SophaTemp.Areas.Admin.Controllers
               return _context.LotCommandes != null ? 
                           View(await _context.LotCommandes.ToListAsync()) :
                           Problem("Entity set 'AppDbContext.LotCommandes'  is null.");
-          
         }
 
         // GET: Admin/LotCommandes/Details/5
@@ -41,8 +37,6 @@ namespace SophaTemp.Areas.Admin.Controllers
             }
 
             var lotCommande = await _context.LotCommandes
-
-                .Include(l => l.Lot)
                 .FirstOrDefaultAsync(m => m.LotCommandeId == id);
             if (lotCommande == null)
             {
@@ -55,8 +49,6 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/LotCommandes/Create
         public IActionResult Create()
         {
-
-            ViewData["LotId"] = new SelectList(_context.Lots, "LotId", "Libelle");
             return View();
         }
 
@@ -65,19 +57,15 @@ namespace SophaTemp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult> Create(LotCommandeVm lotc)
+        public async Task<IActionResult> Create([Bind("LotCommandeId,Frais,Quantite")] LotCommande lotCommande)
         {
             if (ModelState.IsValid)
             {
-                LotCommandeMapper map = new LotCommandeMapper();
-                LotCommande newLot = map.LotaddVmCommande(lotc);
-                _context.Add(newLot);
+                _context.Add(lotCommande);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LotId"] = new SelectList(_context.Lots, "LotId", "Libelle", lotc.LotId);
-            return View(lotc);
+            return View(lotCommande);
         }
 
         // GET: Admin/LotCommandes/Edit/5
@@ -93,8 +81,6 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
-            ViewData["LotId"] = new SelectList(_context.Lots, "LotId", "LotId", lotCommande.LotId);
             return View(lotCommande);
         }
 
@@ -103,8 +89,7 @@ namespace SophaTemp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult> Edit(int id, [Bind("LotCommandeId,Frais,Quantite,LotId")] LotCommande lotCommande)
+        public async Task<IActionResult> Edit(int id, [Bind("LotCommandeId,Frais,Quantite")] LotCommande lotCommande)
         {
             if (id != lotCommande.LotCommandeId)
             {
@@ -131,8 +116,6 @@ namespace SophaTemp.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-
-            ViewData["LotId"] = new SelectList(_context.Lots, "LotId", "LotId", lotCommande.LotId);
             return View(lotCommande);
         }
 
@@ -145,7 +128,6 @@ namespace SophaTemp.Areas.Admin.Controllers
             }
 
             var lotCommande = await _context.LotCommandes
-                .Include(l => l.Lot)
                 .FirstOrDefaultAsync(m => m.LotCommandeId == id);
             if (lotCommande == null)
             {

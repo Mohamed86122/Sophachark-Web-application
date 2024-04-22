@@ -49,8 +49,6 @@
             @RenderSection("navbar", required: false)
 @*         </header>
  *@
- @if (User.Identity.IsAuthenticated)
-    {
         <div class="container">
             <main role="main" class="pb-3">
                 <div class="navbar navbar-expand-lg bsnav bsnav-sticky bsnav-sticky-slide">
@@ -60,10 +58,20 @@
                         <a class="navbar-brand" href="index.html">
                             <img src="~/assets/image/SophaLogo.png" class="img-fluid logo" alt="img">
                         </a>
-
+                    @if (User.Identity.IsAuthenticated)
+                    {
                         <button class="navbar-toggler toggler-spring">
                             <span class="navbar-toggler-icon"></span>
                         </button>
+                    <div class="collapse navbar-collapse">
+                        <ul class="navbar-nav navbar-mobile ml-auto mr-auto">
+                            <li class="nav-item dropdown activee">
+                                <a class="nav-link link_hd" href="@Url.Action("Authentification", "Login")">Login</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                        
                         <div class="collapse navbar-collapse">
                             <ul class="navbar-nav navbar-mobile ml-auto mr-auto">
                                 <li class="nav-item dropdown activee">
@@ -129,12 +137,14 @@
                                 </li>
                             </ul> *@
                         </div>
-                    </div>
+                    }
                 </div>
+                </div>
+                   
             </main>
 
         </div>
-    }
+    
     @RenderBody()
       
 

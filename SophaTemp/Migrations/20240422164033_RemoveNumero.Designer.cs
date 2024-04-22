@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SophaTemp.Data;
 
@@ -11,9 +12,10 @@ using SophaTemp.Data;
 namespace SophaTemp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240422164033_RemoveNumero")]
+    partial class RemoveNumero
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,9 +232,6 @@ namespace SophaTemp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("LotCommandeId")
-                        .HasColumnType("int");
-
                     b.Property<int>("MedicamentId")
                         .HasColumnType("int");
 
@@ -252,8 +251,6 @@ namespace SophaTemp.Migrations
 
                     b.HasIndex("FournisseurId");
 
-                    b.HasIndex("LotCommandeId");
-
                     b.HasIndex("MedicamentId");
 
                     b.ToTable("Lots");
@@ -270,10 +267,15 @@ namespace SophaTemp.Migrations
                     b.Property<double>("Frais")
                         .HasColumnType("float");
 
+                    b.Property<int>("LotId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Quantite")
                         .HasColumnType("int");
 
                     b.HasKey("LotCommandeId");
+
+                    b.HasIndex("LotId");
 
                     b.ToTable("LotCommandes");
                 });
@@ -585,10 +587,6 @@ namespace SophaTemp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SophaTemp.Models.LotCommande", null)
-                        .WithMany("Lots")
-                        .HasForeignKey("LotCommandeId");
-
                     b.HasOne("SophaTemp.Models.Medicament", "Medicament")
                         .WithMany()
                         .HasForeignKey("MedicamentId")
@@ -598,6 +596,17 @@ namespace SophaTemp.Migrations
                     b.Navigation("Fournisseur");
 
                     b.Navigation("Medicament");
+                });
+
+            modelBuilder.Entity("SophaTemp.Models.LotCommande", b =>
+                {
+                    b.HasOne("SophaTemp.Models.Lot", "Lot")
+                        .WithMany()
+                        .HasForeignKey("LotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Lot");
                 });
 
             modelBuilder.Entity("SophaTemp.Models.MedicamentCategoryMedicament", b =>
@@ -659,11 +668,6 @@ namespace SophaTemp.Migrations
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Fournisseur", b =>
-                {
-                    b.Navigation("Lots");
-                });
-
-            modelBuilder.Entity("SophaTemp.Models.LotCommande", b =>
                 {
                     b.Navigation("Lots");
                 });
