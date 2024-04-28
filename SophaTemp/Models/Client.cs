@@ -2,7 +2,7 @@
 {
     public class Client : Personne
     {
-        public int ClientId {  get; set; }
+        public int ClientId { get; set; }
         public string LibellePharmacie { get; set; }
         public string Ville { get; set; }
         public string Telephone { get; set; }
@@ -11,8 +11,11 @@
         public string Adresse { get; set; }
         public bool EnGarde { get; set; }
 
+        
         public virtual ICollection<Commande> Commandes { get; set; }
         public int WhishlistId { get; set; }
         public Whishlist Whishlist { get; set; }
+
+        
     }
 }

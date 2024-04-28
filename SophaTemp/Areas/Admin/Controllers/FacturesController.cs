@@ -195,5 +195,7 @@ namespace SophaTemp.Areas.Admin.Controllers
         {
           return (_context.Factures?.Any(e => e.FactureId == id)).GetValueOrDefault();
         }
+
+       
     }
 }

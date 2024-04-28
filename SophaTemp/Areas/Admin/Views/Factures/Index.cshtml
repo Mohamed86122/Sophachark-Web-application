@@ -9,11 +9,13 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
 
 }
-<h1>Index</h1>
+<div class="container mt-5">
+<h1>Facturation</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-outline-primary">Create New</a>
 </p>
+<br />
 <table id="monTableau" class="display" style="width:100%">
     <thead>
         <tr>
@@ -48,14 +50,18 @@
                 @Html.DisplayFor(modelItem => item.Commande.CommandeId)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.FactureId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FactureId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FactureId">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.FactureId" class="btn btn-sm btn-success">Edit</a> 
+                    <a asp-action="Details" asp-route-id="@item.FactureId" class="btn btn-sm btn-info">Details</a> 
+                    <a asp-action="Delete" asp-route-id="@item.FactureId" class="btn btn-sm btn-danger">Delete</a>
+                        
+
             </td>
         </tr>
 }
     </tbody>
 </table>
+<br />
+    <button onclick="afficherCommandes()" class="btn btn-sm btn-primary">Afficher la liste des Commandes</button>
 @section Scripts
 {
     <script src="~/js/Datatable/script.js" />
@@ -83,5 +89,11 @@
 
         })
     </script>
+
+        <script>
+            function afficherCommandes() {
+                window.location.href = "Commandes"; // Replace with your actual commandes route
+            }
+        </script>
 }
 

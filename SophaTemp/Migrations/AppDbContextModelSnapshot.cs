@@ -483,6 +483,9 @@ namespace SophaTemp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PersonneId1")
+                        .HasColumnType("int");
+
                     b.Property<string>("Telephone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -499,6 +502,8 @@ namespace SophaTemp.Migrations
 
                     b.Property<double>("Y")
                         .HasColumnType("float");
+
+                    b.HasIndex("PersonneId1");
 
                     b.HasIndex("WhishlistId");
 
@@ -655,11 +660,19 @@ namespace SophaTemp.Migrations
 
             modelBuilder.Entity("SophaTemp.Models.Client", b =>
                 {
+                    b.HasOne("SophaTemp.Models.Personne", "Personne")
+                        .WithMany("Clients")
+                        .HasForeignKey("PersonneId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SophaTemp.Models.Whishlist", "Whishlist")
                         .WithMany("Clients")
                         .HasForeignKey("WhishlistId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Personne");
 
                     b.Navigation("Whishlist");
                 });
@@ -692,6 +705,11 @@ namespace SophaTemp.Migrations
 
                     b.Navigation("Personne")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SophaTemp.Models.Personne", b =>
+                {
+                    b.Navigation("Clients");
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Whishlist", b =>

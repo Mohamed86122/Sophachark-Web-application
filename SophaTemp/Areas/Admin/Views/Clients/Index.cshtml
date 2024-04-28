@@ -9,11 +9,14 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
 
 }
+<div class="container mt-5">
+
 <h1>Liste des clients  </h1>
 
 <p>
     <a asp-action="Create" class="btn btn-outline-primary">Create New</a>
 </p>
+<br />
 <table id="monTableau" class="display">
     <thead>
         <tr>
@@ -26,21 +29,21 @@
             <th>
                 @Html.DisplayNameFor(model => model.Telephone)
             </th>
-            <th>
+          @*   <th>
                 @Html.DisplayNameFor(model => model.X)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Y)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.Adresse)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.EnGarde)
             </th>
-            <th>
+        @*     <th>
                 @Html.DisplayNameFor(model => model.Whishlist)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.nom)
             </th>
@@ -50,20 +53,19 @@
             <th>
                 @Html.DisplayNameFor(model => model.email)
             </th>
-            <th>
+           @*  <th>
                 @Html.DisplayNameFor(model => model.motdepasse)
-            </th>
-            <th>
+            </th> *@
+         @*     <th>
                 @Html.DisplayNameFor(model => model.Passeport)
-            </th>
-            <th></th>
+            </th>  *@
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.LibellePharmacie)
+            <td >
+                       @Html.DisplayFor(modelItem => item.LibellePharmacie)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Ville)
@@ -71,21 +73,21 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Telephone)
             </td>
-            <td>
+          @*   <td>
                 @Html.DisplayFor(modelItem => item.X)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Y)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.Adresse)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EnGarde)
             </td>
-            <td>
+           @*  <td>
                 @Html.DisplayFor(modelItem => item.Whishlist.WhishlistId)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.nom)
             </td>
@@ -95,16 +97,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.email)
             </td>
-            <td>
+             @*<td>
                 @Html.DisplayFor(modelItem => item.motdepasse)
-            </td>
-            <td>
+            </td> 
+             <td>
                 @Html.DisplayFor(modelItem => item.Passeport.PasseportId)
-            </td>
+            </td> *@
             <td>
-                <a asp-action="Edit" asp-route-id="@item.PersonneId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PersonneId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PersonneId">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.PersonneId" class="btn btn-sm btn-success">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.PersonneId" class="btn btn-sm btn-info">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.PersonneId" class="btn btn-sm btn-danger">Delete</a>
             </td>
         </tr>
 }
@@ -124,4 +126,17 @@
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+
+        <script>
+
+            $(document).ready(function () {
+
+                $("#ClientTable").DataTable();
+            });
+            $(document).ready(function () {
+
+
+
+            })
+        </script>
  }

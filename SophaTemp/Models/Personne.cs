@@ -15,6 +15,8 @@ namespace SophaTemp.Models
 
         public Passeport Passeport { get; set; }
 
+     
         public int PasseportId { get; set; }
+
     }
 }
