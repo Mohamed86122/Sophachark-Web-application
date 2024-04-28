@@ -65,11 +65,11 @@
                      <span id="affichageMontant" class="form-control"></span>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DateDeProduction)
-                </td>
+                        @item.DateDeProduction.ToString("dd/MM/yyyy")
+                    </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DateDExpedition)
-                </td>
+                        @item.DateDExpedition.ToString("dd/MM/yyyy")
+                    </td>
                 <td>
                 </td>
                 <td>
@@ -79,9 +79,9 @@
                     @Html.DisplayFor(modelItem => item.Fournisseur.NomComplet)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.LotId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.LotId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.LotId">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.LotId" class="btn btn-sm btn-success">Edit</a> 
+                        <a asp-action="Details" asp-route-id="@item.LotId" class="btn btn-sm btn-info">Details</a> 
+                        <a asp-action="Delete" asp-route-id="@item.LotId" class="btn btn-sm btn-danger">Delete</a>
                 </td>
             </tr>
     }

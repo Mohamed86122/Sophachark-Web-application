@@ -1,7 +1,7 @@
 ﻿@model SophaTemp.Viewmodel.MedicamentAddVM
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Medicament";
 }
 
 <div class="container mt-5">
@@ -43,14 +43,16 @@
                     </div>
                     <div class="form-group text-center">
                         <input type="submit" value="Create" class="btn btn-primary" />
+                        <a asp-action="Index" asp-controller="Medicaments" class="btn btn-outline-primary">Create & stay </a>
+                        <a asp-action="Index" asp-controller="Medicaments" class="btn btn-outline-success">Back to List</a>
+
                     </div>
+                    
                 </form>
             </div>
         </div>
     </div>
-    <div class="text-center mt-3">
-        <a asp-action="Index" asp-controller="Medicaments">Back to List</a>
-    </div>
+    
 </div>
 
 @section Scripts {
