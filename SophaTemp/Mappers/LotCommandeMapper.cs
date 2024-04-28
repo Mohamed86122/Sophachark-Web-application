@@ -12,7 +12,7 @@ namespace SophaTemp.Mappers
             {
                 Frais=model.Frais,
                 Quantite=model.Quantite,
-                LotId=model.LotId
+                
             };
 
         }

@@ -18,9 +18,7 @@
 <table id="monTableau" class="display">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Numero)
-            </th>
+            
             <th>
                 Medicament
             </th>
@@ -42,10 +40,13 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            
             <td>
-                @Html.DisplayFor(modelItem => item.Numero)
+                        
             </td>
-           
+            <td>
+                        
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DateCommande)
             </td>

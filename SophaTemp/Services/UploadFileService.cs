@@ -24,7 +24,7 @@
                     file.CopyTo(stream);
                 }
             }
-            return "~" + NewName;
+            return   Path.Combine(directory, NewName);
         }
     }
 }

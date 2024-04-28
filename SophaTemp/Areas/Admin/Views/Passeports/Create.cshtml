@@ -1,4 +1,4 @@
-﻿@model SophaTemp.Models.LotCommande
+﻿@model SophaTemp.Viewmodel.PasseportVm
 
 @{
     ViewData["Title"] = "Create";
@@ -6,22 +6,22 @@
 
 <h1>Create</h1>
 
-<h4>LotCommande</h4>
+<h4>Passeport</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Frais" class="control-label"></label>
-                <input asp-for="Frais" class="form-control" />
-                <span asp-validation-for="Frais" class="text-danger"></span>
+                <label asp-for="Nom" class="control-label"></label>
+                <input asp-for="Nom" class="form-control" />
+                <span asp-validation-for="Nom" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Quantite" class="control-label"></label>
-                <input asp-for="Quantite" class="form-control" />
-                <span asp-validation-for="Quantite" class="text-danger"></span>
+                <label for="">Catégories</label>
+                <select asp-for="SelectedpasseportIds" asp-items="ViewBag.Permission" class="form-control" ></select>
             </div>
+            
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

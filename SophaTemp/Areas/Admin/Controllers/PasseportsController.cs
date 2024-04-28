@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SophaTemp.Data;
+using SophaTemp.Mappers;
 using SophaTemp.Models;
+using SophaTemp.Viewmodel;
 
 namespace SophaTemp.Areas.Admin.Controllers
 {
@@ -23,7 +25,10 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Passeports
         public async Task<IActionResult> Index()
         {
-              return _context.Passeports != null ? 
+            var passeports = await _context.Passeports
+                .Include(p => p.Permissions)
+                .ToListAsync();
+            return _context.Passeports != null ? 
                           View(await _context.Passeports.ToListAsync()) :
                           Problem("Entity set 'AppDbContext.Passeports'  is null.");
         }
@@ -49,6 +54,7 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Passeports/Create
         public IActionResult Create()
         {
+            ViewBag.Permission = new SelectList(_context.permissions, "PermissionId", "Nom");
             return View();
         }
 
@@ -57,17 +63,30 @@ namespace SophaTemp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PasseportId,Nom,Prenom,PermissionsJson")] Passeport passeport)
+        public async Task<IActionResult> Create(PasseportVm model)
         {
             if (ModelState.IsValid)
             {
+                PasseportMapper passeportMap = new PasseportMapper(_context);
+                Passeport passeport = passeportMap.PassportAddVmmap(model);
+
+                foreach (var permissionId in model.SelectedpasseportIds)
+                {
+                    var existingPermission = await _context.permissions
+                        .FindAsync(permissionId); // Assurez-vous que cette permission existe déjà dans la base de données.
+                    if (existingPermission != null)
+                    {
+                        passeport.Permissions.Add(existingPermission); // Ajoutez l'instance existante au lieu d'en créer une nouvelle.
+                    }
+                }
+
                 _context.Add(passeport);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(passeport);
+            ViewBag.Permission = new SelectList(_context.permissions, "PermissionId", "Nom");
+            return View(model);
         }
-
         // GET: Admin/Passeports/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -76,48 +95,79 @@ namespace SophaTemp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var passeport = await _context.Passeports.FindAsync(id);
+            var passeport = await _context.Passeports
+                .Include(p => p.Permissions)  // Assurez-vous de charger également les permissions
+                .FirstOrDefaultAsync(p => p.PasseportId == id);
             if (passeport == null)
             {
                 return NotFound();
             }
-            return View(passeport);
+
+            var viewModel = new PasseportVm
+            {
+                Nom = passeport.Nom,
+                SelectedpasseportIds = passeport.Permissions.Select(p => p.PermissionId).ToList()
+            };
+            ViewBag.Permission = new SelectList(_context.permissions, "PermissionId", "Nom", viewModel.SelectedpasseportIds);
+            return View(viewModel);
         }
 
-        // POST: Admin/Passeports/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PasseportId,Nom,Prenom,PermissionsJson")] Passeport passeport)
+
+          // POST: Admin/Passeports/Edit/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, PasseportVm model)  // Utiliser ViewModel au lieu de binder directement le modèle Passeport
+    {
+    
+
+        if (ModelState.IsValid)
         {
-            if (id != passeport.PasseportId)
+            var passeportToUpdate = await _context.Passeports
+                .Include(p => p.Permissions)
+                .FirstOrDefaultAsync(p => p.PasseportId == id);
+
+            if (passeportToUpdate == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            passeportToUpdate.Nom = model.Nom;  // Mise à jour des champs simples
+            // Mise à jour des permissions
+            var updatedPermissions = _context.permissions
+                .Where(p => model.SelectedpasseportIds.Contains(p.PermissionId))
+                .ToList();
+
+            passeportToUpdate.Permissions = updatedPermissions;  // Mise à jour de la collection des permissions
+
+            try
             {
-                try
-                {
-                    _context.Update(passeport);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PasseportExists(passeport.PasseportId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(passeportToUpdate);
+                await _context.SaveChangesAsync();
             }
-            return View(passeport);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PasseportExists(passeportToUpdate.PasseportId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
         }
+
+        // Recharger les permissions si la soumission du formulaire échoue
+        model.SelectedpasseportIds = _context.permissions
+            .Where(p => model.SelectedpasseportIds.Contains(p.PermissionId))
+            .Select(p => p.PermissionId)
+            .ToList();
+
+        ViewBag.Permission = new SelectList(_context.permissions, "PermissionId", "Nom", model.SelectedpasseportIds);
+        return View(model);
+    }
 
         // GET: Admin/Passeports/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -128,6 +178,7 @@ namespace SophaTemp.Areas.Admin.Controllers
             }
 
             var passeport = await _context.Passeports
+                .Include(p => p.Permissions)  // Charger les permissions pour afficher les détails avant la suppression
                 .FirstOrDefaultAsync(m => m.PasseportId == id);
             if (passeport == null)
             {
@@ -142,19 +193,17 @@ namespace SophaTemp.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Passeports == null)
-            {
-                return Problem("Entity set 'AppDbContext.Passeports'  is null.");
-            }
             var passeport = await _context.Passeports.FindAsync(id);
-            if (passeport != null)
+            if (passeport == null)
             {
-                _context.Passeports.Remove(passeport);
+                return NotFound();
             }
-            
+
+            _context.Passeports.Remove(passeport);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool PasseportExists(int id)
         {

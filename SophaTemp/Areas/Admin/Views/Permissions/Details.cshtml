@@ -1,4 +1,4 @@
-﻿@model SophaTemp.Models.LotCommande
+﻿@model SophaTemp.Models.Permission
 
 @{
     ViewData["Title"] = "Details";
@@ -7,24 +7,24 @@
 <h1>Details</h1>
 
 <div>
-    <h4>LotCommande</h4>
+    <h4>Permission</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Frais)
+            @Html.DisplayNameFor(model => model.Nom)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Frais)
+            @Html.DisplayFor(model => model.Nom)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Quantite)
+            @Html.DisplayNameFor(model => model.Description)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Quantite)
+            @Html.DisplayFor(model => model.Description)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.LotCommandeId">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.PermissionId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

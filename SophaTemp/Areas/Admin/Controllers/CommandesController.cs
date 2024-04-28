@@ -16,10 +16,14 @@ namespace SophaTemp.Areas.Admin.Controllers
     public class CommandesController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly CommandeMapper _commandeMapper;
 
-        public CommandesController(AppDbContext context)
+
+        public CommandesController(AppDbContext context,CommandeMapper command)
         {
             _context = context;
+            _commandeMapper = command;
+
         }
 
         public async Task<IActionResult> Index()
@@ -50,18 +54,40 @@ namespace SophaTemp.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CommandeVm commandeVm)
         {
-            if (ModelState.IsValid)
-            {
-                CommandeMapper commandeMapper = new CommandeMapper();
-                Commande commande = commandeMapper.commandemapperAddVm(commandeVm);
-                _context.Add(commande);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+            
+                if (ModelState.IsValid)
+                {
+                    var lotsDisponibles = _context.Lots
+                        .Where(l => l.MedicamentId == commandeVm.MedicamentId && l.Quantite >= commandeVm.Quantite)
+                        .ToList();
 
-            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", commandeVm.MedicamentId);
-            ViewData["ClientId"] = new SelectList(_context.Clients, "ClientId", "Nom", commandeVm.ClientId);
-            return View(commandeVm);
+                    var commande = _commandeMapper.CommandeMapperAddVm(commandeVm);
+
+                    if (lotsDisponibles.Any())
+                    {
+                        _context.Add(commande);
+
+                        foreach (var lot in lotsDisponibles)
+                        {
+                            lot.Quantite -= commandeVm.Quantite;
+                            _context.Update(lot);
+                        }
+
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", $"La quantité demandée de {commandeVm.Quantite} ne peut être couverte par les lots sélectionnés.");
+                    }
+                }
+
+                ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", commandeVm.MedicamentId);
+                ViewData["ClientId"] = new SelectList(_context.Clients, "ClientId", "LibellePharmacie", commandeVm.ClientId);
+
+                return View(commandeVm);
+            
         }
 
         public async Task<IActionResult> Edit(int? id)

@@ -58,55 +58,68 @@
                         <a class="navbar-brand" href="index.html">
                             <img src="~/assets/image/SophaLogo.png" class="img-fluid logo" alt="img">
                         </a>
-
+                    @if (User.Identity.IsAuthenticated)
+                    {
                         <button class="navbar-toggler toggler-spring">
                             <span class="navbar-toggler-icon"></span>
                         </button>
+                    <div class="collapse navbar-collapse">
+                        <ul class="navbar-nav navbar-mobile ml-auto mr-auto">
+                            <li class="nav-item dropdown activee">
+                                <a class="nav-link link_hd" href="@Url.Action("Authentification", "Login")">Login</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                        
                         <div class="collapse navbar-collapse">
                             <ul class="navbar-nav navbar-mobile ml-auto mr-auto">
                                 <li class="nav-item dropdown activee">
                                     <a class="nav-link link_hd" href="@Url.Action("Index", "Home")">Home</a>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link link_hd" href="#">  Pages  </a>
-                                    <ul class="navbar-nav submenu">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link link_hd" href="#">  Pages  </a>
+                                        <ul class="navbar-nav submenu">
 
-                                        <li class="nav-item">
-                                            <a class="nav-link link_hd" href="@Url.Action("Index", "Medicaments")">Médicament</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link link_hd" href="@Url.Action("Index", "Lots")">Lots</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link link_hd" href="@Url.Action("Index", "CategoryMedicaments")">Catégorie Médicament</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link link_hd" href="@Url.Action("Index", "Clients")">Clients</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link link_hd" href="@Url.Action("Index", "Factures")">Factures</a>
-                                        </li>
-                                       
+                                            <li class="nav-item">
+                                                <a class="nav-link link_hd" href="@Url.Action("Index", "Medicaments")">Médicament</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link link_hd" href="@Url.Action("Index", "Lots")">Lots</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link link_hd" href="@Url.Action("Index", "CategoryMedicaments")">Catégorie Médicament</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link link_hd" href="@Url.Action("Index", "Clients")">Clients</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link link_hd" href="@Url.Action("Index", "Factures")">Factures</a>
+                                            </li>
 
-                                    </ul>
-                                </li><li class="nav-item dropdown">
-                                    <a class="nav-link link_hd" href="#">  Pages 2  </a>
-                                    <ul class="navbar-nav submenu">
 
-                                        <li class="nav-item">
-                                            <a class="nav-link link_hd" href="@Url.Action("Index", "Passeports")">Passeports</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link link_hd" href="@Url.Action("Index", "Commandes")">Commande</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link link_hd" href="@Url.Action("Index", "Fournisseurs")">Fournisseur</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link link_hd" href="@Url.Action("Index", "LotCommandes")">Lot Commandes</a>
-                                        </li>
+                                        </ul>
+                                    </li><li class="nav-item dropdown">
+                                        <a class="nav-link link_hd" href="#">  Pages 2  </a>
+                                        <ul class="navbar-nav submenu">
 
-                                    </ul>
-                                </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link link_hd" href="@Url.Action("Index", "Passeports")">Passeports</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link link_hd" href="@Url.Action("Index", "Commandes")">Commande</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link link_hd" href="@Url.Action("Index", "Fournisseurs")">Fournisseur</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link link_hd" href="@Url.Action("Index", "LotCommandes")">Lot Commandes</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link link_hd" href="@Url.Action("Index", "Personnes")">Person</a>
+                                            </li>
+
+                                        </ul>
+                                    </li>
                             </ul>
                             @* <ul class="navbar-nav navbar-mobile right-nav ml-auto ">
                                 <li class="nav-item dropdown">
@@ -124,15 +137,16 @@
                                 </li>
                             </ul> *@
                         </div>
-                    </div>
+                    }
                 </div>
+                </div>
+                   
             </main>
 
         </div>
-
-        @RenderBody()
+    
+    @RenderBody()
       
-        @RenderBody()
 
         @RenderSection("footer", required: false)
 

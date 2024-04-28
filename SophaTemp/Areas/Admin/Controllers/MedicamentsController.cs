@@ -61,7 +61,7 @@ namespace SophaTemp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        
         public async Task<IActionResult> Create(MedicamentAddVM medicament)
         {
             if (ModelState.IsValid)

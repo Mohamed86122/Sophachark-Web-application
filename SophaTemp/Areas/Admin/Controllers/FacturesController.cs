@@ -31,7 +31,7 @@ namespace SophaTemp.Areas.Admin.Controllers
 
             var commandes = await _context.Commandes
                 .Where(c => c.CommandeId == numericTerm) // Recherche par CommandeId
-                .Select(c => new { label = c.Numero, value = c.CommandeId })
+                .Select(c => new {  value = c.CommandeId })
                 .ToListAsync();
 
             return Json(commandes);

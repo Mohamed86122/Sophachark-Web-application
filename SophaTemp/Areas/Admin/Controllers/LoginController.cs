@@ -6,20 +6,22 @@ using SophaTemp.Viewmodel;
 using System.Security.Claims;
 
 namespace SophaTemp.Areas.Admin.Controllers
-{   
-    [Area("Admin")]
-    public class HomeController : Controller
+{
+    public class LoginController : Controller
     {
         private readonly AppDbContext _context;
 
-        public HomeController(AppDbContext context)
+        public LoginController(AppDbContext context)
         {
             _context = context;
         }
-
-        public IActionResult Index(LoginVm model)
+        public IActionResult Index()
         {
+            return View();
+        }
 
+        public IActionResult Login(LoginVm model)
+        {
             if (ModelState.IsValid)
             {
                 // Récupérer l'utilisateur par email et mot de passe
@@ -63,8 +65,7 @@ namespace SophaTemp.Areas.Admin.Controllers
             }
 
             return View(model);
+
         }
-		
-		
     }
 }
