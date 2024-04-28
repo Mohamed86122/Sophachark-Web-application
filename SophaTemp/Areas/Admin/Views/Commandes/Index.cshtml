@@ -13,8 +13,8 @@
     <h1>La liste des Commandes</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
-</p>
+        <a asp-action="Create" class="btn btn-outline-primary">Create New</a>
+    </p>
 <table id="monTableau" class="display">
     <thead>
         <tr>
@@ -51,9 +51,9 @@
                 @Html.DisplayFor(modelItem => item.IdLotCommande)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.CommandeId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CommandeId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CommandeId">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.CommandeId" class="btn btn-sm btn-success">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.CommandeId" class="btn btn-sm btn-info">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.CommandeId" class="btn btn-sm btn-danger">Delete</a>
             </td>
         </tr>
 }

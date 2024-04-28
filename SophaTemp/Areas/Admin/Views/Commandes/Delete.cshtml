@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Delete";
 }
+<div class="container mt-5">
 
 <h1>Delete</h1>
 
@@ -10,9 +11,9 @@
 <div>
     <h4>Commande</h4>
     <hr />
-    <dl class="row">
-        
-        
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="border p-4 rounded">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DateCommande)
         </dt>
@@ -31,11 +32,12 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.IdLotCommande)
         </dd>
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="CommandeId" />
+                        <input type="submit" value="Delete" class="btn btn-danger" /> |
+                        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    </form>
     </dl>
     
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="CommandeId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+   
 </div>
