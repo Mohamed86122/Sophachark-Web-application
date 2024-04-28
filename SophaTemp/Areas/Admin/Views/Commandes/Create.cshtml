@@ -107,7 +107,7 @@
         </div> *@
 
         <div class="lot-container">
-            @* @for (int i = 1; i <= 3; i++)
+           @*  @for (int i = 1; i <= 3; i++)
             {
                 <button class="lot-button" data-lot-id="@i">
                     <div class="lot">
@@ -116,7 +116,7 @@
                         <p>QTE DISPO : </p>
                     </div>
                 </button>
- *@
+            } *@
                 @* <input type="hidden" name="LotCommandes.@i.LotId" value="">
                 <input type="hidden" name="LotCommandes.@i.Quantite" id="lotQuantity-@i"> *@
             @* } *@
@@ -125,9 +125,9 @@
         <div id="quantityDialog" class="dialog">
             <h2>Saisir Quantité</h2>
             <label for="quantityInput">Quantité:</label>
-            <input type="number" id="quantityInput" min="0">
-            <button id="saveButton">Valider</button>
-            <button id="cancelButton">Annuler</button>
+            <input asp-for="Quantite" min="0">
+            <input type="button" id="saveButton" value="valider"/>
+            <input type="button" id="cancelButton" value="cancel"/>
         </div>
 
 
@@ -155,91 +155,83 @@
                     data.forEach(function (lot, index) {
                         var isSelected = index === 0; 
                         var lotClass = isSelected ? 'lot selected' : 'lot';
-
                         container.append(
-                            `<div class="${lotClass}" data-lot-id="${lot.id}" data-lot-quantity="${lot.quantite}">
-                        <p>Date Expiration: ${lot.dateDExpedition}</p>
+                            `<div class="${lotClass} lot-button" data-lot-id="${lot.lotId}" data-lot-quantity="${lot.quantite}">
+                                     <input id="input${lot.lotId}" name="IdLotCommande" min="0">
+                            <p>Date Expiration: ${lot.dateDExpedition}</p>
                         <p>Quantité: ${lot.quantite}</p>
                       </div>`
                         );
                     });
 
-                    // Handle lot selection and quantity update
                     $('.lot').click(function () {
-                        $('.lot').removeClass('selected'); // Deselect all
+                        $('.lot').removeClass('selected'); 
                         $(this).addClass('selected');
-
-                        // Update quantity input based on selected lot quantity
                         $('#quantite').val($(this).data('lotQuantity'));
                     });
                 }
             });
-        }
-        
-                  // Initialize dialog
                     var dialog = $('#quantityDialog');
                     var quantityInput = $('#quantityInput');
-
-                    // Handle lot button clicks
-                    $('.lot-button').click(function () {
+                    $(".lot-container").on('click', '.lot-button', function(){
                         var selectedLotId = $(this).data('lotId');
                         var selectedLotQuantity = $(`#lotQuantity-${selectedLotId}`).val();
 
-                        // Update dialog values
                         dialog.find('h2').text(`Quantité pour Lot ${selectedLotId}`);
                         quantityInput.val(selectedLotQuantity);
 
-                        // Show dialog
                         dialog.show();
-                    });
+                    })
+                    // $('.lot-container').click(function (e) {
+                    // });
 
-                    // Handle save button click
                     $('#saveButton').click(function () {
                         var quantity = quantityInput.val();
 
-                        // Update selected lot quantity
                         var selectedLotId = dialog.find('.lot-button').data('lotId');
-                        $(`#lotQuantity-${selectedLotId}`).val(quantity);
-
-                        // Hide dialog
+                        alert(quantity);
+                        $(`#input${selectedLotId}`).val(quantity);
+                        
                         dialog.hide();
                     });
 
-                    // Handle cancel button click
                     $('#cancelButton').click(function () {
                         dialog.hide();
                     });
-        $('#quantite').change(function () {
-            var totalQuantityNeeded = parseInt($(this).val());
-            var selectedLots = [];
+        }
+        
+                  
+        // $('#quantite').change(function () {
+        //     var totalQuantityNeeded = parseInt($(this).val());
+        //     var selectedLots = [];
 
-            // Go through each lot and allocate the quantity.
-            $('.lot').each(function () {
-                var lotQuantity = parseInt($(this).data('lotQuantity'));
-                var lotId = $(this).data('lotId');
+        //     // Go through each lot and allocate the quantity.
+        //     $('.lot').each(function () {
+        //         var lotQuantity = parseInt($(this).data('lotQuantity'));
+        //         var lotId = $(this).data('lotId');
 
-                if (totalQuantityNeeded > 0 && lotQuantity > 0) {
-                    var quantityToTake = Math.min(totalQuantityNeeded, lotQuantity);
-                    totalQuantityNeeded -= quantityToTake;
-                    lotQuantity -= quantityToTake;
+        //         if (totalQuantityNeeded > 0 && lotQuantity > 0) {
+        //             var quantityToTake = Math.min(totalQuantityNeeded, lotQuantity);
+        //             totalQuantityNeeded -= quantityToTake;
+        //             lotQuantity -= quantityToTake;
 
-                    selectedLots.push({ lotId: lotId, quantityTaken: quantityToTake });
+        //             selectedLots.push({ lotId: lotId, quantityTaken: quantityToTake });
 
-                    // Update the displayed quantity for this lot.
-                    $(this).find('.lot-quantity-display').text('QTE : ' + lotQuantity);
-                }
-            });
+        //             // Update the displayed quantity for this lot.
+        //             $(this).find('.lot-quantity-display').text('QTE : ' + lotQuantity);
+        //         }
+        //     });
 
-            if (totalQuantityNeeded > 0) {
-                // If there's still quantity needed, inform the user.
-                alert('Not enough quantity in lots for the requested amount.');
-                // Consider clearing the quantity input or setting it to the maximum available.
-                // $('#quantite').val('');
-            }
+        //     if (totalQuantityNeeded > 0) {
+        //         // If there's still quantity needed, inform the user.
+        //         alert('Not enough quantity in lots for the requested amount.');
+        //         // Consider clearing the quantity input or setting it to the maximum available.
+        //         // $('#quantite').val('');
+        //     }
 
-            // Update hidden inputs for selected lots.
-            updateHiddenInputsForSelectedLots(selectedLots);
-        });
+        //     // Update hidden inputs for selected lots.
+        //     updateHiddenInputsForSelectedLots(selectedLots);
+        // });
         // function loadLots(medicamentId, commandeQuantite = 0) {
         //     // ... (rest of the code)
         //     $.ajax({

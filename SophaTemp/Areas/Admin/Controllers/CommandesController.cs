@@ -37,7 +37,7 @@ namespace SophaTemp.Areas.Admin.Controllers
         {
             var lots = await _context.Lots
                 .Where(l => l.MedicamentId == medicamentId)
-                .Select(l => new { l.DateDExpedition, l.Quantite })
+                .Select(l => new { l.LotId,l.DateDExpedition, l.Quantite })
                 .ToListAsync();
             return Json(lots);
         }
