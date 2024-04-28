@@ -61,7 +61,7 @@
     </tbody>
 </table>
 <br />
-    <button onclick="afficherCommandes()" class="btn btn-sm btn-primary">Afficher la liste des Commandes</button>
+    <a href="@Url.Action("Commandes")"  class="btn btn-sm btn-primary">Afficher la liste des Commandes</a>
 @section Scripts
 {
     <script src="~/js/Datatable/script.js" />
@@ -90,10 +90,6 @@
         })
     </script>
 
-        <script>
-            function afficherCommandes() {
-                window.location.href = "Commandes"; // Replace with your actual commandes route
-            }
-        </script>
+       
 }
 
