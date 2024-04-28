@@ -36,11 +36,10 @@
     <hr />
     <form asp-action="Create" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                   
-                        <div class="form-group">
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="border p-4 rounded">
                             <label asp-for="LibellePharmacie" class="control-label"></label>
                             <input asp-for="LibellePharmacie" class="form-control" />
                             <span asp-validation-for="LibellePharmacie" class="text-danger"></span>
