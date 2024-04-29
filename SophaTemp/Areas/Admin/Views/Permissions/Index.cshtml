@@ -15,6 +15,7 @@
     <p>
             <a asp-action="Create" class="btn btn-outline-primary">Create New</a>
     </p>
+    <br />
     <table id="monTableau" class="display" style="width:100%">
         <thead>
             <tr>
@@ -37,9 +38,9 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.PermissionId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.PermissionId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.PermissionId">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.PermissionId" class="btn btn-sm btn-success">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.PermissionId" class="btn btn-sm btn-info">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.PermissionId" class="btn btn-sm btn-danger">Delete</a>
                 </td>
             </tr>
     }
