@@ -17,8 +17,8 @@
     <a asp-action="Create" class="btn btn-outline-primary">Create New</a>
 </p>
 <br />
-<table id="monTableau" class="display">
-    <thead>
+    <table id="monTableau" class="display" style="width:100%">
+        <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.LibellePharmacie)
@@ -29,21 +29,14 @@
             <th>
                 @Html.DisplayNameFor(model => model.Telephone)
             </th>
-          @*   <th>
-                @Html.DisplayNameFor(model => model.X)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Y)
-            </th> *@
+         
             <th>
                 @Html.DisplayNameFor(model => model.Adresse)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.EnGarde)
             </th>
-        @*     <th>
-                @Html.DisplayNameFor(model => model.Whishlist)
-            </th> *@
+       
             <th>
                 @Html.DisplayNameFor(model => model.nom)
             </th>
@@ -112,31 +105,23 @@
 }
     </tbody>
 </table>
-@section Scripts 
-{
-    <script src="~/js/Datatable/script.js"/>
-    <script type="text/javascript"  src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+@section Scripts
+    {
+        <script src="~/js/Datatable/script.js" />
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
 
-    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
-
-        <script>
-
-            $(document).ready(function () {
-
-                $("#ClientTable").DataTable();
-            });
-            $(document).ready(function () {
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+        <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
 
 
+        
+    }
 
-            })
-        </script>
- }
+ 

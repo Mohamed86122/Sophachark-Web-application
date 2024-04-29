@@ -75,18 +75,20 @@
 
 </style>
 
-<div class="container">
+<div class="container mt-5">
     <div class="title">
         <h1>CREATE Commande</h1>
     </div>
 
     <form asp-action="Create">
         <!-- Sélection du client -->
-        <div class="form-group">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="border p-4 rounded">
             <label asp-for="ClientId" class="control-label">Pharmacie</label>
             <select asp-for="ClientId" asp-items="ViewBag.ClientId" class="form-control"></select>
             <span asp-validation-for="ClientId" class="text-danger"></span>
-        </div>
+        
 
         <!-- Sélection du médicament -->
         <div class="form-group">
@@ -100,26 +102,10 @@
             <input asp-for="DateCommande" class="form-control" type="date"/>
             <span asp-validation-for="DateCommande" class="text-danger"></span>
         </div>
-        @* <div class="form-group">
-            <label asp-for="Quantite" class="control-label">Quantité</label>
-            <input asp-for="Quantite" class="form-control" placeholder="Quantité" id="prixAchat" />
-            <span asp-validation-for="Quantite" class="text-danger"></span>
-        </div> *@
+       
 
         <div class="lot-container">
-           @*  @for (int i = 1; i <= 3; i++)
-            {
-                <button class="lot-button" data-lot-id="@i">
-                    <div class="lot">
-                        <p>DATE EXPIRATION : </p>
-                        <p>LOT @i</p>
-                        <p>QTE DISPO : </p>
-                    </div>
-                </button>
-            } *@
-                @* <input type="hidden" name="LotCommandes.@i.LotId" value="">
-                <input type="hidden" name="LotCommandes.@i.Quantite" id="lotQuantity-@i"> *@
-            @* } *@
+        
         </div>
 
         <div id="quantityDialog" class="dialog">
@@ -129,14 +115,17 @@
             <input type="button" id="saveButton" value="valider"/>
             <input type="button" id="cancelButton" value="cancel"/>
         </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
 
 
-        <div class="form-group">
-            <button type="submit" class="btn btn-create">Create</button>
-            <button type="submit" formaction="@Url.Action("Index")" class="btn btn-back">Create & Back to List</button>
-            <button type="submit" formaction="@Url.Action("CreateAndStay")" class="btn btn-back">Create & Stay</button>
-        </div>
+                        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    </div>
     </form>
+                </div>
+            </div>
+        </div>
+      
 </div>
 
 @section Scripts {

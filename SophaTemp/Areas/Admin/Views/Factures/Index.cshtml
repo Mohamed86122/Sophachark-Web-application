@@ -61,7 +61,7 @@
     </tbody>
 </table>
 <br />
-    <a href="@Url.Action("Commandes")"  class="btn btn-sm btn-primary">Afficher la liste des Commandes</a>
+    <button onclick="afficherCommandes()" class="btn btn-sm btn-primary">Afficher la liste des Commandes</button>
 @section Scripts
 {
     <script src="~/js/Datatable/script.js" />
@@ -77,19 +77,11 @@
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
 
-    <script>
-
-        $(document).ready(function () {
-
-            $("#FactureTable").DataTable();
-        });
-        $(document).ready(function () {
-
-
-
-        })
-    </script>
-
-       
+    
+        <script>
+            function afficherCommandes() {
+                window.location.href = "Commandes"; // Replace with your actual commandes route
+            }
+        </script>
 }
 

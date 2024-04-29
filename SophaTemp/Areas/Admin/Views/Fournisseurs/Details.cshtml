@@ -9,17 +9,23 @@
 <div>
     <h4>Fournisseur</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NomComplet)
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="border p-4 rounded">
+
+                    @Html.DisplayNameFor(model => model.NomComplet)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.NomComplet)
         </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.FournisseurId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+                    <div>
+                        <a asp-action="Edit" asp-route-id="@Model.FournisseurId" class="btn btn-primary">Edit</a> |
+
+                        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 </div>
