@@ -31,7 +31,7 @@ namespace SophaTemp.Areas.Admin.Controllers
         }
         //DatatTable 
         [HttpGet]
-        
+
 
 
         // GET: Admin/Clients/Details/5
@@ -74,7 +74,7 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 ClientMapper clientMapper = new ClientMapper();
                 Client newclient = clientMapper.ClientVmClient(clientVm);
-               
+
 
                 _context.Clients.Add(newclient);
                 await _context.SaveChangesAsync();
@@ -84,7 +84,7 @@ namespace SophaTemp.Areas.Admin.Controllers
             ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Prenom");
             return View(clientVm);
         }
-        
+
         // GET: Admin/Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -174,14 +174,14 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 _context.Clients.Remove(client);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ClientExists(int id)
         {
-          return (_context.Clients?.Any(e => e.PersonneId == id)).GetValueOrDefault();
+            return (_context.Clients?.Any(e => e.PersonneId == id)).GetValueOrDefault();
         }
     }
 }
