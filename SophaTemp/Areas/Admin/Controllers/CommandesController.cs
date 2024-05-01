@@ -44,8 +44,8 @@ namespace SophaTemp.Areas.Admin.Controllers
 
         public IActionResult Create()
         {
-            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom");
-            ViewData["ClientId"] = new SelectList(_context.Clients, "ClientId", "LibellePharmacie");
+          /*  ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom");
+            ViewData["ClientId"] = new SelectList(_context.Clients, "ClientId", "LibellePharmacie");*/
             return View();
         }
 
@@ -84,7 +84,7 @@ namespace SophaTemp.Areas.Admin.Controllers
             }
 
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", commandeVm.MedicamentId);
-            ViewData["ClientId"] = new SelectList(_context.Clients, "ClientId", "LibellePharmacie", commandeVm.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.clients, "ClientId", "LibellePharmacie", commandeVm.ClientId);
 
             return View(commandeVm);
 

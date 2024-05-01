@@ -26,7 +26,7 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Clients
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Clients.Include(c => c.Passeport).Include(c => c.Whishlist);
+            var appDbContext = _context.clients.Include(c => c.Passeport).Include(c => c.Whishlist);
             return View(await appDbContext.ToListAsync());
         }
         //DatatTable 
@@ -37,12 +37,12 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Clients/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Clients == null)
+            if (id == null || _context.clients == null)
             {
                 return NotFound();
             }
 
-            var client = await _context.Clients
+            var client = await _context.clients
                 .Include(c => c.Passeport)
                 .Include(c => c.Whishlist)
                 .FirstOrDefaultAsync(m => m.PersonneId == id);
@@ -76,7 +76,7 @@ namespace SophaTemp.Areas.Admin.Controllers
                 Client newclient = clientMapper.ClientVmClient(clientVm);
 
 
-                _context.Clients.Add(newclient);
+                _context.clients.Add(newclient);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -88,12 +88,12 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Clients == null)
+            if (id == null || _context.clients == null)
             {
                 return NotFound();
             }
 
-            var client = await _context.Clients.FindAsync(id);
+            var client = await _context.clients.FindAsync(id);
             if (client == null)
             {
                 return NotFound();
@@ -143,12 +143,12 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Clients/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Clients == null)
+            if (id == null || _context.clients == null)
             {
                 return NotFound();
             }
 
-            var client = await _context.Clients
+            var client = await _context.clients
                 .Include(c => c.Passeport)
                 .Include(c => c.Whishlist)
                 .FirstOrDefaultAsync(m => m.PersonneId == id);
@@ -165,14 +165,14 @@ namespace SophaTemp.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Clients == null)
+            if (_context.clients == null)
             {
                 return Problem("Entity set 'AppDbContext.Clients'  is null.");
             }
-            var client = await _context.Clients.FindAsync(id);
+            var client = await _context.clients.FindAsync(id);
             if (client != null)
             {
-                _context.Clients.Remove(client);
+                _context.clients.Remove(client);
             }
 
             await _context.SaveChangesAsync();
@@ -181,7 +181,7 @@ namespace SophaTemp.Areas.Admin.Controllers
 
         private bool ClientExists(int id)
         {
-            return (_context.Clients?.Any(e => e.PersonneId == id)).GetValueOrDefault();
+            return (_context.clients?.Any(e => e.PersonneId == id)).GetValueOrDefault();
         }
     }
 }
