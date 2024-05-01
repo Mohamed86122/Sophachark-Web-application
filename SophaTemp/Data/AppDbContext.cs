@@ -17,7 +17,7 @@ namespace SophaTemp.Data
         public DbSet<AdminProduit> AdminProduits { get; set; }
         public DbSet<AdminStock> AdminStocks { get; set; }
         public DbSet<AdminCommande> AdminCommandes { get; set; }
-        public DbSet<Client> Clients { get; set; }
+        
         public DbSet<Commande> Commandes { get; set; }
         public DbSet<Livraison> Livraisons { get; set; }
         public DbSet<Medicament> Medicaments { get; set; }
@@ -26,6 +26,7 @@ namespace SophaTemp.Data
         public DbSet<Lot> Lots { get; set; }
         public DbSet<LotCommande> LotCommandes { get; set; }
 
+        public DbSet<Client> Clients { get; set; }
         public DbSet<Facture> Factures { get; set; }
 
         public DbSet<CategoryMedicament> Categories { get; set; } 
