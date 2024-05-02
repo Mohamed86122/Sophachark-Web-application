@@ -42,11 +42,12 @@ namespace SophaTemp.Data
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Personne>().ToTable("Personnes");
-            modelBuilder.Entity<AdminPrincipal>().ToTable("AdminPrincipals");
-            modelBuilder.Entity<AdminProduit>().ToTable("AdminProduits");
-            modelBuilder.Entity<AdminStock>().ToTable("AdminStocks");
-            modelBuilder.Entity<AdminCommande>().ToTable("AdminCommandes");
-            modelBuilder.Entity<Client>().ToTable("Clients");
+            modelBuilder.Entity<Client>().ToTable("Clients").HasBaseType<Personne>();
+            modelBuilder.Entity<AdminPrincipal>().ToTable("AdminPrincipals").HasBaseType<Personne>();
+            modelBuilder.Entity<AdminProduit>().ToTable("AdminProduits").HasBaseType<Personne>();
+            modelBuilder.Entity<AdminStock>().ToTable("AdminStocks").HasBaseType<Personne>();
+            modelBuilder.Entity<AdminCommande>().ToTable("AdminCommandes").HasBaseType<Personne>();
+
 
 
             modelBuilder.Entity<MedicamentCategoryMedicament>()
@@ -64,9 +65,10 @@ namespace SophaTemp.Data
 
 
             modelBuilder.Entity<Personne>().HasKey(p => p.PersonneId);
-            
 
-                
+
+
+
 
         }
 

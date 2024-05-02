@@ -2,7 +2,6 @@
 {
     public class Client : Personne
     {
-        public int ClientId { get; set; }
         public string LibellePharmacie { get; set; }
         public string Ville { get; set; }
         public string Telephone { get; set; }
