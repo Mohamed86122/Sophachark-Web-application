@@ -26,7 +26,7 @@ namespace SophaTemp.Mappers
                 }
             };
 
-            foreach (var lotId in commandeVm.SelectedLotIds)
+            foreach (var lotId in commandeVm.Lots)
             {
                 var lot = _context.Lots.Find(lotId);
                 if (lot != null)

@@ -93,14 +93,6 @@
                             <span asp-validation-for="DateCommande" class="text-danger"></span>
                     </div>
                     <div class="lot-container">
-                        @* @foreach (var lot in Model)
-                        { *@
-                           @*  <div class="lot">
-                                <p>Date Expiration: @lot.DateDExpedition.ToString("yyyy-MM-dd")</p>
-                                <p>Quantité disponible: @lot.Quantite</p>
-                                <input type="number" name="quantities[@lot.LotId]" min="0" max="@lot.Quantite" />
-                            </div> *@
-                        @* } *@
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Create" class="btn btn-primary" />
@@ -117,7 +109,7 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    <script>
+    @* <script>
         function loadLots(medicamentId) {
             $.ajax({
                 url: '@Url.Action("GetLotsByMedicamentId", "Commandes")',
@@ -261,5 +253,5 @@
         //     });
         // }
 
-    </script>
+    </script> *@
 }

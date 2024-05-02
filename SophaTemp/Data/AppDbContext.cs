@@ -41,6 +41,13 @@ namespace SophaTemp.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Personne>().ToTable("Personnes");
+            modelBuilder.Entity<AdminPrincipal>().ToTable("AdminPrincipals");
+            modelBuilder.Entity<AdminProduit>().ToTable("AdminProduits");
+            modelBuilder.Entity<AdminStock>().ToTable("AdminStocks");
+            modelBuilder.Entity<AdminCommande>().ToTable("AdminCommandes");
+            modelBuilder.Entity<Client>().ToTable("Clients");
+
 
             modelBuilder.Entity<MedicamentCategoryMedicament>()
                 .HasKey(mcm => new { mcm.MedicamentId, mcm.CategoryMedicamentId });
@@ -57,8 +64,9 @@ namespace SophaTemp.Data
 
 
             modelBuilder.Entity<Personne>().HasKey(p => p.PersonneId);
-
             
+
+                
 
         }
 

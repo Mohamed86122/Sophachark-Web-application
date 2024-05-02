@@ -12,8 +12,8 @@ using SophaTemp.Data;
 namespace SophaTemp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240501232032_AddClientTodb")]
-    partial class AddClientTodb
+    [Migration("20240502130137_AddClient")]
+    partial class AddClient
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -378,10 +378,6 @@ namespace SophaTemp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PersonneId"), 1L, 1);
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("PasseportId")
                         .HasColumnType("int");
 
@@ -406,9 +402,7 @@ namespace SophaTemp.Migrations
                     b.HasIndex("PasseportId")
                         .IsUnique();
 
-                    b.ToTable("Personnes");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Personne");
+                    b.ToTable("Personnes", (string)null);
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Whishlist", b =>
@@ -434,28 +428,28 @@ namespace SophaTemp.Migrations
                 {
                     b.HasBaseType("SophaTemp.Models.Personne");
 
-                    b.HasDiscriminator().HasValue("AdminCommande");
+                    b.ToTable("AdminCommandes", (string)null);
                 });
 
             modelBuilder.Entity("SophaTemp.Models.AdminPrincipal", b =>
                 {
                     b.HasBaseType("SophaTemp.Models.Personne");
 
-                    b.HasDiscriminator().HasValue("AdminPrincipal");
+                    b.ToTable("AdminPrincipals", (string)null);
                 });
 
             modelBuilder.Entity("SophaTemp.Models.AdminProduit", b =>
                 {
                     b.HasBaseType("SophaTemp.Models.Personne");
 
-                    b.HasDiscriminator().HasValue("AdminProduit");
+                    b.ToTable("AdminProduits", (string)null);
                 });
 
             modelBuilder.Entity("SophaTemp.Models.AdminStock", b =>
                 {
                     b.HasBaseType("SophaTemp.Models.Personne");
 
-                    b.HasDiscriminator().HasValue("AdminStock");
+                    b.ToTable("AdminStocks", (string)null);
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Client", b =>
@@ -495,7 +489,7 @@ namespace SophaTemp.Migrations
 
                     b.HasIndex("WhishlistId");
 
-                    b.HasDiscriminator().HasValue("Client");
+                    b.ToTable("Clients", (string)null);
                 });
 
             modelBuilder.Entity("CommandeLivraison", b =>
@@ -639,8 +633,50 @@ namespace SophaTemp.Migrations
                     b.Navigation("Passeport");
                 });
 
+            modelBuilder.Entity("SophaTemp.Models.AdminCommande", b =>
+                {
+                    b.HasOne("SophaTemp.Models.Personne", null)
+                        .WithOne()
+                        .HasForeignKey("SophaTemp.Models.AdminCommande", "PersonneId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SophaTemp.Models.AdminPrincipal", b =>
+                {
+                    b.HasOne("SophaTemp.Models.Personne", null)
+                        .WithOne()
+                        .HasForeignKey("SophaTemp.Models.AdminPrincipal", "PersonneId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SophaTemp.Models.AdminProduit", b =>
+                {
+                    b.HasOne("SophaTemp.Models.Personne", null)
+                        .WithOne()
+                        .HasForeignKey("SophaTemp.Models.AdminProduit", "PersonneId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SophaTemp.Models.AdminStock", b =>
+                {
+                    b.HasOne("SophaTemp.Models.Personne", null)
+                        .WithOne()
+                        .HasForeignKey("SophaTemp.Models.AdminStock", "PersonneId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SophaTemp.Models.Client", b =>
                 {
+                    b.HasOne("SophaTemp.Models.Personne", null)
+                        .WithOne()
+                        .HasForeignKey("SophaTemp.Models.Client", "PersonneId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
                     b.HasOne("SophaTemp.Models.Whishlist", "Whishlist")
                         .WithMany("Clients")
                         .HasForeignKey("WhishlistId")

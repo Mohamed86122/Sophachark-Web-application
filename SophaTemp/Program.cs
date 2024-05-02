@@ -14,7 +14,7 @@ builder.Services.AddScoped<IUploadFileService, UploadFileService>();
 builder.Services.AddScoped<CommandeMapper>();
 /*builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<AppDbContext>();*/
-builder.Services.AddAuthorization(options =>
+/*builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPrincipalePolicy", policy =>
         policy.RequireClaim("Passeport", "AdminPrincipale"));
@@ -22,7 +22,7 @@ builder.Services.AddAuthorization(options =>
         policy.RequireClaim("Passeport", "AdminCommande"));
     options.AddPolicy("AdminProduitPolicy", policy =>
         policy.RequireClaim("Passeport", "AdminProduit"));
-});
+});*/
 
 var app = builder.Build();
 

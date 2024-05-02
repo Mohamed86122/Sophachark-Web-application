@@ -41,11 +41,23 @@ namespace SophaTemp.Areas.Admin.Controllers
                 .ToListAsync();
             return Json(lots);
         }
+        public async Task<IActionResult> GetLotsPartial(int? medicamentId)
+        {
+            if (!medicamentId.HasValue)
+            {
+                return PartialView("LotsPartial", new List<Lot>());  // Retourne une liste vide si aucun ID n'est fourni
+            }
+
+            var lots = await _context.Lots
+                                     .Where(l => l.MedicamentId == medicamentId.Value)
+                                     .ToListAsync();
+            return PartialView("LotsPartial", lots);
+        }
 
         public IActionResult Create()
         {
-          /*  ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom");
-            ViewData["ClientId"] = new SelectList(_context.Clients, "ClientId", "LibellePharmacie");*/
+            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom");
+            ViewData["ClientId"] = new SelectList(_context.clients, "ClientId", "LibellePharmacie");
             return View();
         }
 
