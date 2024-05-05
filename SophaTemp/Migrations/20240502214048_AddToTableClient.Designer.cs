@@ -12,8 +12,8 @@ using SophaTemp.Data;
 namespace SophaTemp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240502130137_AddClient")]
-    partial class AddClient
+    [Migration("20240502214048_AddToTableClient")]
+    partial class AddToTableClient
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -459,9 +459,6 @@ namespace SophaTemp.Migrations
                     b.Property<string>("Adresse")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
 
                     b.Property<bool>("EnGarde")
                         .HasColumnType("bit");

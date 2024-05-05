@@ -462,9 +462,6 @@ namespace SophaTemp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("EnGarde")
                         .HasColumnType("bit");
 
