@@ -8,13 +8,15 @@ namespace SophaTemp.Mappers
 
         public LotCommande LotaddVmCommande(LotCommandeVm model)
         {
-            return new LotCommande
+            var lotCommande = new LotCommande
             {
                 Frais=model.Frais,
                 Quantite=model.Quantite,
-                
-            };
+                Lots = model.LotId.Select(id => new Lot { LotId = id }).ToList()  // Assumant que vous avez une propriété LotId dans Lot
 
+            };
+            
+            return lotCommande;
         }
     }
 }

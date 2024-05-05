@@ -1,257 +1,73 @@
 ﻿@model SophaTemp.Viewmodel.CommandeVm
+
 @{
-    ViewData["Title"] = "Create Commande";
+    ViewData["Title"] = "Create";
 }
 
-<style>
-    .title 
-    {
-        text-align: center;
-        margin-bottom: 2rem;
-    }
+<h1>Create</h1>
 
-    .form-control {
-        margin-bottom: 1rem;
-        padding: 0.5rem;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
+<h4>Commande</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    .lot-container {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 2rem;
-    }
-
-    .lot {
-        border: 1px solid #000;
-        padding: 1rem;
-        text-align: center;
-    }   
-    .lot:hover
-    {
-        background-color:green;
-    }
-
-    .btn {
-        padding: 0.5rem 2rem;
-        margin-right: 1rem;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .btn-create {
-        background-color: #28a745;
-        color: white;
-    }
-
-    .btn-back {
-        background-color: #007bff;
-        color: white;
-    }
-
-    .dialog {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: white;
-        padding: 20px;
-        border: 1px solid #ccc;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        z-index: 100;
-    }
-
-</style>
-
-<div class="container mt-5">
-    <div class="title">
-        <h1>CREATE Commande</h1>
-    </div>
-
-    <form asp-action="Create">
-        <!-- Sélection du client -->
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="border p-4 rounded">
-                    <div class="form-group">
-                            <label asp-for="ClientId" class="control-label">Pharmacie</label>
-                            <select asp-for="ClientId" asp-items="ViewBag.ClientId" class="form-control"></select>
-                            <span asp-validation-for="ClientId" class="text-danger"></span>
-                    </div>
-                    <!-- Sélection du médicament -->
-                    <div class="form-group">
-                            <label asp-for="MedicamentId" class="control-label">Medicament</label>
-                            <select asp-for="MedicamentId" asp-items="ViewBag.MedicamentId" class="form-control" onchange="loadLots(this.value)"></select>
-                            <span asp-validation-for="MedicamentId" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                            <label asp-for="DateCommande" class="control-label">Date Commande</label>
-                            <input asp-for="DateCommande" class="form-control" type="date"/>
-                            <span asp-validation-for="DateCommande" class="text-danger"></span>
-                    </div>
-                    <div class="lot-container">
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Create" class="btn btn-primary" />
-                        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-                    </div>
-    
-                </div>
+            <div class="form-group">
+                <label asp-for="ClientId" class="control-label"></label>
+                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
             </div>
-        </div>
-    </form>
+           
+
+            <div class="form-group">
+                <label asp-for="MedicamentId" class="control-label">Medicament</label>
+                <select asp-for="MedicamentId" asp-items="ViewBag.MedicamentId" class="form-control" onchange="loadLots(this.value)">
+                    <option value="">Select Medicament</option>
+                </select>
+                <span asp-validation-for="MedicamentId" class="text-danger"></span>
+            </div>
+
+            <!-- Placeholder for Lots Partial View -->
+            <div id="lotsContainer"></div>
+
+            <div class="form-group">
+                <label asp-for="DateCommande" class="control-label"></label>
+                <input asp-for="DateCommande" class="form-control" />
+                <span asp-validation-for="DateCommande" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <input asp-for="Status" class="form-control" />
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
 </div>
 
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
 @section Scripts {
+    <script src="~/lib/jquery/jquery.js"></script>
+
+    <script>
+        function loadLots(medicamentId) {
+            if (medicamentId) {
+                var url = '@Url.Action("Lots", "Commandes")?medicamentId=' + medicamentId;
+                $('#lotsContainer').load(url);
+            } else {
+                $('#lotsContainer').empty();
+            }
+        }
+    </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    @* <script>
-        function loadLots(medicamentId) {
-            $.ajax({
-                url: '@Url.Action("GetLotsByMedicamentId", "Commandes")',
-                data: { medicamentId: medicamentId },
-                success: function (data) {
-                    var container = $('.lot-container');
-                    container.empty(); 
-
-                    data.forEach(function (lot, index) {
-                        var isSelected = index === 0; 
-                        var lotClass = isSelected ? 'lot selected' : 'lot';
-                        container.append(
-                            `<div class="${lotClass} lot-button" data-lot-id="${lot.lotId}" data-lot-quantity="${lot.quantite}">
-                                     <input id="input${lot.lotId}" name="IdLotCommande" min="0">
-                            <p>Date Expiration: ${lot.dateDExpedition}</p>
-                        <p>Quantité: ${lot.quantite}</p>
-                      </div>`
-                        );
-                    });
-
-                    $('.lot').click(function () {
-                        $('.lot').removeClass('selected'); 
-                        $(this).addClass('selected');
-                        $('#quantite').val($(this).data('lotQuantity'));
-                    });
-                }
-            });
-                    var dialog = $('#quantityDialog');
-                    var quantityInput = $('#quantityInput');
-                    $(".lot-container").on('click', '.lot-button', function(){
-                        var selectedLotId = $(this).data('lotId');
-                        var selectedLotQuantity = $(`#lotQuantity-${selectedLotId}`).val();
-
-                        dialog.find('h2').text(`Quantité pour Lot ${selectedLotId}`);
-                        quantityInput.val(selectedLotQuantity);
-
-                        dialog.show();
-                    })
-                    // $('.lot-container').click(function (e) {
-                    // });
-
-                    $('#saveButton').click(function () {
-                        var quantity = quantityInput.val();
-
-                        var selectedLotId = dialog.find('.lot-button').data('lotId');
-                        alert(quantity);
-                        $(`#input${selectedLotId}`).val(quantity);
-                        
-                        dialog.hide();
-                    });
-
-                    $('#cancelButton').click(function () {
-                        dialog.hide();
-                    });
-        }
-        
-                  
-        // $('#quantite').change(function () {
-        //     var totalQuantityNeeded = parseInt($(this).val());
-        //     var selectedLots = [];
-
-        //     // Go through each lot and allocate the quantity.
-        //     $('.lot').each(function () {
-        //         var lotQuantity = parseInt($(this).data('lotQuantity'));
-        //         var lotId = $(this).data('lotId');
-
-        //         if (totalQuantityNeeded > 0 && lotQuantity > 0) {
-        //             var quantityToTake = Math.min(totalQuantityNeeded, lotQuantity);
-        //             totalQuantityNeeded -= quantityToTake;
-        //             lotQuantity -= quantityToTake;
-
-        //             selectedLots.push({ lotId: lotId, quantityTaken: quantityToTake });
-
-        //             // Update the displayed quantity for this lot.
-        //             $(this).find('.lot-quantity-display').text('QTE : ' + lotQuantity);
-        //         }
-        //     });
-
-        //     if (totalQuantityNeeded > 0) {
-        //         // If there's still quantity needed, inform the user.
-        //         alert('Not enough quantity in lots for the requested amount.');
-        //         // Consider clearing the quantity input or setting it to the maximum available.
-        //         // $('#quantite').val('');
-        //     }
-
-        //     // Update hidden inputs for selected lots.
-        //     updateHiddenInputsForSelectedLots(selectedLots);
-        // });
-        // function loadLots(medicamentId, commandeQuantite = 0) {
-        //     // ... (rest of the code)
-        //     $.ajax({
-        //                 url: '@Url.Action("GetLotsByMedicamentId", "Commandes")',
-        //                 data: { medicamentId: medicamentId },
-        //                 success: function (data) {
-        //                     var container = $('.lot-container');
-        //                     container.empty(); // Clear previous lots
-
-        //                     data.forEach(function (lot, index) {
-        //                         var isSelected = index === 0; // Select the first lot by default
-        //                         var lotClass = isSelected ? 'lot selected' : 'lot';
-
-        //                         container.append(
-        //                             `<div class="${lotClass}" data-lot-id="${lot.id}" data-lot-quantity="${lot.quantite}">
-        //                         <p>Date Expiration: ${lot.dateDExpedition}</p>
-        //                         <p>Quantité: ${lot.quantite}</p>
-        //                       </div>`
-        //                         );
-        //                     });
-        //     // Initialize dialog
-        //     var dialog = $('#quantityDialog');
-        //     var quantityInput = $('#quantityInput');
-
-        //     // Handle lot button clicks
-        //     $('.lot-button').click(function () {
-        //         var selectedLotId = $(this).data('lotId');
-        //         var selectedLotQuantity = $(`#lotQuantity-${selectedLotId}`).val();
-
-        //         // Update dialog values
-        //         dialog.find('h2').text(`Quantité pour Lot ${selectedLotId}`);
-        //         quantityInput.val(selectedLotQuantity);
-
-        //         // Show dialog
-        //         dialog.show();
-        //     });
-
-        //     // Handle save button click
-        //     $('#saveButton').click(function () {
-        //         var quantity = quantityInput.val();
-
-        //         // Update selected lot quantity
-        //         var selectedLotId = dialog.find('.lot-button').data('lotId');
-        //         $(`#lotQuantity-${selectedLotId}`).val(quantity);
-
-        //         // Hide dialog
-        //         dialog.hide();
-        //     });
-
-        //     // Handle cancel button click
-        //     $('#cancelButton').click(function () {
-        //         dialog.hide();
-        //     });
-        // }
-
-    </script> *@
 }

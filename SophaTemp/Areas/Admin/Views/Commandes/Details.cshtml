@@ -3,23 +3,28 @@
 @{
     ViewData["Title"] = "Details";
 }
-<div class="container mt-5">
 
 <h1>Details</h1>
 
 <div>
     <h4>Commande</h4>
     <hr />
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="border p-4 rounded">
-        
+    <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateCommande)
+            @Html.DisplayNameFor(model => model.Client)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateCommande)
+            @Html.DisplayFor(model => model.Client.PersonneId)
         </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DateCommande)
+        </dt> 
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Medicament)
+        </dt>
+       
+        
+
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Status)
         </dt>
@@ -27,15 +32,20 @@
             @Html.DisplayFor(model => model.Status)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Quantite)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Quantite)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.IdLotCommande)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.IdLotCommande)
         </dd>
-                    <div>
-                        <a asp-action="Edit" asp-route-id="@Model.CommandeId" class="btn btn-primary">Edit</a> |
-
-                        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-                    </div>
     </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.CommandeId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
 </div>

@@ -1,0 +1,10 @@
+﻿@model IEnumerable<SophaTemp.Models.Lot>
+
+@for (int i = 0; i < Model.Count(); i++)
+{
+    <div>
+        <input type="hidden" name="LotSelections[@i].LotId" value="@Model.ElementAt(i).LotId" />
+        <label>Lot id : @Model.ElementAt(i).LotId - La quantité disponible: @Model.ElementAt(i).Quantite</label>
+        <input type="number" name="LotSelections[@i].Quantite" min="1" max="@Model.ElementAt(i).Quantite" value="1" />
+    </div>
+}

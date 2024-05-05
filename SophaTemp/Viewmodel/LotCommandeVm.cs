@@ -11,7 +11,7 @@ namespace SophaTemp.Viewmodel
         [Required]
         public int Quantite { get; set; }
         [Required]
-        public int LotId { get; set; }
+        public List<int> LotId { get; set; }
 
     }
 }

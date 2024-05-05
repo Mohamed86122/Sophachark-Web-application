@@ -14,6 +14,7 @@ namespace SophaTemp.Viewmodel
         public MedicamentAddVM () 
         {
             SelectedCategorieIds = new List<int> ();
+
         }   
 
     }

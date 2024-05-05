@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SophaTemp.Data;
 
@@ -11,9 +12,10 @@ using SophaTemp.Data;
 namespace SophaTemp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240503120359_AddPropertyToOrder")]
+    partial class AddPropertyToOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,6 +95,9 @@ namespace SophaTemp.Migrations
                     b.Property<int>("LotCommandeId")
                         .HasColumnType("int");
 
+                    b.Property<int>("MedicamentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Quantite")
                         .HasColumnType("int");
 
@@ -105,6 +110,8 @@ namespace SophaTemp.Migrations
                     b.HasIndex("ClientId");
 
                     b.HasIndex("LotCommandeId");
+
+                    b.HasIndex("MedicamentId");
 
                     b.ToTable("Commandes");
                 });
@@ -269,10 +276,6 @@ namespace SophaTemp.Migrations
 
                     b.Property<double>("Frais")
                         .HasColumnType("float");
-
-                    b.Property<string>("Libelle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Quantite")
                         .HasColumnType("int");
@@ -538,7 +541,15 @@ namespace SophaTemp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SophaTemp.Models.Medicament", "Medicament")
+                        .WithMany()
+                        .HasForeignKey("MedicamentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Client");
+
+                    b.Navigation("Medicament");
 
                     b.Navigation("lotCommande");
                 });

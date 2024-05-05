@@ -18,90 +18,95 @@ namespace SophaTemp.Areas.Admin.Controllers
         private readonly AppDbContext _context;
         private readonly CommandeMapper _commandeMapper;
 
-
-        public CommandesController(AppDbContext context,CommandeMapper command)
+        public CommandesController(AppDbContext context,CommandeMapper mapper)
         {
             _context = context;
-            _commandeMapper = command;
-
+            _commandeMapper = mapper;
         }
 
+        // GET: Admin/Commandes
         public async Task<IActionResult> Index()
         {
-            return _context.Commandes != null ?
-                View(await _context.Commandes.ToListAsync()) :
-                Problem("Entity set 'AppDbContext.Commandes' is null.");
+            var appDbContext = _context.Commandes.Include(c => c.Client);
+            return View(await appDbContext.ToListAsync());
         }
-
-        public async Task<IActionResult> GetLotsByMedicamentId(int medicamentId)
+        // GET: Admin/Commandes/Lots
+        public async Task<IActionResult> Lots(int medicamentId)
         {
             var lots = await _context.Lots
-                .Where(l => l.MedicamentId == medicamentId)
-                .Select(l => new { l.LotId,l.DateDExpedition, l.Quantite })
-                .ToListAsync();
-            return Json(lots);
+                                     .Where(l => l.MedicamentId == medicamentId && l.Quantite > 0)
+                                     .ToListAsync();
+            return PartialView("_LotsPartial", lots);
         }
-        public async Task<IActionResult> GetLotsPartial(int? medicamentId)
+
+        // GET: Admin/Commandes/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
-            if (!medicamentId.HasValue)
+            if (id == null || _context.Commandes == null)
             {
-                return PartialView("LotsPartial", new List<Lot>());  // Retourne une liste vide si aucun ID n'est fourni
+                return NotFound();
             }
 
-            var lots = await _context.Lots
-                                     .Where(l => l.MedicamentId == medicamentId.Value)
-                                     .ToListAsync();
-            return PartialView("LotsPartial", lots);
+            var commande = await _context.Commandes
+                .Include(c => c.Client)
+                .FirstOrDefaultAsync(m => m.CommandeId == id);
+            if (commande == null)
+            {
+                return NotFound();
+            }
+
+            return View(commande);
         }
 
+        // GET: Admin/Commandes/Create
         public IActionResult Create()
         {
-            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom");
             ViewData["ClientId"] = new SelectList(_context.clients, "ClientId", "LibellePharmacie");
+            ViewData["LotCommandeId"] = new SelectList(_context.LotCommandes, "LotCommandeId", "LotCommandeId");
+            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom");
+
             return View();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CommandeVm commandeVm)
         {
-
             if (ModelState.IsValid)
             {
-                var lotsDisponibles = _context.Lots
-                    .Where(l => l.MedicamentId == commandeVm.MedicamentId && l.Quantite >= commandeVm.Quantite)
-                    .ToList();
+                var commande = _commandeMapper.CommandeFromVm(commandeVm);  // Utilisation du mapper ajusté
 
-                var commande = _commandeMapper.CommandeMapperAddVm(commandeVm);
-
-                if (lotsDisponibles.Any())
+                // Vérifier et déduire les quantités de chaque lot sélectionné
+                foreach (var lotSelection in commandeVm.LotSelections)
                 {
-                    _context.Add(commande);
-
-                    foreach (var lot in lotsDisponibles)
+                    var lot = await _context.Lots.FindAsync(lotSelection.LotId);
+                    if (lot != null && lot.Quantite >= lotSelection.Quantite)
                     {
-                        lot.Quantite -= commandeVm.Quantite;
+                        lot.Quantite -= lotSelection.Quantite;
                         _context.Update(lot);
                     }
-
-                    await _context.SaveChangesAsync();
-
-                    return RedirectToAction(nameof(Index));
+                    else
+                    {
+                        ModelState.AddModelError("", $"La quantité demandée pour le lot {lotSelection.LotId} est insuffisante.");
+                        return View(commandeVm);
+                    }
                 }
-                else
-                {
-                    ModelState.AddModelError("", $"La quantité demandée de {commandeVm.Quantite} ne peut être couverte par les lots sélectionnés.");
-                }
+
+                _context.Add(commande);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
 
-            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", commandeVm.MedicamentId);
             ViewData["ClientId"] = new SelectList(_context.clients, "ClientId", "LibellePharmacie", commandeVm.ClientId);
-
+            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", commandeVm.MedicamentId);
             return View(commandeVm);
-
         }
 
+
+
+
+
+        // GET: Admin/Commandes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Commandes == null)
@@ -114,49 +119,47 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            ViewData["ClientId"] = new SelectList(_context.clients, "PersonneId", "PersonneId", commande.ClientId);
             return View(commande);
         }
 
+        // POST: Admin/Commandes/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, CommandeVm commandeVm)
+        public async Task<IActionResult> Edit(int id, [Bind("CommandeId,ClientId,DateCommande,Status,Quantite,IdLotCommande")] Commande commande)
         {
-            if (id != commandeVm.ClientId)
+            if (id != commande.CommandeId)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                var commandeToUpdate = await _context.Commandes.FindAsync(id);
-                if (commandeToUpdate != null)
+                try
                 {
-                    commandeToUpdate.DateCommande = commandeVm.DateCommande;
-                    commandeToUpdate.Status = commandeVm.Status;
-                    // Update other properties as needed
-
-                    try
+                    _context.Update(commande);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CommandeExists(commande.CommandeId))
                     {
-                        _context.Update(commandeToUpdate);
-                        await _context.SaveChangesAsync();
+                        return NotFound();
                     }
-                    catch (DbUpdateConcurrencyException)
+                    else
                     {
-                        if (!CommandeExists(commandeToUpdate.CommandeId))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
+                        throw;
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(commandeVm);
+            ViewData["ClientId"] = new SelectList(_context.clients, "PersonneId", "PersonneId", commande.ClientId);
+            return View(commande);
         }
 
+        // GET: Admin/Commandes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Commandes == null)
@@ -165,6 +168,7 @@ namespace SophaTemp.Areas.Admin.Controllers
             }
 
             var commande = await _context.Commandes
+                .Include(c => c.Client)
                 .FirstOrDefaultAsync(m => m.CommandeId == id);
             if (commande == null)
             {
@@ -174,26 +178,28 @@ namespace SophaTemp.Areas.Admin.Controllers
             return View(commande);
         }
 
+        // POST: Admin/Commandes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Commandes == null)
             {
-                return Problem("Entity set 'AppDbContext.Commandes' is null.");
+                return Problem("Entity set 'AppDbContext.Commandes'  is null.");
             }
             var commande = await _context.Commandes.FindAsync(id);
             if (commande != null)
             {
                 _context.Commandes.Remove(commande);
-                await _context.SaveChangesAsync();
             }
+            
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CommandeExists(int id)
         {
-            return _context.Commandes.Any(e => e.CommandeId == id);
+          return (_context.Commandes?.Any(e => e.CommandeId == id)).GetValueOrDefault();
         }
     }
 }

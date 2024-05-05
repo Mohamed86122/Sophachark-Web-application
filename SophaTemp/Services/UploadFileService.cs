@@ -10,7 +10,7 @@
         public string Upload(IFormFile file, string directory, bool encrypt )
         {
             string NewName = "";
-            string[] AllowedExt = { ".jpg", ".png", ".jpeg" };
+            string[] AllowedExt = { ".jpg", ".png", ".jpeg",".webp"};
             string FileExt = Path.GetExtension(file.FileName);
             if (AllowedExt.Contains(FileExt.ToLower()))
             {

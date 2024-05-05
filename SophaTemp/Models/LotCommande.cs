@@ -3,6 +3,7 @@
     public class LotCommande
     {
         public int LotCommandeId { get; set; }
+
         public double Frais { get; set; }
         public int Quantite { get; set; }
 
