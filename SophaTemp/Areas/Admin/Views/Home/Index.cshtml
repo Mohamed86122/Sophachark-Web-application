@@ -1,52 +1,106 @@
-﻿<div class="jumbotron jumbotron-fluid">
-    <div class="container">
-        <h1 class="display-4">Bienvenue, Admin !</h1>
-        <p class="lead">Ceci est votre tableau de bord, d'où vous pouvez gérer l'ensemble de l'application.</p>
-    </div>
-</div>
+﻿@section Style
+{
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-<div class="container">
-    <div class="row">
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Gérer les Utilisateurs</h5>
-                    <p class="card-text">Ajouter, modifier ou supprimer des utilisateurs de l'application.</p>
-                    <a href="/Admin/GestionUtilisateurs" class="btn btn-primary">Explorer</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Voir les Rapports</h5>
-                    <p class="card-text">Accéder et analyser les derniers rapports.</p>
-                    <a href="/Admin/Rapports" class="btn btn-primary">Explorer</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Paramètres</h5>
-                    <p class="card-text">Ajuster les paramètres de l'application.</p>
-                    <a href="/Admin/Parametres" class="btn btn-primary">Explorer</a>
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 
-                </div>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/styleIndex.css">
 
-            </div>
+}
+<!-- Main -->
 
+    <main class="main-container">
+        <div class="main-title">
+            <h2>Tableau de bord</h2>
         </div>
 
+        <div class="main-cards">
 
+            <div class="card">
+                <div class="card-inner">
+                    <h3 >Medicament</h3>
+                    <span class="material-icons-outlined">inventory_2</span>
+                </div>
+                <h1>249</h1>
+            </div>
 
+            <div class="card">
+                <div class="card-inner">
+                    <h3>Catégorie </h3>
+                    <span class="material-icons-outlined">category</span>
+                </div>
+                <h1>25</h1>
+            </div>
 
+            <div class="card">
+                <div class="card-inner">
+                    <h3>Client</h3>
+                    <span class="material-icons-outlined">groups</span>
+                </div>
+                <h1>1500</h1>
+            </div>
 
+            <div class="card">
+                <div class="card-inner">
+                    <h3>ALERTS</h3>
+                    <span class="material-icons-outlined">notification_important</span>
+                </div>
+                <h1>56</h1>
+            </div>
 
+        </div>
+        <div class="main-cards">
 
+            <div class="card">
+                <div class="card-inner">
+                    <h3>Medicament</h3>
+                    <span class="material-icons-outlined">inventory_2</span>
+                </div>
+                <h1>249</h1>
+            </div>
 
+            <div class="card">
+                <div class="card-inner">
+                    <h3>Catégorie </h3>
+                    <span class="material-icons-outlined">category</span>
+                </div>
+                <h1>25</h1>
+            </div>
 
+            <div class="card">
+                <div class="card-inner">
+                    <h3>Client</h3>
+                    <span class="material-icons-outlined">groups</span>
+                </div>
+                <h1>1500</h1>
+            </div>
 
-    </div>
+            <div class="card">
+                <div class="card-inner">
+                    <h3>ALERTS</h3>
+                    <span class="material-icons-outlined">notification_important</span>
+                </div>
+                <h1>56</h1>
+            </div>
 
-</div>
+        </div>
+        <div class="charts">
+
+            <div class="charts-card">
+                <h2 class="chart-title">Top 5 Products</h2>
+                <div id="bar-chart"></div>
+            </div>
+
+            <div class="charts-card">
+                <h2 class="chart-title">Purchase and Sales Orders</h2>
+                <div id="area-chart"></div>
+            </div>
+
+        </div>
+    </main>
+<!-- End Main -->
+@section Scripts{
+    <script src="~/js/scriptsHome.js"></script>
+}

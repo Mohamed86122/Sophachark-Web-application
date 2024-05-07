@@ -12,6 +12,7 @@
         public int Quantite {  get; set; }
         public int IdLotCommande { get; set; }
         public LotCommande lotCommande { get; set; }
+        public int MedicamentId { get; set; } // Ajout de la propriété MédicamentId
         public Medicament Medicament { get; set; } // Ajout de la propriété Médicament
 
         public virtual ICollection<Livraison> Livraisons { get; set; }

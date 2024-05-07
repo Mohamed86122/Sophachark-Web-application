@@ -76,7 +76,6 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 var commande = _commandeMapper.CommandeFromVm(commandeVm);  // Utilisation du mapper ajusté
 
-                // Vérifier et déduire les quantités de chaque lot sélectionné
                 foreach (var lotSelection in commandeVm.LotSelections)
                 {
                     var lot = await _context.Lots.FindAsync(lotSelection.LotId);
@@ -87,7 +86,10 @@ namespace SophaTemp.Areas.Admin.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("", $"La quantité demandée pour le lot {lotSelection.LotId} est insuffisante.");
+                        ModelState.AddModelError("", $"Quantité insuffisante pour le lot {lotSelection.LotId}.");
+                        ViewData["ClientId"] = new SelectList(_context.clients, "ClientId", "LibellePharmacie", commandeVm.ClientId);
+                        ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", commandeVm.MedicamentId);
+                        ViewData["LotCommandeId"] = new SelectList(_context.LotCommandes, "LotCommandeId", "Frais");
                         return View(commandeVm);
                     }
                 }
@@ -98,9 +100,14 @@ namespace SophaTemp.Areas.Admin.Controllers
             }
 
             ViewData["ClientId"] = new SelectList(_context.clients, "ClientId", "LibellePharmacie", commandeVm.ClientId);
+            
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", commandeVm.MedicamentId);
+            ViewData["LotCommandeId"] = new SelectList(_context.LotCommandes, "LotCommandeId", "Frais");
+
             return View(commandeVm);
+
         }
+
 
 
 

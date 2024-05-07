@@ -29,8 +29,9 @@ namespace SophaTemp.Mappers
                     Lots = commandeVm.LotSelections.Select(lotSel => _context.Lots.Find(lotSel.LotId)).ToList()
                 }
             };
+            commande.Client = _context.clients.FirstOrDefault(c => c.ClientId == commandeVm.ClientId);
 
-            commande.Quantite = commandeVm.LotSelections.Sum(lotSel => lotSel.Quantite);
+            commandeVm.Quantite = commandeVm.LotSelections.Sum(lotSel => lotSel.Quantite);
 
             return commande;
         }
