@@ -9328,6 +9328,10 @@ textarea {
 	position: relative;
 	overflow: hidden;
 	margin-bottom: 20px;
+	display: flex;
+	align-items: stretch;
+	justify-content: center;
+	height: 150px;
 }
 
 .shop_right_bar .shop_products_outer .image img {

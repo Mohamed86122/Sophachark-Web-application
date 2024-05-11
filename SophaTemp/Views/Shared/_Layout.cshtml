@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - SophaTemp</title>
     <link rel="icon" type="image/png" href="~/assets/image/SophaLogo.png">
-
+    <link rel="stylesheet" type="text/css" href="~/assets/css/responsive.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/fonts/font/flaticon.css">
     <link rel="stylesheet" href="~/assets/css/style.css" asp-append-version="true" />
    @RenderSection("Style",false)
 
@@ -69,47 +70,50 @@
                         <ul class="navbar-nav navbar-mobile ml-auto mr-auto">
                             <li class="nav-item dropdown activee">
                                 <a class="nav-link link_hd" href="@Url.Action("Index", "Home")">Home</a>
-
-
-
-
                             <li class="nav-item dropdown">
-                                <a class="nav-link link_hd" href="#">  Pages  </a>
-                                <ul class="navbar-nav submenu">
-
-                                    <li class="nav-item">
-                                        <a class="nav-link link_hd" href="@Url.Action("AboutUs", "AboutUs")">About us</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link link_hd" href="@Url.Action("Contact", "Contact")">Contact us</a>
-                                    </li>
-
-                                </ul>
+                                <a class="nav-link link_hd" href="@Url.Action("AboutUs", "AboutUs")">  About us  </a>
                             </li>
                             
+                             <li class="nav-item dropdown">
+                                <a class="nav-link link_hd" href="@Url.Action("Contact", "Contact")">  Contact   </a>
+                            </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link link_hd" href="#">  La liste des médicaments  </a>
+                                <a class="nav-link link_hd" href="@Url.Action("AboutUs", "AboutUs")">  catégories  </a>
                                 <ul class="navbar-nav submenu">
                                     <li class="nav-item">
-                                        <a class="nav-link link_hd" href="@Url.Action("ShopView", "Shop")">Shop</a>
-
+                                        <a class="nav-link link_hd" href="">About us</a>
                                     </li>
-
-                                        <li class="nav-item">
-                                            <a class="nav-link link_hd" href="@Url.Action("ProdDetails", "ProductDetails")">Product Details</a>
-
-                                        </li>
-
                                 </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link link_hd" href="@Url.Action("ShopView", "Shop")"> médicaments  </a>
+                            </li> 
+                            <li class="nav-item dropdown">
+                                <a class="nav-link link_hd" href="@Url.Action("ProdDetails", "ProductDetails")"> médicament  </a>
                             </li>
 
                         </ul>  
                         <ul class="navbar-nav navbar-mobile ml-auto mr-auto">
-                           
                             <li class="nav-item dropdown">
-                                <a class="nav-link link_hd" href="@Url.Action("Index", "Auths")"> Login </a>
+                                <a class="nav-link link_hd" href="@Url.Action("Index", "Auth")"> Login </a>
                             </li>
+                        </ul>
+                        <ul class="navbar-nav navbar-mobile ml-auto mr-auto">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link link_hd" href="@Url.Action("Index", "Auth")">
+                                    <span class="flaticon-supermarket"></span>
+                                    <span class="cart-icon">0</span>
 
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav navbar-mobile ml-auto mr-auto">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link link_hd" href="@Url.Action("Index", "Auth")">
+                                    <span class="flaticon-heart-1"></span>
+                                    <span class="cart-icon">0</span>
+                                </a>
+                            </li>
                         </ul>
                         <ul class="navbar-nav navbar-mobile right-nav ml-auto ">
                             <li class="nav-item dropdown">

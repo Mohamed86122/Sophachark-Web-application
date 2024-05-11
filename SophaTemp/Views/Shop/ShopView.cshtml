@@ -18,12 +18,12 @@
     <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
     <!--[if lt IE 9]><script src="js/respond.js"></script><![endif]-->
     <title>Shop | Meditex | Responsive  HTML 5 Template</title>
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/responsive.css">
-    <link rel="stylesheet" type="text/css" href="assets/fonts/font/flaticon.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/responsive.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/fonts/font/flaticon.css">
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="assets/image/fav/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="assets/image/fav/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="~/assets/image/fav/favicon-32x32à.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="~/assets/image/fav/favicon-16x16.png" sizes="16x16">
 
 }
 <!--Start Preloader -->
@@ -31,70 +31,6 @@
     // Le contenu spécifique à la vue ici
     Layout = "_Layout";
 }
-@* <div class="preloader"></div> *@
-<!--End Preloader -->
-@* <div class="page-wapper home-page-one">
-        <header class="site-header" id="header-one">
-            <div class="top-bar">
-                <div class="container">
-                    <div class="row clearfix">
-                        <div class="col-lg-12">
-                            <div class="float-left">
-                                <p><i class="fa fa-map-marker"></i> 7088 Micaela Cliffs, Thielshire, OK 95062</p>
-                            </div>
-                            <div class="float-right ">
-                                <div class="inner-sec">
-                                    <ul class="social-media">
-                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-vimeo"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-share-alt"></i></a></li>
-                                    </ul>
-                                    <div class="dropdown language-drp">
-                                        <button type="button" class=" btn-primary dropdown-toggle" data-toggle="dropdown">
-                                            <img src="assets/image/language-1.jpg" alt="lan"> Eng
-                                        </button>
-                                        <div class="dropdown-menu">
-
-                                            <a class="dropdown-item" href="#"><img src="assets/image/language-2.jpg" alt="lan"> FRA</a>
-                                            <a class="dropdown-item" href="#"><img src="assets/image/language-1.jpg" alt="lan">GRE</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> *@
-@*  <section class="ban-bread-crumb">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-
-                                    <li class="breadcrumb-item">
-                                        <a href="@Url.Action("Index", "Home")">Home</a>
-                                    </li>
-
-                                    <li class="breadcrumb-item">
-                                        <a href="@Url.Action("Contact", "Contact")">Contact</a>
-                                    </li>
-
-                                    <li class="breadcrumb-item">
-                                        <a href="@Url.Action("AboutUs", "AboutUs")">About Us</a>
-                                    </li>
-
-                                    <li class="breadcrumb-item active" aria-current="page"> Shop</li>
-                                </ol>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-
-            </section> *@
-
 <!--------shop_-------->
 
 <section class="shop_">
@@ -102,7 +38,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="heading">
-                    <h1>Shop</h1>
+                    <h1>La liste des médicaments</h1>
                 </div>
             </div>
 
@@ -205,7 +141,7 @@
                                     <div class="image">
                                         <img src="~/@Url.Content(medicament.Image)" alt="Image du médicament" class="img-fluid" style="max-width:100px; height:auto;">
                                         <div class="overlay_cart">
-                                            <span class="flaticon-supermarket"></span>
+                                            <span id="add-to-cart-icon" class="flaticon-supermarket"></span>
                                         </div>
                                     </div>
                                     <div class="porduct_des">
@@ -320,5 +256,21 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHzPSV2jshbjI8fqnC_C4L08ffnj5EN3A"></script>
     <script src="~/assets/js/gmaps.js"></script>
     <script src="~/assets/js/map-script.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#add-to-cart-icon').click(function () {
+                // Récupérer la span dans le layout
+                var cartIcon = $('.cart-icon');
+                // Récupérer le nombre actuel d'articles dans le panier
+                var currentCount = parseInt(cartIcon.text());
+                // Ajouter 1 au nombre actuel
+                var newCount = currentCount + 1;
+                // Mettre à jour le contenu de la span dans le layout avec le nouveau nombre
+                cartIcon.text(newCount);
+            });
+        });
+    </script>
     }
 <!--End Google Map APi-->
