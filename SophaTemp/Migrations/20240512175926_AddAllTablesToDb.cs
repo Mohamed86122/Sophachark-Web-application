@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SophaTemp.Migrations
 {
-    public partial class UpdateDataBase : Migration
+    public partial class AddAllTablesToDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -323,7 +323,8 @@ namespace SophaTemp.Migrations
                         name: "FK_Clients_Personnes_PersonneId",
                         column: x => x.PersonneId,
                         principalTable: "Personnes",
-                        principalColumn: "PersonneId");
+                        principalColumn: "PersonneId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Clients_Whishlists_WhishlistId",
                         column: x => x.WhishlistId,

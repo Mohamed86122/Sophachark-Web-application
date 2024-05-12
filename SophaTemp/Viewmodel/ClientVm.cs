@@ -4,6 +4,7 @@ namespace SophaTemp.Viewmodel
 {
     public class ClientVm
     {
+
         public string LibellePharmacie { get; set; }
         public string Ville { get; set; }
         public string Telephone { get; set; }

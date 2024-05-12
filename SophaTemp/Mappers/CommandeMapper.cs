@@ -23,8 +23,8 @@ namespace SophaTemp.Mappers
                 ClientId = commandeVm.ClientId,
                 DateCommande = commandeVm.DateCommande,
                 Status = commandeVm.Status,
-                Medicament = _context.Medicaments.FirstOrDefault(m => m.MedicamentId == commandeVm.MedicamentId),
-                lotCommande = new LotCommande
+/*                Medicament = _context.Medicaments.FirstOrDefault(m => m.MedicamentId == commandeVm.MedicamentId),
+*/                lotCommande = new LotCommande
                 {
                     Lots = commandeVm.LotSelections.Select(lotSel => _context.Lots.Find(lotSel.LotId)).ToList()
                 }

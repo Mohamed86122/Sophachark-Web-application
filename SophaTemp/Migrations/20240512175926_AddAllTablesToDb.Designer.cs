@@ -12,8 +12,8 @@ using SophaTemp.Data;
 namespace SophaTemp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240511224216_UpdateDataBase")]
-    partial class UpdateDataBase
+    [Migration("20240512175926_AddAllTablesToDb")]
+    partial class AddAllTablesToDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -688,10 +688,10 @@ namespace SophaTemp.Migrations
 
             modelBuilder.Entity("SophaTemp.Models.Client", b =>
                 {
-                    b.HasOne("SophaTemp.Models.Personne", null)
-                        .WithOne()
-                        .HasForeignKey("SophaTemp.Models.Client", "PersonneId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
+                    b.HasOne("SophaTemp.Models.Personne", "Personne")
+                        .WithMany()
+                        .HasForeignKey("PersonneId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SophaTemp.Models.Whishlist", "Whishlist")
@@ -699,6 +699,8 @@ namespace SophaTemp.Migrations
                         .HasForeignKey("WhishlistId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Personne");
 
                     b.Navigation("Whishlist");
                 });

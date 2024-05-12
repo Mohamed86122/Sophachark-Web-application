@@ -686,10 +686,10 @@ namespace SophaTemp.Migrations
 
             modelBuilder.Entity("SophaTemp.Models.Client", b =>
                 {
-                    b.HasOne("SophaTemp.Models.Personne", null)
-                        .WithOne()
-                        .HasForeignKey("SophaTemp.Models.Client", "PersonneId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
+                    b.HasOne("SophaTemp.Models.Personne", "Personne")
+                        .WithMany()
+                        .HasForeignKey("PersonneId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SophaTemp.Models.Whishlist", "Whishlist")
@@ -697,6 +697,8 @@ namespace SophaTemp.Migrations
                         .HasForeignKey("WhishlistId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Personne");
 
                     b.Navigation("Whishlist");
                 });

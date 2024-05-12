@@ -57,17 +57,20 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Clients/Create
         public IActionResult Create()
         {
-/*            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Nom");
-*/            ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId");
+            ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId");
             return View();
+        }
+        
+        private int GetNewPersonId()
+        {
+            
+            return 0; // Laisser SQL Server générer automatiquement la valeur de l'identifiant
+
         }
 
         // POST: Admin/Clients/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-
         public async Task<IActionResult> Create(ClientVm clientVm)
         {
             if (ModelState.IsValid)
@@ -75,16 +78,18 @@ namespace SophaTemp.Areas.Admin.Controllers
                 ClientMapper clientMapper = new ClientMapper();
                 Client newclient = clientMapper.ClientVmClient(clientVm);
 
+                // Assignez l'Id de la personne
+                newclient.PersonneId = GetNewPersonId();
 
                 _context.clients.Add(newclient);
                 await _context.SaveChangesAsync();
+                
+                // Rediriger vers l'index des clients après avoir ajouté avec succès un nouveau client
                 return RedirectToAction(nameof(Index));
             }
             ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "Whishlist");
-/*            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Nom");
-*/            return View(clientVm);
+            return View(clientVm);
         }
-
         // GET: Admin/Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

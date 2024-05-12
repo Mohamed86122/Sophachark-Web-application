@@ -16,6 +16,8 @@
         public int WhishlistId { get; set; }
         public Whishlist Whishlist { get; set; }
 
-        
+        // Clé étrangère vers Personne
+        public int PersonneId { get; set; }
+        public Personne Personne { get; set; }
     }
 }

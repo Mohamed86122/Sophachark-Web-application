@@ -48,10 +48,10 @@ namespace SophaTemp.Data
             modelBuilder.Entity<AdminStock>().ToTable("AdminStocks").HasBaseType<Personne>();
             modelBuilder.Entity<AdminCommande>().ToTable("AdminCommandes").HasBaseType<Personne>();
 
-            modelBuilder.Entity<Commande>()
-        .HasOne(c => c.Medicament) // Relation un-à-plusieurs avec Medicament
-        .WithMany(m => m.Commandes) // Medicament a plusieurs commandes
-        .HasForeignKey(c => c.MedicamentId);
+                    modelBuilder.Entity<Commande>()
+                .HasOne(c => c.Medicament) // Relation un-à-plusieurs avec Medicament
+                .WithMany(m => m.Commandes) // Medicament a plusieurs commandes
+                .HasForeignKey(c => c.MedicamentId);
 
             modelBuilder.Entity<MedicamentCategoryMedicament>()
                 .HasKey(mcm => new { mcm.MedicamentId, mcm.CategoryMedicamentId });
@@ -69,19 +69,14 @@ namespace SophaTemp.Data
 
             modelBuilder.Entity<Personne>().HasKey(p => p.PersonneId);
 
-            modelBuilder.Entity<Personne>().ToTable("Personnes");
-            modelBuilder.Entity<Client>().HasBaseType<Personne>();
-            modelBuilder.Entity<AdminPrincipal>().HasBaseType<Personne>();
-            // Continuez pour les autres types admin
-
-            // Configuration de clé primaire pour Passeport (si ce n'est pas déjà fait par convention)
             modelBuilder.Entity<Passeport>().HasKey(p => p.PasseportId);
+            modelBuilder.Entity<Passeport>().HasOne(p => p.Personne).WithOne(p => p.Passeport);
 
-            // Relation un-à-un entre Personne et Passeport
-            modelBuilder.Entity<Personne>()
-                .HasOne(p => p.Passeport)
-                .WithOne(p => p.Personne);
-
+            // Ajout de la configuration de la clé étrangère pour Client
+            modelBuilder.Entity<Client>()
+                .HasOne(c => c.Personne)
+                .WithMany()
+                .HasForeignKey(c => c.PersonneId);
 
 
         }
