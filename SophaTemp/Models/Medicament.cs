@@ -12,7 +12,7 @@
         // Propriétés de navigation
         public virtual ICollection<Whishlist> Whishlists { get; set; }
         public virtual ICollection<Commentaire> Commentaires { get; set; }
-
+        public ICollection<Commande> Commandes { get; set; }
         public ICollection<MedicamentCategoryMedicament> MedicamentCategoryMedicaments { get; set; }
 
 

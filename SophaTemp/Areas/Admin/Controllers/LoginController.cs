@@ -1,71 +1,65 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SophaTemp.Data;
+using SophaTemp.Filter;
+using SophaTemp.Mappers;
+using SophaTemp.Models;
 using SophaTemp.Viewmodel;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
-namespace SophaTemp.Areas.Admin.Controllers
+namespace SophaTemp.Controllers
 {
+
+        [Area("Admin")]
+
     public class LoginController : Controller
     {
         private readonly AppDbContext _context;
-
-        public LoginController(AppDbContext context)
+        private readonly PersonMapper _personMapper;
+        public LoginController(AppDbContext context, PersonMapper mapper) 
         {
             _context = context;
+            _personMapper = mapper;
+        
         }
-        public IActionResult Index()
+
+        [HttpGet]
+        public IActionResult Login()
         {
             return View();
         }
 
-        public IActionResult Login(LoginVm model)
+        [HttpPost]
+        public async Task<IActionResult> Login(PersonVm model)
         {
             if (ModelState.IsValid)
             {
-                // Récupérer l'utilisateur par email et mot de passe
-                var user = _context.Personnes
-                    .Include(p => p.Passeport.Permissions) // Inclure les permissions du Passeport
-                    .FirstOrDefault(u => u.email == model.Email && u.motdepasse == model.MotDePasse);
+                Personne person = _personMapper.AddMapVM(model);
+
+                var user = _context.Personnes.FirstOrDefault(u => u.email == person.email && u.motdepasse == person.motdepasse);
 
                 if (user != null)
                 {
-                    // Créer un cookie d'authentification
-                    var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.NameIdentifier, user.PersonneId.ToString()),
-                    new Claim(ClaimTypes.Name, user.nom + " " + user.prenom),
-                    new Claim(ClaimTypes.Email, user.email),
-                    // Ajouter un claim pour les permissions (ex: CRUD_Medicament)
-                    new Claim("Permissions", string.Join(",", user.Passeport.Permissions.Select(p => p.Nom)))
-                };
-
-                    var identity = new ClaimsIdentity(claims, "AdminIdentity");
-                    var principal = new ClaimsPrincipal(identity);
-
-                    HttpContext.SignInAsync(principal);
-
-                    // Redirection en fonction des permissions
-                    if (user.Passeport.Permissions.Any(p => p.Nom == "AccèsAdminClient"))
+                    // Remplissage de l'objet USer Identity
+                    string redirectController = user.Passeport?.Nom switch
                     {
-                        return RedirectToAction("Index", "Client", new { area = "Admin" }); // Redirection vers Admin/Client/Index
-                    }
-                    else if (user.Passeport.Permissions.Any(p => p.Nom == "AccèsAdminProduit"))
-                    {
-                        // Redirection vers la page d'accueil de l'administrateur produit
-                        return RedirectToAction("Index", "Produit", new { area = "Admin" }); // Remplacer "Produit" par le nom de votre contrôleur
-                    }
-                    // ... (ajouter d'autres redirections en fonction des permissions)
+                        "AdminCommande" => "Commandes",
+                        "AdminPrincipale" => "Principale",
+                        _ => "Home"
+                    };
+
+                    return RedirectToAction("Index", redirectController);
                 }
-                else
-                {
-                    ModelState.AddModelError("", "Identifiants incorrects.");
-                }
+
+                ModelState.AddModelError("", "Invalid login attempt.");
             }
 
             return View(model);
 
         }
+
     }
 }

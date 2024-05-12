@@ -540,7 +540,7 @@ namespace SophaTemp.Migrations
                         .IsRequired();
 
                     b.HasOne("SophaTemp.Models.Medicament", "Medicament")
-                        .WithMany()
+                        .WithMany("Commandes")
                         .HasForeignKey("MedicamentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -723,6 +723,8 @@ namespace SophaTemp.Migrations
 
             modelBuilder.Entity("SophaTemp.Models.Medicament", b =>
                 {
+                    b.Navigation("Commandes");
+
                     b.Navigation("Commentaires");
 
                     b.Navigation("MedicamentCategoryMedicaments");

@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SophaTemp.Migrations
 {
-    public partial class AddTableToDb : Migration
+    public partial class UpdateDataBase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "CategoryMedicament",
+                name: "Categories",
                 columns: table => new
                 {
                     CategoryMedicamentId = table.Column<int>(type: "int", nullable: false)
@@ -20,7 +20,7 @@ namespace SophaTemp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CategoryMedicament", x => x.CategoryMedicamentId);
+                    table.PrimaryKey("PK_Categories", x => x.CategoryMedicamentId);
                 });
 
             migrationBuilder.CreateTable(
@@ -50,6 +50,20 @@ namespace SophaTemp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LotCommandes",
+                columns: table => new
+                {
+                    LotCommandeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Frais = table.Column<double>(type: "float", nullable: false),
+                    Quantite = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LotCommandes", x => x.LotCommandeId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Medicaments",
                 columns: table => new
                 {
@@ -72,9 +86,7 @@ namespace SophaTemp.Migrations
                 {
                     PasseportId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nom = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Prenom = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PermissionsJson = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Nom = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,30 +108,6 @@ namespace SophaTemp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CategoryMedicamentMedicament",
-                columns: table => new
-                {
-                    CategoriesCategoryMedicamentId = table.Column<int>(type: "int", nullable: false),
-                    MedicamentsMedicamentId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CategoryMedicamentMedicament", x => new { x.CategoriesCategoryMedicamentId, x.MedicamentsMedicamentId });
-                    table.ForeignKey(
-                        name: "FK_CategoryMedicamentMedicament_CategoryMedicament_CategoriesCategoryMedicamentId",
-                        column: x => x.CategoriesCategoryMedicamentId,
-                        principalTable: "CategoryMedicament",
-                        principalColumn: "CategoryMedicamentId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CategoryMedicamentMedicament_Medicaments_MedicamentsMedicamentId",
-                        column: x => x.MedicamentsMedicamentId,
-                        principalTable: "Medicaments",
-                        principalColumn: "MedicamentId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "categoryMedicaments",
                 columns: table => new
                 {
@@ -130,9 +118,9 @@ namespace SophaTemp.Migrations
                 {
                     table.PrimaryKey("PK_categoryMedicaments", x => new { x.MedicamentId, x.CategoryMedicamentId });
                     table.ForeignKey(
-                        name: "FK_categoryMedicaments_CategoryMedicament_CategoryMedicamentId",
+                        name: "FK_categoryMedicaments_Categories_CategoryMedicamentId",
                         column: x => x.CategoryMedicamentId,
-                        principalTable: "CategoryMedicament",
+                        principalTable: "Categories",
                         principalColumn: "CategoryMedicamentId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -150,13 +138,15 @@ namespace SophaTemp.Migrations
                     LotId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Montant = table.Column<double>(type: "float", nullable: false),
+                    Libelle = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Quantite = table.Column<int>(type: "int", nullable: false),
                     PrixAchat = table.Column<int>(type: "int", nullable: false),
                     PrixVente = table.Column<int>(type: "int", nullable: false),
                     DateDeProduction = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateDExpedition = table.Column<DateTime>(type: "datetime2", nullable: false),
                     MedicamentId = table.Column<int>(type: "int", nullable: false),
-                    FournisseurId = table.Column<int>(type: "int", nullable: false)
+                    FournisseurId = table.Column<int>(type: "int", nullable: false),
+                    LotCommandeId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -168,10 +158,58 @@ namespace SophaTemp.Migrations
                         principalColumn: "FournisseurId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Lots_LotCommandes_LotCommandeId",
+                        column: x => x.LotCommandeId,
+                        principalTable: "LotCommandes",
+                        principalColumn: "LotCommandeId");
+                    table.ForeignKey(
                         name: "FK_Lots_Medicaments_MedicamentId",
                         column: x => x.MedicamentId,
                         principalTable: "Medicaments",
                         principalColumn: "MedicamentId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "permissions",
+                columns: table => new
+                {
+                    PermissionId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nom = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PasseportId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_permissions", x => x.PermissionId);
+                    table.ForeignKey(
+                        name: "FK_permissions_Passeports_PasseportId",
+                        column: x => x.PasseportId,
+                        principalTable: "Passeports",
+                        principalColumn: "PasseportId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Personnes",
+                columns: table => new
+                {
+                    PersonneId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    nom = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    prenom = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    motdepasse = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PasseportId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Personnes", x => x.PersonneId);
+                    table.ForeignKey(
+                        name: "FK_Personnes_Passeports_PasseportId",
+                        column: x => x.PasseportId,
+                        principalTable: "Passeports",
+                        principalColumn: "PasseportId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -200,56 +238,97 @@ namespace SophaTemp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Personnes",
+                name: "AdminCommandes",
                 columns: table => new
                 {
                     PersonneId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    nom = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    prenom = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    motdepasse = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PasseportId = table.Column<int>(type: "int", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LibellePharmacie = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Ville = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    WhishlistId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Personnes", x => x.PersonneId);
+                    table.PrimaryKey("PK_AdminCommandes", x => x.PersonneId);
                     table.ForeignKey(
-                        name: "FK_Personnes_Passeports_PasseportId",
-                        column: x => x.PasseportId,
-                        principalTable: "Passeports",
-                        principalColumn: "PasseportId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Personnes_Whishlists_WhishlistId",
-                        column: x => x.WhishlistId,
-                        principalTable: "Whishlists",
-                        principalColumn: "WhishlistId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_AdminCommandes_Personnes_PersonneId",
+                        column: x => x.PersonneId,
+                        principalTable: "Personnes",
+                        principalColumn: "PersonneId");
                 });
 
             migrationBuilder.CreateTable(
-                name: "LotCommandes",
+                name: "AdminPrincipals",
                 columns: table => new
                 {
-                    LotCommandeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Frais = table.Column<double>(type: "float", nullable: false),
-                    Quantite = table.Column<int>(type: "int", nullable: false),
-                    LotId = table.Column<int>(type: "int", nullable: false)
+                    PersonneId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LotCommandes", x => x.LotCommandeId);
+                    table.PrimaryKey("PK_AdminPrincipals", x => x.PersonneId);
                     table.ForeignKey(
-                        name: "FK_LotCommandes_Lots_LotId",
-                        column: x => x.LotId,
-                        principalTable: "Lots",
-                        principalColumn: "LotId",
+                        name: "FK_AdminPrincipals_Personnes_PersonneId",
+                        column: x => x.PersonneId,
+                        principalTable: "Personnes",
+                        principalColumn: "PersonneId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AdminProduits",
+                columns: table => new
+                {
+                    PersonneId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AdminProduits", x => x.PersonneId);
+                    table.ForeignKey(
+                        name: "FK_AdminProduits_Personnes_PersonneId",
+                        column: x => x.PersonneId,
+                        principalTable: "Personnes",
+                        principalColumn: "PersonneId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AdminStocks",
+                columns: table => new
+                {
+                    PersonneId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AdminStocks", x => x.PersonneId);
+                    table.ForeignKey(
+                        name: "FK_AdminStocks_Personnes_PersonneId",
+                        column: x => x.PersonneId,
+                        principalTable: "Personnes",
+                        principalColumn: "PersonneId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Clients",
+                columns: table => new
+                {
+                    PersonneId = table.Column<int>(type: "int", nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    LibellePharmacie = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Ville = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Telephone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    X = table.Column<double>(type: "float", nullable: false),
+                    Y = table.Column<double>(type: "float", nullable: false),
+                    Adresse = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EnGarde = table.Column<bool>(type: "bit", nullable: false),
+                    WhishlistId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clients", x => x.PersonneId);
+                    table.ForeignKey(
+                        name: "FK_Clients_Personnes_PersonneId",
+                        column: x => x.PersonneId,
+                        principalTable: "Personnes",
+                        principalColumn: "PersonneId");
+                    table.ForeignKey(
+                        name: "FK_Clients_Whishlists_WhishlistId",
+                        column: x => x.WhishlistId,
+                        principalTable: "Whishlists",
+                        principalColumn: "WhishlistId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -294,16 +373,23 @@ namespace SophaTemp.Migrations
                 {
                     CommandeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Numero = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
                     DateCommande = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantite = table.Column<int>(type: "int", nullable: false),
                     IdLotCommande = table.Column<int>(type: "int", nullable: false),
                     LotCommandeId = table.Column<int>(type: "int", nullable: false),
-                    ClientPersonneId = table.Column<int>(type: "int", nullable: true)
+                    MedicamentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Commandes", x => x.CommandeId);
+                    table.ForeignKey(
+                        name: "FK_Commandes_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "PersonneId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Commandes_LotCommandes_LotCommandeId",
                         column: x => x.LotCommandeId,
@@ -311,10 +397,11 @@ namespace SophaTemp.Migrations
                         principalColumn: "LotCommandeId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Commandes_Personnes_ClientPersonneId",
-                        column: x => x.ClientPersonneId,
-                        principalTable: "Personnes",
-                        principalColumn: "PersonneId");
+                        name: "FK_Commandes_Medicaments_MedicamentId",
+                        column: x => x.MedicamentId,
+                        principalTable: "Medicaments",
+                        principalColumn: "MedicamentId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -341,10 +428,27 @@ namespace SophaTemp.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_CategoryMedicamentMedicament_MedicamentsMedicamentId",
-                table: "CategoryMedicamentMedicament",
-                column: "MedicamentsMedicamentId");
+            migrationBuilder.CreateTable(
+                name: "Factures",
+                columns: table => new
+                {
+                    FactureId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Numero = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Montant = table.Column<double>(type: "float", nullable: false),
+                    DateFacturation = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CommandeId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Factures", x => x.FactureId);
+                    table.ForeignKey(
+                        name: "FK_Factures_Commandes_CommandeId",
+                        column: x => x.CommandeId,
+                        principalTable: "Commandes",
+                        principalColumn: "CommandeId",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_categoryMedicaments_CategoryMedicamentId",
@@ -352,19 +456,29 @@ namespace SophaTemp.Migrations
                 column: "CategoryMedicamentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Clients_WhishlistId",
+                table: "Clients",
+                column: "WhishlistId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CommandeLivraison_LivraisonsLivraisonId",
                 table: "CommandeLivraison",
                 column: "LivraisonsLivraisonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Commandes_ClientPersonneId",
+                name: "IX_Commandes_ClientId",
                 table: "Commandes",
-                column: "ClientPersonneId");
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Commandes_LotCommandeId",
                 table: "Commandes",
                 column: "LotCommandeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Commandes_MedicamentId",
+                table: "Commandes",
+                column: "MedicamentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Commentaire_CommentaireParentId",
@@ -382,14 +496,19 @@ namespace SophaTemp.Migrations
                 column: "PersonneId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LotCommandes_LotId",
-                table: "LotCommandes",
-                column: "LotId");
+                name: "IX_Factures_CommandeId",
+                table: "Factures",
+                column: "CommandeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lots_FournisseurId",
                 table: "Lots",
                 column: "FournisseurId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Lots_LotCommandeId",
+                table: "Lots",
+                column: "LotCommandeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lots_MedicamentId",
@@ -402,21 +521,30 @@ namespace SophaTemp.Migrations
                 column: "WhishlistsWhishlistId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_permissions_PasseportId",
+                table: "permissions",
+                column: "PasseportId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Personnes_PasseportId",
                 table: "Personnes",
                 column: "PasseportId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Personnes_WhishlistId",
-                table: "Personnes",
-                column: "WhishlistId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CategoryMedicamentMedicament");
+                name: "AdminCommandes");
+
+            migrationBuilder.DropTable(
+                name: "AdminPrincipals");
+
+            migrationBuilder.DropTable(
+                name: "AdminProduits");
+
+            migrationBuilder.DropTable(
+                name: "AdminStocks");
 
             migrationBuilder.DropTable(
                 name: "categoryMedicaments");
@@ -428,37 +556,46 @@ namespace SophaTemp.Migrations
                 name: "Commentaire");
 
             migrationBuilder.DropTable(
-                name: "MedicamentWhishlist");
-
-            migrationBuilder.DropTable(
-                name: "CategoryMedicament");
-
-            migrationBuilder.DropTable(
-                name: "Commandes");
-
-            migrationBuilder.DropTable(
-                name: "Livraisons");
-
-            migrationBuilder.DropTable(
-                name: "LotCommandes");
-
-            migrationBuilder.DropTable(
-                name: "Personnes");
+                name: "Factures");
 
             migrationBuilder.DropTable(
                 name: "Lots");
 
             migrationBuilder.DropTable(
-                name: "Passeports");
+                name: "MedicamentWhishlist");
 
             migrationBuilder.DropTable(
-                name: "Whishlists");
+                name: "permissions");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Livraisons");
+
+            migrationBuilder.DropTable(
+                name: "Commandes");
 
             migrationBuilder.DropTable(
                 name: "Fournisseurs");
 
             migrationBuilder.DropTable(
+                name: "Clients");
+
+            migrationBuilder.DropTable(
+                name: "LotCommandes");
+
+            migrationBuilder.DropTable(
                 name: "Medicaments");
+
+            migrationBuilder.DropTable(
+                name: "Personnes");
+
+            migrationBuilder.DropTable(
+                name: "Whishlists");
+
+            migrationBuilder.DropTable(
+                name: "Passeports");
         }
     }
 }

@@ -12,8 +12,8 @@ using SophaTemp.Data;
 namespace SophaTemp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240503125415_AddColumnLibelleTOLOTCOMMANDE")]
-    partial class AddColumnLibelleTOLOTCOMMANDE
+    [Migration("20240511224216_UpdateDataBase")]
+    partial class UpdateDataBase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -95,6 +95,9 @@ namespace SophaTemp.Migrations
                     b.Property<int>("LotCommandeId")
                         .HasColumnType("int");
 
+                    b.Property<int>("MedicamentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Quantite")
                         .HasColumnType("int");
 
@@ -107,6 +110,8 @@ namespace SophaTemp.Migrations
                     b.HasIndex("ClientId");
 
                     b.HasIndex("LotCommandeId");
+
+                    b.HasIndex("MedicamentId");
 
                     b.ToTable("Commandes");
                 });
@@ -271,10 +276,6 @@ namespace SophaTemp.Migrations
 
                     b.Property<double>("Frais")
                         .HasColumnType("float");
-
-                    b.Property<string>("Libelle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Quantite")
                         .HasColumnType("int");
@@ -540,7 +541,15 @@ namespace SophaTemp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SophaTemp.Models.Medicament", "Medicament")
+                        .WithMany("Commandes")
+                        .HasForeignKey("MedicamentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Client");
+
+                    b.Navigation("Medicament");
 
                     b.Navigation("lotCommande");
                 });
@@ -716,6 +725,8 @@ namespace SophaTemp.Migrations
 
             modelBuilder.Entity("SophaTemp.Models.Medicament", b =>
                 {
+                    b.Navigation("Commandes");
+
                     b.Navigation("Commentaires");
 
                     b.Navigation("MedicamentCategoryMedicaments");
