@@ -50,14 +50,13 @@ namespace SophaTemp.Controllers
             return RedirectToAction("ShopView");
         }
 
-        // Action pour afficher le contenu du panier
         public IActionResult ViewCart()
         {
             // Récupérer le panier depuis la session
             var cart = HttpContext.Session.GetObject<List<Medicament>>("Cart");
 
-            // Envoyer le panier à la vue
-            return View(cart);
+            // Envoyer le panier à la vue partielle
+            return PartialView("_CartPartial", cart);
         }
 
         // Action pour vider le panier
