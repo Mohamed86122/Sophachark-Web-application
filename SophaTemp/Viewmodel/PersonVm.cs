@@ -2,9 +2,8 @@
 
 namespace SophaTemp.Viewmodel
 {
-    public class LoginVm
+    public class PersonVm
     {
-
         [Required]
         [EmailAddress]
         public string Email { get; set; }

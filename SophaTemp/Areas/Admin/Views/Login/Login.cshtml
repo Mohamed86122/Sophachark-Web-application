@@ -1,33 +1,39 @@
 ﻿@model SophaTemp.Viewmodel.LoginVm
 
-
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="border p-4 rounded">
-                <form method="post" asp-action="Login">
-                    <!-- Email input -->
-                    <div data-mdb-input-init class="form-outline mb-4">
-                        <label class="form-label" for="form2Example1">Email</label>
-
-                        <input asp-for="Email" id="form2Example1" class="form-control" placeholder="Entrer votre mail" />
-                    </div>
-
-                    <!-- Password input -->
-                    <div data-mdb-input-init class="form-outline mb-4">
-                        <label class="form-label" for="form2Example2">Password</label>
-
-                        <input asp-for="MotDePasse" id="form2Example2" class="form-control" placeholder="Entrer Votre mot de passe" />
-                    </div>
+@{
+    Layout = null;
+    ViewData["Title"] = "Login";
+}
 
 
+    <div class="login-container">
+        <div class="login-header">
 
-                    <!-- Submit button -->
-                    <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Sign in</button>
-
-
-                </form>
-            </div>
+            <h1>Veuillez Se Connecter !</h1>
         </div>
+        <div class="login-form">
+            <form asp-action="Login" method="post">
+                
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" required class="form-control"/>
+                        <span asp-validation-for="Email"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="MotDePasse"></label>
+                        <input asp-for="MotDePasse" required class="form-control" />
+                        <span asp-validation-for="MotDePasse"></span>
+                    </div>
+               
+                <div class="form-group form-check">
+                    <input type="checkbox" asp-for="RememberMe" id="rememberMe">
+                    <label for="rememberMe">Se souvenir de moi</label>
+                </div>
+                <button type="submit" class="btn-login">Se connecter</button>
+            </form>
+            <a href="#" class="forgot-password">Mot de passe oublié ?</a>
+        </div>
+        <footer>
+            <p>Support: support@sobrus.com | Phone: 05 30 500 500</p>
+        </footer>
     </div>
-</div>

@@ -57,8 +57,8 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Clients/Create
         public IActionResult Create()
         {
-            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Prenom");
-            ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId");
+/*            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Nom");
+*/            ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId");
             return View();
         }
 
@@ -81,8 +81,8 @@ namespace SophaTemp.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "Whishlist");
-            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Prenom");
-            return View(clientVm);
+/*            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Nom");
+*/            return View(clientVm);
         }
 
         // GET: Admin/Clients/Edit/5
@@ -98,8 +98,8 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Prenom", client.PasseportId);
-            ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId", client.WhishlistId);
+/*            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Nom", client.PasseportId);
+*/            ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId", client.WhishlistId);
             return View(client);
         }
 
@@ -108,7 +108,7 @@ namespace SophaTemp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LibellePharmacie,Ville,Telephone,X,Y,Adresse,EnGarde,WhishlistId,PersonneId,nom,prenom,email,motdepasse,PasseportId")] Client client)
+        public async Task<IActionResult> Edit(int id, [Bind("LibellePharmacie,Ville,Telephone,X,Y,Adresse,EnGarde,WhishlistId,PersonneId,nom,prenom,email,motdepasse")] Client client)
         {
             if (id != client.PersonneId)
             {
@@ -135,7 +135,7 @@ namespace SophaTemp.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Prenom", client.PasseportId);
+            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Nom", client.PasseportId);
             ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId", client.WhishlistId);
             return View(client);
         }
