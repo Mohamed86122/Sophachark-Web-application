@@ -3,64 +3,70 @@
 @{
     ViewData["Title"] = "Create";
 }
+<div class="container mt-5">
+    <h1>Create Commande</h1>
 
-<h1>Create</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<h4>Commande</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="form-group">
-                <label asp-for="ClientId" class="control-label"></label>
-                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
-            </div>
+                <div class="form-group">
+                    <label asp-for="ClientId" class="control-label"></label>
+                    <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
+                </div>
            
-            <div class="form-group">
-                <label asp-for="IdLotCommande" class="control-label"></label>
-                <select asp-for="IdLotCommande" class="form-control" asp-items="ViewBag.LotCommandeId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="MedicamentId" class="control-label">Medicament</label>
-                <select asp-for="MedicamentId" asp-items="ViewBag.MedicamentId" class="form-control" onchange="loadLots(this.value)">
-                    <option value="">Select Medicament</option>
-                </select>
-                <span asp-validation-for="MedicamentId" class="text-danger"></span>
-            </div>
+            
+                <div class="form-group">
+                    <label asp-for="MedicamentId" class="control-label">Medicament</label>
+                    <select asp-for="MedicamentId" asp-items="ViewBag.MedicamentId" class="form-control" onchange="loadLots(this.value)">
+                        <option value="">Select Medicament</option>
+                    </select>
+                    <span asp-validation-for="MedicamentId" class="text-danger"></span>
+                </div>
 
-            <!-- Placeholder for Lots Partial View -->
-            <div id="lotsContainer"></div>
+                <div id="lotsContainer"></div>
 
-            <div class="form-group">
-                <label asp-for="DateCommande" class="control-label"></label>
-                <input asp-for="DateCommande" class="form-control" />
-                <span asp-validation-for="DateCommande" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="DateCommande" class="control-label"></label>
+                    <input asp-for="DateCommande" class="form-control" type="date" />
+                    <span asp-validation-for="DateCommande" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Status" class="control-label"></label>
+                    <input asp-for="Status" class="form-control" />
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <!-- Champ de texte caché pour stocker les lots sélectionnés -->
+                <input type="hidden" id="selectedLotsJson" name="SelectedLotsJson" />
+
+                <!-- Textarea pour afficher les données des lots sélectionnés -->
+                <div class="form-group">
+                    <label for="selectedLotsTextArea">Selected Lots:</label>
+                    <textarea id="selectedLotsTextArea" class="form-control" rows="4" readonly></textarea>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-
 @section Scripts {
     <script src="~/lib/jquery/jquery.js"></script>
 
     <script>
+        var selectedLots = [];
+
         function loadLots(medicamentId) {
             if (medicamentId) {
                 var url = '@Url.Action("Lots", "Commandes")?medicamentId=' + medicamentId;
@@ -68,6 +74,26 @@
             } else {
                 $('#lotsContainer').empty();
             }
+        }
+
+        function addLotToList(lotId, quantite) {
+            var existingLot = selectedLots.find(l => l.lotId === lotId);
+            if (existingLot) {
+                existingLot.quantite = quantite;
+            } else {
+                selectedLots.push({ lotId: lotId, quantite: quantite });
+            }
+            updateSelectedLotsJson();
+            updateSelectedLotsTextArea();
+        }
+
+        function updateSelectedLotsJson() {
+            $('#selectedLotsJson').val(JSON.stringify(selectedLots));
+        }
+
+        function updateSelectedLotsTextArea() {
+            var textAreaContent = selectedLots.map(l => `Lot ID: ${l.lotId}, Quantite: ${l.quantite}`).join('\n');
+            $('#selectedLotsTextArea').val(textAreaContent);
         }
     </script>
     @{

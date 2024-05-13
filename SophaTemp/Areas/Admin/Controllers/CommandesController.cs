@@ -18,7 +18,7 @@ namespace SophaTemp.Areas.Admin.Controllers
         private readonly AppDbContext _context;
         private readonly CommandeMapper _commandeMapper;
 
-        public CommandesController(AppDbContext context,CommandeMapper mapper)
+        public CommandesController(AppDbContext context, CommandeMapper mapper)
         {
             _context = context;
             _commandeMapper = mapper;
@@ -30,6 +30,7 @@ namespace SophaTemp.Areas.Admin.Controllers
             var appDbContext = _context.Commandes.Include(c => c.Client);
             return View(await appDbContext.ToListAsync());
         }
+
         // GET: Admin/Commandes/Lots
         public async Task<IActionResult> Lots(int medicamentId)
         {
@@ -39,30 +40,10 @@ namespace SophaTemp.Areas.Admin.Controllers
             return PartialView("_LotsPartial", lots);
         }
 
-        // GET: Admin/Commandes/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Commandes == null)
-            {
-                return NotFound();
-            }
-
-            var commande = await _context.Commandes
-                .Include(c => c.Client)
-                .FirstOrDefaultAsync(m => m.CommandeId == id);
-            if (commande == null)
-            {
-                return NotFound();
-            }
-
-            return View(commande);
-        }
-
         // GET: Admin/Commandes/Create
         public IActionResult Create()
         {
             ViewData["ClientId"] = new SelectList(_context.clients, "ClientId", "LibellePharmacie");
-            ViewData["LotCommandeId"] = new SelectList(_context.LotCommandes, "LotCommandeId", "LotCommandeId");
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom");
 
             return View();
@@ -89,10 +70,11 @@ namespace SophaTemp.Areas.Admin.Controllers
                         ModelState.AddModelError("", $"Quantité insuffisante pour le lot {lotSelection.LotId}.");
                         ViewData["ClientId"] = new SelectList(_context.clients, "ClientId", "LibellePharmacie", commandeVm.ClientId);
                         ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", commandeVm.MedicamentId);
-                        ViewData["LotCommandeId"] = new SelectList(_context.LotCommandes, "LotCommandeId", "Frais");
                         return View(commandeVm);
                     }
                 }
+
+                commande.SelectedLotsJson = Newtonsoft.Json.JsonConvert.SerializeObject(commandeVm.LotSelections);
 
                 _context.Add(commande);
                 await _context.SaveChangesAsync();
@@ -100,18 +82,10 @@ namespace SophaTemp.Areas.Admin.Controllers
             }
 
             ViewData["ClientId"] = new SelectList(_context.clients, "ClientId", "LibellePharmacie", commandeVm.ClientId);
-            
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", commandeVm.MedicamentId);
-            ViewData["LotCommandeId"] = new SelectList(_context.LotCommandes, "LotCommandeId", "Frais");
 
             return View(commandeVm);
-
         }
-
-
-
-
-
 
         // GET: Admin/Commandes/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -199,14 +173,14 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 _context.Commandes.Remove(commande);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CommandeExists(int id)
         {
-          return (_context.Commandes?.Any(e => e.CommandeId == id)).GetValueOrDefault();
+            return (_context.Commandes?.Any(e => e.CommandeId == id)).GetValueOrDefault();
         }
     }
 }
