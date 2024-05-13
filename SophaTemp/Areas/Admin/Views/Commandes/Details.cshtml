@@ -9,13 +9,14 @@
 <div>
     <h4>Commande</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Client)
-        </dt>
-        <dd class = "col-sm-10">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="border p-4 rounded">
+           @*  @Html.DisplayNameFor(model => model.Client)
+        </dt> *@
+        @* <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Client.PersonneId)
-        </dd>
+        </dd> *@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DateCommande)
         </dt> 
@@ -46,6 +47,7 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.CommandeId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+                <a asp-action="Edit" asp-route-id="@Model.CommandeId" class="btn btn-primary">Edit</a> |
+
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>

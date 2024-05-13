@@ -178,6 +178,18 @@ namespace SophaTemp.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //Button Details Commande dans facture
+        [HttpGet("Details/{id}")]
+        public IActionResult Details(int id)
+        {
+            var commande = _context.Commandes.Find(id);
+            if (commande == null)
+            {
+                return NotFound();
+            }
+            return View(commande);
+        }
+
         private bool CommandeExists(int id)
         {
             return (_context.Commandes?.Any(e => e.CommandeId == id)).GetValueOrDefault();

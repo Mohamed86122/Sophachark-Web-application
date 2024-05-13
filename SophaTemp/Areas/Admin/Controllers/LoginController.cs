@@ -32,6 +32,7 @@ namespace SophaTemp.Controllers
             return View();
         }
 
+
         [HttpPost]
         public async Task<IActionResult> Login(PersonVm model)
         {
@@ -39,7 +40,7 @@ namespace SophaTemp.Controllers
             {
                 Personne person = _personMapper.AddMapVM(model);
 
-                var user = _context.Personnes.FirstOrDefault(u => u.email == person.email && u.motdepasse == person.motdepasse);
+                var user = _context.Personnes.FirstOrDefault(u => u.email.Trim() == person.email.Trim() && u.motdepasse.Trim() == person.motdepasse.Trim());
 
                 if (user != null)
                 {
@@ -48,6 +49,7 @@ namespace SophaTemp.Controllers
                     {
                         "AdminCommande" => "Commandes",
                         "AdminPrincipale" => "Principale",
+                        "AdminClient" => "Clients",
                         _ => "Home"
                     };
 
