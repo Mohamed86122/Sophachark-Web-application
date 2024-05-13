@@ -2,57 +2,54 @@
 using Microsoft.AspNetCore.Mvc;
 using SophaTemp.Data;
 using Microsoft.EntityFrameworkCore;
+using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SophaTemp.Filter
 {
-    public class PasseportAuthorizationFilter : ActionFilterAttribute
+    public class PasseportAuthorizationFilter : IAsyncActionFilter
     {
-        private readonly AppDbContext _context;
-        private string passeport;
+        private readonly string _passeport;
 
-        public PasseportAuthorizationFilter(string passport)
+        public PasseportAuthorizationFilter(string passeport)
         {
-            this.passeport = passeport;
+            _passeport = passeport;
         }
 
-        public void OnActionExecuting(ActionExecutingContext context)
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+            var dbContext = context.HttpContext.RequestServices.GetRequiredService<AppDbContext>();
+
             var userEmail = context.HttpContext.User.Identity.Name;
+            var user = await dbContext.Personnes
+                                      .Include(u => u.Passeport)
+                                      .FirstOrDefaultAsync(u => u.email == userEmail);
 
-            var user = _context.Personnes
-                               .Include(u => u.Passeport)
-                               .FirstOrDefault(u => u.email == userEmail);
-
-            if (user != null && user.Passeport != null)
+            if (user != null && user.Passeport != null && user.Passeport.Nom == _passeport)
             {
                 switch (user.Passeport.Nom)
                 {
                     case "AdminCommande":
                         context.Result = new RedirectToActionResult("Index", "Commandes", null);
-                        break;
+                        return;
                     case "AdminClient":
                         context.Result = new RedirectToActionResult("Index", "Clients", null);
-                        break;
+                        return;
                     case "AdminPrincipale":
                         context.Result = new RedirectToActionResult("Index", "Principal", null);
-                        break;
+                        return;
                     case "AdminProduit":
                         context.Result = new RedirectToActionResult("Index", "Produits", null);
-                        break;
+                        return;
                     default:
                         context.Result = new RedirectToActionResult("Index", "Home", null);
-                        break;
+                        return;
                 }
             }
-            else
-            {
-                context.Result = new RedirectToActionResult("Login", "Account", null);
-            }
-        }
 
-        public void OnActionExecuted(ActionExecutedContext context)
-        {
-
+            // If no user is found or role does not match, redirect to login
+            context.Result = new RedirectToActionResult("Login", "Account", null);
+            // Skip the next action execution
         }
     }
 }

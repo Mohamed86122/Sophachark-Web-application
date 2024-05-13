@@ -3,17 +3,38 @@
 @{
     ViewData["Title"] = "Create";
 }
+<style>
+    .btn-primary {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
 
-<h1>Create</h1>
+        .btn-primary:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
 
-<h4>Commande</h4>
+    .btn-secondary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-secondary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+
+</style>
+<div class="container mt-5">
+    <h1>Create Commande</h1>
+
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="form-group">
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="border p-4 rounded">
+            
                 <label asp-for="ClientId" class="control-label"></label>
                 <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
             </div>
@@ -53,7 +74,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>
 
 
