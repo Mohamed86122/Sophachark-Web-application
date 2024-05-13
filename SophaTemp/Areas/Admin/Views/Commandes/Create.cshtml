@@ -5,7 +5,6 @@
 }
 <div class="container mt-5">
     <h1>Create Commande</h1>
-
     <hr />
     <div class="row">
         <div class="col-md-4">
@@ -16,17 +15,23 @@
                     <label asp-for="ClientId" class="control-label"></label>
                     <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
                 </div>
-           
-            
-                <div class="form-group">
-                    <label asp-for="MedicamentId" class="control-label">Medicament</label>
-                    <select asp-for="MedicamentId" asp-items="ViewBag.MedicamentId" class="form-control" onchange="loadLots(this.value)">
-                        <option value="">Select Medicament</option>
-                    </select>
-                    <span asp-validation-for="MedicamentId" class="text-danger"></span>
-                </div>
 
-                <div id="lotsContainer"></div>
+                <div id="medicamentsContainer">
+                    <div class="medicament-group">
+                        <div class="form-group">
+                            <label class="control-label">Medicament</label>
+                            <select class="form-control medicament-select" onchange="loadLots(this)">
+                                <option value="">Select Medicament</option>
+                                @foreach (var item in ViewBag.MedicamentId)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="lots-container"></div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" onclick="addMedicamentGroup()">Add Medicament</button>
 
                 <div class="form-group">
                     <label asp-for="DateCommande" class="control-label"></label>
@@ -40,14 +45,8 @@
                     <span asp-validation-for="Status" class="text-danger"></span>
                 </div>
 
-                <!-- Champ de texte caché pour stocker les lots sélectionnés -->
                 <input type="hidden" id="selectedLotsJson" name="SelectedLotsJson" />
-
-                <!-- Textarea pour afficher les données des lots sélectionnés -->
-                <div class="form-group">
-                    <label for="selectedLotsTextArea">Selected Lots:</label>
-                    <textarea id="selectedLotsTextArea" class="form-control" rows="4" readonly></textarea>
-                </div>
+                <textarea id="selectedLotsTextArea" class="form-control" rows="4" readonly></textarea>
 
                 <div class="form-group">
                     <input type="submit" value="Create" class="btn btn-primary" />
@@ -55,48 +54,77 @@
             </form>
         </div>
     </div>
-
     <div>
         <a asp-action="Index">Back to List</a>
     </div>
-
 </div>
+
 @section Scripts {
     <script src="~/lib/jquery/jquery.js"></script>
-
     <script>
         var selectedLots = [];
 
-        function loadLots(medicamentId) {
+        $(document).ready(function () {
+            // Attachez les événements seulement après que le DOM est prêt
+            $('body').on('change', '.medicament-select', function () {
+                loadLots(this);
+            });
+
+            $('body').on('change', '.lot-quantity', function () {
+                var lotId = $(this).data('lot-id');
+                var quantite = $(this).val();
+                var medicamentId = $(this).data('medicament-id');
+                addLotToList(lotId, quantite, medicamentId);
+            });
+
+            $('#medicamentsContainer').on('click', '.add-medicament', function () {
+                addMedicamentGroup();
+            });
+        });
+
+        function loadLots(selectElement) {
+            var medicamentId = $(selectElement).val();
+            var container = $(selectElement).closest('.medicament-group').find('.lots-container');
             if (medicamentId) {
                 var url = '@Url.Action("Lots", "Commandes")?medicamentId=' + medicamentId;
-                $('#lotsContainer').load(url);
+                container.load(url);
             } else {
-                $('#lotsContainer').empty();
+                container.empty();
             }
         }
 
-        function addLotToList(lotId, quantite) {
+        function addLotToList(lotId, quantite, medicamentId) {
             var existingLot = selectedLots.find(l => l.lotId === lotId);
             if (existingLot) {
                 existingLot.quantite = quantite;
             } else {
-                selectedLots.push({ lotId: lotId, quantite: quantite });
+                selectedLots.push({ lotId: lotId, quantite: quantite, medicamentId: medicamentId });
             }
             updateSelectedLotsJson();
             updateSelectedLotsTextArea();
         }
 
         function updateSelectedLotsJson() {
-            $('#selectedLotsJson').val(JSON.stringify(selectedLots));
+            var jsonString = JSON.stringify(selectedLots);
+            console.log("SelectedLotsJson:", jsonString); // Vérifiez le JSON dans la console
+            $('#selectedLotsJson').val(jsonString);
         }
 
         function updateSelectedLotsTextArea() {
-            var textAreaContent = selectedLots.map(l => `Lot ID: ${l.lotId}, Quantite: ${l.quantite}`).join('\n');
+            var textAreaContent = selectedLots.map(l => `Lot ID: ${l.lotId}, Quantite: ${l.quantite}, Medicament ID: ${l.medicamentId}`).join('\n');
             $('#selectedLotsTextArea').val(textAreaContent);
+        }
+
+        function addMedicamentGroup() {
+            var newGroup = $('.medicament-group').first().clone();
+            newGroup.find('select').val('');
+            newGroup.find('.lots-container').empty();
+            $('#medicamentsContainer').append(newGroup);
         }
     </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
+

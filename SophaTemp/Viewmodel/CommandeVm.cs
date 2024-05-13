@@ -15,4 +15,6 @@ namespace SophaTemp.Viewmodel
         // Ajout de la propriété pour stocker les données des lots sélectionnés au format JSON
         public string SelectedLotsJson { get; set; }
     }
+    
+
 }

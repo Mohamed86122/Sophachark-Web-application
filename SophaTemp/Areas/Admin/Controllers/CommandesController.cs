@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using SophaTemp.Data;
 using SophaTemp.Mappers;
 using SophaTemp.Models;
@@ -49,13 +50,19 @@ namespace SophaTemp.Areas.Admin.Controllers
             return View();
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CommandeVm commandeVm)
         {
+            if (!string.IsNullOrEmpty(commandeVm.SelectedLotsJson))
+            {
+                commandeVm.LotSelections = JsonConvert.DeserializeObject<List<LotSelection>>(commandeVm.SelectedLotsJson);
+            }
+
             if (ModelState.IsValid)
             {
-                var commande = _commandeMapper.CommandeFromVm(commandeVm);  // Utilisation du mapper ajusté
+                var commande = _commandeMapper.CommandeFromVm(commandeVm);
 
                 foreach (var lotSelection in commandeVm.LotSelections)
                 {
@@ -74,8 +81,7 @@ namespace SophaTemp.Areas.Admin.Controllers
                     }
                 }
 
-                commande.SelectedLotsJson = Newtonsoft.Json.JsonConvert.SerializeObject(commandeVm.LotSelections);
-
+                commande.SelectedLotsJson = commandeVm.SelectedLotsJson;
                 _context.Add(commande);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,7 +92,6 @@ namespace SophaTemp.Areas.Admin.Controllers
 
             return View(commandeVm);
         }
-
         // GET: Admin/Commandes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
