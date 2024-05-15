@@ -1,37 +1,8 @@
-﻿@page
-@model SophaTemp.Models.Medicament
+﻿@model List<SophaTemp.Models.Medicament>
 
-@section Style {
-    <meta charset="utf-8">
-    <meta name="title" content="Meditex">
-    <meta property="fb:app_id" content="312" />
-    <meta property="og:type" content="Medical" />
-    <meta property="og:url" content="http://steelthemes.com/demo/Elango/meditex-final/" />
-    <meta property="og:title" content="Meditex">
-    <meta property="og:image" content="http://steelthemes.com/demo/Elango/meditex-final/assets/image/fbimg-210x210.jpg">
-    <meta property="og:description" content="Meditex is html 5 Template">
-    <meta name="full-screen" content="yes">
-    <meta name="theme-color" content="#568701">
-    <!-- Responsive -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
-    <!--[if lt IE 9]><script src="js/respond.js"></script><![endif]-->
-    <title>Shop | Meditex | Responsive  HTML 5 Template</title>
-    <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
-    <link rel="stylesheet" type="text/css" href="~/assets/css/responsive.css">
-    <link rel="stylesheet" type="text/css" href="~/assets/fonts/font/flaticon.css">
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="~/assets/image/fav/favicon-32x32à.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="~/assets/image/fav/favicon-16x16.png" sizes="16x16">
-
-}
-<!--Start Preloader -->
 @{
-    // Le contenu spécifique à la vue ici
     Layout = "_Layout";
 }
-<!--------shop_-------->
 
 <section class="shop_">
     <div class="container">
@@ -41,14 +12,12 @@
                     <h1>La liste des médicaments</h1>
                 </div>
             </div>
-
         </div>
         <div class="row">
             <div class="col-lg-3">
                 <div class="shop_left_bar">
-
-                    <div id="search" class=" widget_search">
-                        <div class=" widget_product_search">
+                    <div id="search" class="widget_search">
+                        <div class="widget_product_search">
                             <form role="search" method="get" class="product-search" action="#">
                                 <input class="search-field" placeholder="Enter Keyword..." type="search">
                                 <input value="" type="submit" class="search_btn">
@@ -60,20 +29,18 @@
                         <ul>
                             <li><a href="#">All Categories<span>(20)</span></a></li>
                             <li><a href="#"> Business<span>(5)</span></a></li>
-                            <li><a href="#">Lifestyle<span> (6)</span></a></li>
+                            <li><a href="#">Lifestyle<span>(6)</span></a></li>
                             <li><a href="#">Experience<span>(3)</span></a></li>
                             <li><a href="#">Technology<span>(9)</span></a></li>
-                            <li><a href="#">Other<span> (8)</span></a></li>
+                            <li><a href="#">Other<span>(8)</span></a></li>
                         </ul>
                     </div>
-
-                    <div class="widget  widget_price_filter">
+                    <div class="widget widget_price_filter">
                         <h2 class="sub_head">Filter by price</h2>
                         <form>
                             <div class="price_slider_wrapper">
                                 <div id="slider-range" class="price_slider"></div>
                                 <div class="price_slider_amount">
-
                                     <div class="price_label">
                                         Price:
                                         <input type="text" id="amount">
@@ -85,32 +52,25 @@
                     </div>
                     <div class="widget_view_products">
                         <h2 class="sub_head">Viewed Products</h2>
-                        
                         <div class="view_products">
                             @foreach (var medicament in ViewBag.Medicaments)
                             {
                                 <div class="product_inner">
-                                        <img src="~/@Url.Content(medicament.Image)" alt="Image du médicament" class="img-fluid" style="max-width:100px; height:auto;">
-                                        <div class="view_text">
+                                    <img src="~/@Url.Content(medicament.Image)" alt="Image du médicament" class="img-fluid" style="max-width:100px; height:auto;">
+                                    <div class="view_text">
                                         <h2>@medicament.Nom</h2>
                                         <p>$40.00</p>
                                     </div>
                                 </div>
-                            } 
+                            }
                         </div>
-                       
                     </div>
-
-
-
                 </div>
             </div>
-
             <div class="col-lg-9">
                 <div class="shop_right_bar">
                     <div class="top_shop_bar">
-                        <div class="row ">
-
+                        <div class="row">
                             <div class="col-lg-6">
                                 <div class="products_showing">
                                     <p>Showing 1–9 of 17 results</p>
@@ -119,7 +79,6 @@
                             <div class="col-lg-6 ">
                                 <form>
                                     <div class="form-group">
-
                                         <select name="departmrnt" id="department">
                                             <option>Slower</option>
                                             <option>Slow</option>
@@ -128,20 +87,20 @@
                                             <option>Faster</option>
                                         </select>
                                     </div>
-
                                 </form>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         @foreach (var medicament in ViewBag.Medicaments)
-                         {
+                        {
                             <div class="col-md-4 col-sm-6 col-xs-12">
                                 <div class="shop_products_outer">
                                     <div class="image">
                                         <img src="~/@Url.Content(medicament.Image)" alt="Image du médicament" class="img-fluid" style="max-width:100px; height:auto;">
                                         <div class="overlay_cart">
-                                            <span id="add-to-cart-icon" class="flaticon-supermarket"></span>
+                                            <span class="flaticon-supermarket add-to-cart-icon" data-id="@medicament.MedicamentId"></span>
+                                            <span class="flaticon-heart add-to-wishlist-icon" data-id="@medicament.MedicamentId"></span>
                                         </div>
                                     </div>
                                     <div class="porduct_des">
@@ -150,9 +109,7 @@
                                     </div>
                                 </div>
                             </div>
-                          }
-                       
-
+                        }
                     </div>
                     <div class="row">
                         <div class="col-lg-12 text-center pagination_column_shop">
@@ -173,50 +130,6 @@
     </div>
 </section>
 
-<!--------shop_-------->
-<!-------contact-through----->
-<div class="contact_through">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-md-3 col-sm-6">
-                <div class="contact_through_inner">
-                    <span class="flaticon-phone-1 icon"></span>
-                    <p>
-                        Emergency Cases: <br />
-                        (052) 611-5711
-                    </p>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-6">
-                <div class="contact_through_inner">
-                    <span class="flaticon-placeholder icon"></span>
-                    <p>
-                        E7088 Micaela Cliffs, <br />
-                        Thielshire, OK 95062
-                    </p>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-6">
-                <div class="contact_through_inner">
-                    <span class="flaticon-envelope icon"></span>
-                    <p>
-                        Email Address<br />
-                        contact@meditex.com
-                    </p>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-6">
-                <div class="contact_through_inner">
-                    <span class="flaticon-calendar icon"></span>
-                    <p>
-                        Book Online<br />
-                        Appointment Now
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <!-------contact-through----->
 <!-------backtotop-------->
 <a href="#" id="scroll" class="default-bg" style="display: none;"><span></span></a>
@@ -246,7 +159,6 @@
     <script src="~/assets/js/jquery-ui.js"></script>
     <script src="~/assets/js/owl.js"></script>
     <script src="~/assets/js/isotope.min.js"></script>
-    <!---smooth-scrool-->
     <script src="~/assets/js/SmoothScroll.min.js"></script>
     <script src="~/assets/js/validator.min.js"></script>
     <script src="~/assets/js/contact.js"></script>
@@ -257,20 +169,34 @@
     <script src="~/assets/js/gmaps.js"></script>
     <script src="~/assets/js/map-script.js"></script>
 
-
     <script>
         $(document).ready(function () {
-            $('#add-to-cart-icon').click(function () {
-                // Récupérer la span dans le layout
-                var cartIcon = $('.cart-icon');
-                // Récupérer le nombre actuel d'articles dans le panier
-                var currentCount = parseInt(cartIcon.text());
-                // Ajouter 1 au nombre actuel
-                var newCount = currentCount + 1;
-                // Mettre à jour le contenu de la span dans le layout avec le nouveau nombre
-                cartIcon.text(newCount);
+            $('.add-to-cart-icon').click(function () {
+                var medicamentId = $(this).data('id');
+                $.ajax({
+                    url: '@Url.Action("AddToCart", "Shop")',
+                    type: 'POST',
+                    data: { id: medicamentId },
+                    success: function (data) {
+                        var cartIcon = $('.cart-icon');
+                        cartIcon.text(data.totalItems);
+                    }
+                });
+            });
+
+            $('.add-to-wishlist-icon').click(function () {
+                var medicamentId = $(this).data('id');
+                $.ajax({
+                    url: '@Url.Action("AddToWishlist", "Shop")',
+                    type: 'POST',
+                    data: { id: medicamentId },
+                    success: function (data) {
+                        var wishlistIcon = $('.wishlist-icon');
+                        wishlistIcon.text(data.totalItems);
+                    }
+                });
             });
         });
     </script>
-    }
-<!--End Google Map APi-->
+}
+

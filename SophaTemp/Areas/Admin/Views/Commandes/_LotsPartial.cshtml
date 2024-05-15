@@ -5,8 +5,7 @@
     <div class="form-group">
         <label>Lot @lot.LotId : @lot.DateDExpedition.ToString("dd/MM/yyyy")</label>
         <label>Quantité disponible : @lot.Quantite</label>
-        <input type="number" class="form-control" min="0" max="@lot.Quantite" placeholder="Quantite"
-               onchange="addLotToList(@lot.LotId, this.value, @lot.MedicamentId)" />
+        <input type="number" class="form-control lot-quantity" min="0" max="@lot.Quantite" placeholder="Quantite"
+               data-lot-id="@lot.LotId" data-medicament-id="@lot.MedicamentId" />
     </div>
 }
-

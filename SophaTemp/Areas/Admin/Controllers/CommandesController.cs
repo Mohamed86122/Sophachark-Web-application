@@ -5,11 +5,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using SophaTemp.Data;
 using SophaTemp.Mappers;
-using SophaTemp.Models;
 using SophaTemp.Viewmodel;
+using SophaTemp.Models;
+using ModelLotSelection = SophaTemp.Models.LotSelection;
+using ViewModelLotSelection = SophaTemp.Viewmodel.LotSelection;
+
 
 namespace SophaTemp.Areas.Admin.Controllers
 {
@@ -50,14 +54,18 @@ namespace SophaTemp.Areas.Admin.Controllers
             return View();
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CommandeVm commandeVm)
         {
-            if (!string.IsNullOrEmpty(commandeVm.SelectedLotsJson))
+            if (!string.IsNullOrEmpty(commandeVm.SelectedLotsString))
             {
-                commandeVm.LotSelections = JsonConvert.DeserializeObject<List<LotSelection>>(commandeVm.SelectedLotsJson);
+                commandeVm.LotSelections = ParseLotSelections(commandeVm.SelectedLotsString);
+            }
+
+            if (commandeVm.LotSelections == null || !commandeVm.LotSelections.Any())
+            {
+                ModelState.AddModelError("LotSelections", "LotSelections cannot be null or empty.");
             }
 
             if (ModelState.IsValid)
@@ -81,7 +89,7 @@ namespace SophaTemp.Areas.Admin.Controllers
                     }
                 }
 
-                commande.SelectedLotsJson = commandeVm.SelectedLotsJson;
+                commande.SelectedLotsString = commandeVm.SelectedLotsString;
                 _context.Add(commande);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -92,6 +100,58 @@ namespace SophaTemp.Areas.Admin.Controllers
 
             return View(commandeVm);
         }
+        private List<Viewmodel.LotSelection> ParseLotSelections(string selectedLotsString)
+        {
+            var lotSelections = new List<Viewmodel.LotSelection>();
+
+            if (string.IsNullOrWhiteSpace(selectedLotsString))
+            {
+                return lotSelections;
+            }
+
+            var lots = selectedLotsString.Split(';');
+
+            foreach (var lot in lots)
+            {
+                var details = lot.Split(',');
+
+                if (details.Length == 3)
+                {
+                    try
+                    {
+                        var lotIdPart = details[0].Split(':')[1].Trim();
+                        var quantitePart = details[1].Split(':')[1].Trim();
+                        var medicamentIdPart = details[2].Split(':')[1].Trim();
+
+                        var lotId = int.Parse(lotIdPart);
+                        var quantite = int.Parse(quantitePart);
+                        var medicamentId = int.Parse(medicamentIdPart);
+
+                        lotSelections.Add(new Viewmodel.LotSelection
+                        {
+                            LotId = lotId,
+                            Quantite = quantite,
+                            MedicamentId = medicamentId
+                        });
+
+                        // Log de débogage
+                        Console.WriteLine($"Lot ajouté : Lot ID={lotId}, Quantite={quantite}, Medicament ID={medicamentId}");
+                    }
+                    catch (Exception ex)
+                    {
+                        // Ajoutez ici une gestion des erreurs si nécessaire
+                        Console.WriteLine("Erreur de format ou de parsing : " + ex.Message);
+                    }
+                }
+            }
+
+            return lotSelections;
+        }
+
+
+
+
+
         // GET: Admin/Commandes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

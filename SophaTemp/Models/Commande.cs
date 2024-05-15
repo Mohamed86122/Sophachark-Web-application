@@ -17,7 +17,7 @@
 
         public virtual ICollection<Livraison> Livraisons { get; set; }
 
-        public string SelectedLotsJson { get; set; }
+        public string SelectedLotsString { get; set; }
 
     }
 }

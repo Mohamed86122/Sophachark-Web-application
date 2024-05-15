@@ -1,7 +1,7 @@
 ﻿@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
 :root {
-    --primary-color: #12ac8e;
+    --primary-color: #568701;
     --primary-color-dark: #0d846c;
     --primary-color-light: #e9f7f7;
     --secondary-color: #fb923c;
@@ -51,7 +51,7 @@ body {
 }
 
 header {
-    background-image: linear-gradient( to right, rgba(18, 172, 142, 0.9), rgba(18, 172, 142, 0.7) ), url("~/assets/image/header.jpg");
+    background-image: linear-gradient( to right, #568701, rgba(18, 172, 142, 0.7) ), url("~/assets/image/header.jpg");
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -297,76 +297,6 @@ header {
     color: var(--text-light);
 }
 
-.footer {
-    background-color: var(--primary-color-light);
-}
-
-.footer__container {
-    display: grid;
-    grid-template-columns: 400px repeat(3, 1fr);
-    gap: 2rem;
-}
-
-.footer__col h3 {
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--primary-color);
-}
-
-    .footer__col h3 span {
-        color: var(--secondary-color);
-    }
-
-.footer__col h4 {
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--primary-color);
-}
-
-.footer__col p {
-    margin-bottom: 1rem;
-    color: var(--text-dark);
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-    .footer__col p:hover {
-        color: var(--primary-color);
-    }
-
-.footer__col i {
-    color: var(--primary-color);
-}
-
-.footer__bar {
-    background-color: var(--primary-color);
-}
-
-.footer__bar__content {
-    max-width: var(--max-width);
-    margin: auto;
-    padding: 0.5rem 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-}
-
-    .footer__bar__content p {
-        font-size: 0.8rem;
-        color: var(--white);
-    }
-
-.footer__socials {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    font-size: 1rem;
-    color: var(--white);
-    cursor: pointer;
-}
 
 @media (width < 900px) {
     .service__grid {

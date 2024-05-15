@@ -45,7 +45,7 @@
                     <span asp-validation-for="Status" class="text-danger"></span>
                 </div>
 
-                <input type="hidden" id="selectedLotsJson" name="SelectedLotsJson" />
+                <input type="hidden" id="selectedLotsString" name="SelectedLotsString" />
                 <textarea id="selectedLotsTextArea" class="form-control" rows="4" readonly></textarea>
 
                 <div class="form-group">
@@ -65,7 +65,6 @@
         var selectedLots = [];
 
         $(document).ready(function () {
-            // Attachez les événements seulement après que le DOM est prêt
             $('body').on('change', '.medicament-select', function () {
                 loadLots(this);
             });
@@ -100,14 +99,14 @@
             } else {
                 selectedLots.push({ lotId: lotId, quantite: quantite, medicamentId: medicamentId });
             }
-            updateSelectedLotsJson();
+            updateSelectedLotsString();
             updateSelectedLotsTextArea();
         }
 
-        function updateSelectedLotsJson() {
-            var jsonString = JSON.stringify(selectedLots);
-            console.log("SelectedLotsJson:", jsonString); // Vérifiez le JSON dans la console
-            $('#selectedLotsJson').val(jsonString);
+        function updateSelectedLotsString() {
+            var lotsString = selectedLots.map(l => `Lot ID: ${l.lotId}, Quantite: ${l.quantite}, Medicament ID: ${l.medicamentId}`).join('; ');
+            console.log("SelectedLotsString:", lotsString); // Vérifiez la chaîne de caractères dans la console
+            $('#selectedLotsString').val(lotsString);
         }
 
         function updateSelectedLotsTextArea() {
@@ -126,5 +125,3 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-
-

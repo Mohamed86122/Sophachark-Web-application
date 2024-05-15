@@ -13,8 +13,15 @@ namespace SophaTemp.Viewmodel
         public ICollection<Livraison>? Livraisons { get; set; }
 
         // Ajout de la propriété pour stocker les données des lots sélectionnés au format JSON
-        public string SelectedLotsJson { get; set; }
+        public string SelectedLotsString { get; set; }
     }
-    
+
+    public class LotSelection
+    {
+        public int LotId { get; set; }
+        public int Quantite { get; set; }
+        public int MedicamentId { get; set; }
+    }
+
 
 }
