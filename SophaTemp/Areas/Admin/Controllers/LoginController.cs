@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SophaTemp.Data;
 using SophaTemp.Filter;
 using SophaTemp.Mappers;
@@ -40,16 +41,25 @@ namespace SophaTemp.Controllers
             {
                 Personne person = _personMapper.AddMapVM(model);
 
-                var user = _context.Personnes.FirstOrDefault(u => u.email.Trim() == person.email.Trim() && u.motdepasse.Trim() == person.motdepasse.Trim());
+                var user = _context.Personnes
+                    .Include(p => p.Passeport)
+                    .FirstOrDefault(u => u.email.Trim() == person.email.Trim() && u.motdepasse.Trim() == person.motdepasse.Trim());
 
                 if (user != null)
                 {
+                    //Usage Session
+                    HttpContext.Session.SetString("UserId", user.PersonneId.ToString());
+                    HttpContext.Session.SetString("UserEmail", user.email);
+                    HttpContext.Session.SetString("UserRole", user.Passeport?.Nom ?? "User");
+
+
                     // Remplissage de l'objet USer Identity
                     string redirectController = user.Passeport?.Nom switch
                     {
-                        "AdminCommande" => "Commandes",
-                        "AdminPrincipale" => "Principale",
-                        "AdminClient" => "Clients",
+                        "AdminCommandes" => "",
+                        "AdminPrincipale" => "Home",
+                        "AdminProduits" => "Medicaments",
+                        "AdminStock" => "Lots",
                         _ => "Home"
                     };
 

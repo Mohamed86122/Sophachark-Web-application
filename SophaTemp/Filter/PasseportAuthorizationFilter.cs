@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using SophaTemp.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace SophaTemp.Filter
 {
-    public class PasseportAuthorizationFilter : IAsyncActionFilter
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    public class PasseportAuthorizationFilter : Attribute, IAsyncActionFilter
     {
         private readonly string _passeport;
 
@@ -29,11 +31,11 @@ namespace SophaTemp.Filter
             {
                 switch (user.Passeport.Nom)
                 {
-                    case "AdminCommande":
-                        context.Result = new RedirectToActionResult("Index", "Commandes", null);
+                    case "AdminCommandes":
+                        context.Result = new RedirectToActionResult("Index", "Commande", null);
                         return;
-                    case "AdminClient":
-                        context.Result = new RedirectToActionResult("Index", "Clients", null);
+                    case "AdminStock":
+                        context.Result = new RedirectToActionResult("Index", "Lot", null);
                         return;
                     case "AdminPrincipale":
                         context.Result = new RedirectToActionResult("Index", "Principal", null);
@@ -45,11 +47,13 @@ namespace SophaTemp.Filter
                         context.Result = new RedirectToActionResult("Index", "Home", null);
                         return;
                 }
+                await next();
             }
-
-            // If no user is found or role does not match, redirect to login
-            context.Result = new RedirectToActionResult("Login", "Account", null);
-            // Skip the next action execution
+            else
+            {
+                // Redirigez vers la page de login si l'utilisateur n'est pas autorisé
+                context.Result = new RedirectToActionResult("Login", "Account", null);
+            }
         }
     }
 }
