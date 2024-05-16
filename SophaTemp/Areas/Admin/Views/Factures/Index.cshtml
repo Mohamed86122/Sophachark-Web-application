@@ -54,7 +54,7 @@
                     <a asp-action="Edit" asp-route-id="@item.FactureId" class="btn btn-sm btn-success">Edit</a> 
                     <a asp-action="Details" asp-route-id="@item.FactureId" class="btn btn-sm btn-info">Details</a> 
                     <a asp-action="Delete" asp-route-id="@item.FactureId" class="btn btn-sm btn-danger">Delete</a>
-                    <a href="@Url.Action("Details", "Commandes", new { area = "Admin", id = item.Commande.CommandeId })" class="btn btn-sm btn-primary">Voir Commande</a>
+                    <a href="@Url.Action("Details", "Commandes", new { area = "Admin", id = item.CommandeId })" class="btn btn-sm btn-primary">Voir Commande</a>
 
                         
 

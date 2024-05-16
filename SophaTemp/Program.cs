@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using SophaTemp.Data;
-using SophaTemp.Services;
 using SophaTemp.Mappers;
+using SophaTemp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +20,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IUploadFileService, UploadFileService>();
 builder.Services.AddScoped<CommandeMapper>();
 builder.Services.AddScoped<PersonMapper>();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+           .AddCookie(options =>
+           {
+               options.LoginPath = "/Admin/Login"; // Chemin de la page de login
+           });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 

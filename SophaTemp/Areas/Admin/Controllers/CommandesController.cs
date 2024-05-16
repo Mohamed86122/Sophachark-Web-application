@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SophaTemp.Data;
+using SophaTemp.Filter;
 using SophaTemp.Mappers;
 using SophaTemp.Models;
 using SophaTemp.Viewmodel;
@@ -13,6 +14,7 @@ using SophaTemp.Viewmodel;
 namespace SophaTemp.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [PasseportAuthorizationFilter("AdminCommande")]
     public class CommandesController : Controller
     {
         private readonly AppDbContext _context;
@@ -25,8 +27,16 @@ namespace SophaTemp.Areas.Admin.Controllers
         }
 
         // GET: Admin/Commandes
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
+            // Vérifiez si l'utilisateur est connecté et a le rôle approprié
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (string.IsNullOrEmpty(userRole) || userRole != "AdminCommandes")
+            {
+                return RedirectToAction("Login", "Login", new { area = "Admin" });
+            }
+
             var appDbContext = _context.Commandes.Include(c => c.Client);
             return View(await appDbContext.ToListAsync());
         }
@@ -42,14 +52,18 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Commandes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Commandes == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
             var commande = await _context.Commandes
                 .Include(c => c.Client)
+                .Include(c => c.Medicament)
+                .Include(c => c.Livraisons)
+                .Include(c => c.lotCommande)  // Assurez-vous d'inclure les détails nécessaires
                 .FirstOrDefaultAsync(m => m.CommandeId == id);
+
             if (commande == null)
             {
                 return NotFound();
@@ -107,10 +121,6 @@ namespace SophaTemp.Areas.Admin.Controllers
             return View(commandeVm);
 
         }
-
-
-
-
 
 
         // GET: Admin/Commandes/Edit/5
