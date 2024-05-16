@@ -3,92 +3,122 @@
 @{
     ViewData["Title"] = "Create";
 }
-<style>
-    .btn-primary {
-        background-color: #28a745;
-        border-color: #28a745;
-    }
-
-        .btn-primary:hover {
-            background-color: #218838;
-            border-color: #1e7e34;
-        }
-
-    .btn-secondary {
-        background-color: #007bff;
-        border-color: #007bff;
-    }
-
-        .btn-secondary:hover {
-            background-color: #0069d9;
-            border-color: #0062cc;
-        }
-
-</style>
 <div class="container mt-5">
     <h1>Create Commande</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<hr />
-    <form asp-action="Create" method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="border p-4 rounded">
-            
-                <label asp-for="ClientId" class="control-label"></label>
-                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
-            </div>
-           
-            <div class="form-group">
-                <label asp-for="IdLotCommande" class="control-label"></label>
-                <select asp-for="IdLotCommande" class="form-control" asp-items="ViewBag.LotCommandeId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="MedicamentId" class="control-label">Medicament</label>
-                <select asp-for="MedicamentId" asp-items="ViewBag.MedicamentId" class="form-control" onchange="loadLots(this.value)">
-                    <option value="">Select Medicament</option>
-                </select>
-                <span asp-validation-for="MedicamentId" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="ClientId" class="control-label"></label>
+                    <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
+                </div>
 
-            <!-- Placeholder for Lots Partial View -->
-            <div id="lotsContainer"></div>
+                <div id="medicamentsContainer">
+                    <div class="medicament-group">
+                        <div class="form-group">
+                            <label class="control-label">Medicament</label>
+                            <select class="form-control medicament-select" onchange="loadLots(this)">
+                                <option value="">Select Medicament</option>
+                                @foreach (var item in ViewBag.MedicamentId)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="lots-container"></div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" onclick="addMedicamentGroup()">Add Medicament</button>
 
-            <div class="form-group">
-                <label asp-for="DateCommande" class="control-label"></label>
-                <input asp-for="DateCommande" class="form-control" />
-                <span asp-validation-for="DateCommande" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="DateCommande" class="control-label"></label>
+                    <input asp-for="DateCommande" class="form-control" type="date" />
+                    <span asp-validation-for="DateCommande" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Status" class="control-label"></label>
+                    <input asp-for="Status" class="form-control" />
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <input type="hidden" id="selectedLotsString" name="SelectedLotsString" />
+                <textarea id="selectedLotsTextArea" class="form-control" rows="4" readonly></textarea>
+
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <div>
+        <a asp-action="Index">Back to List</a>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-</div>
-
-
 @section Scripts {
     <script src="~/lib/jquery/jquery.js"></script>
-
     <script>
-        function loadLots(medicamentId) {
+        var selectedLots = [];
+
+        $(document).ready(function () {
+            $('body').on('change', '.medicament-select', function () {
+                loadLots(this);
+            });
+
+            $('body').on('change', '.lot-quantity', function () {
+                var lotId = $(this).data('lot-id');
+                var quantite = $(this).val();
+                var medicamentId = $(this).data('medicament-id');
+                addLotToList(lotId, quantite, medicamentId);
+            });
+
+            $('#medicamentsContainer').on('click', '.add-medicament', function () {
+                addMedicamentGroup();
+            });
+        });
+
+        function loadLots(selectElement) {
+            var medicamentId = $(selectElement).val();
+            var container = $(selectElement).closest('.medicament-group').find('.lots-container');
             if (medicamentId) {
                 var url = '@Url.Action("Lots", "Commandes")?medicamentId=' + medicamentId;
-                $('#lotsContainer').load(url);
+                container.load(url);
             } else {
-                $('#lotsContainer').empty();
+                container.empty();
             }
+        }
+
+        function addLotToList(lotId, quantite, medicamentId) {
+            var existingLot = selectedLots.find(l => l.lotId === lotId);
+            if (existingLot) {
+                existingLot.quantite = quantite;
+            } else {
+                selectedLots.push({ lotId: lotId, quantite: quantite, medicamentId: medicamentId });
+            }
+            updateSelectedLotsString();
+            updateSelectedLotsTextArea();
+        }
+
+        function updateSelectedLotsString() {
+            var lotsString = selectedLots.map(l => `Lot ID: ${l.lotId}, Quantite: ${l.quantite}, Medicament ID: ${l.medicamentId}`).join('; ');
+            console.log("SelectedLotsString:", lotsString); // Vérifiez la chaîne de caractères dans la console
+            $('#selectedLotsString').val(lotsString);
+        }
+
+        function updateSelectedLotsTextArea() {
+            var textAreaContent = selectedLots.map(l => `Lot ID: ${l.lotId}, Quantite: ${l.quantite}, Medicament ID: ${l.medicamentId}`).join('\n');
+            $('#selectedLotsTextArea').val(textAreaContent);
+        }
+
+        function addMedicamentGroup() {
+            var newGroup = $('.medicament-group').first().clone();
+            newGroup.find('select').val('');
+            newGroup.find('.lots-container').empty();
+            $('#medicamentsContainer').append(newGroup);
         }
     </script>
     @{

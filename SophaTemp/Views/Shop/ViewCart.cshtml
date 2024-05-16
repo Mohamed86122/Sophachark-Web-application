@@ -1,0 +1,19 @@
+﻿@model List<SophaTemp.Models.Lot>
+
+<h2>Votre panier</h2>
+
+@if (Model != null && Model.Any())
+{
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li>@item.Medicament.Nom - Quantité: @item.Quantite - Prix: @item.PrixVente</li>
+        }
+    </ul>
+}
+else
+{
+    <p>Votre panier est vide.</p>
+}
+
+<a href="@Url.Action("ClearCart", "Shop")">Vider le panier</a>

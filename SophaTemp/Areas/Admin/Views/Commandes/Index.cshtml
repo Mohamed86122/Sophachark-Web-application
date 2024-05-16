@@ -4,72 +4,77 @@
     ViewData["Title"] = "Index";
 }
 @section Style
-{
+    {
     <link rel="stylesheet" type="text/css" href="~/css/Datatable/style.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
 
 }
 <div class="container mt-5">
-<h1>Commandes</h1>
-<br />
-<p>
+    <h1>La liste des commandes</h1>
+
+    <p>
         <a asp-action="Create" class="btn btn-outline-primary">Create New</a>
-</p>
-<br />
+    </p><br />
     <table id="monTableau" class="display" style="width:100%">
-    <thead>
-        <tr>
-            @* <th>
-                @Html.DisplayNameFor(model => model.Client)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.DateCommande)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantite)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdLotCommande)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-           @*  <td>
-                @Html.DisplayFor(modelItem => item.Client.PersonneId)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCommande)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantite)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdLotCommande)
-            </td>
-            <td>
-                        <a asp-action="Edit" asp-route-id="@item.CommandeId" class="btn btn-sm btn-success">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.CommandeId" class="btn btn-sm btn-info">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.CommandeId" class="btn btn-sm btn-danger">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-<br />
-    <button onclick="afficherFactures()" class="btn btn-sm btn-primary">Afficher la liste des Factures</button>
-@section Scripts
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Client)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Medicament)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateCommande)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Quantite)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IdLotCommande)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Client.PersonneId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Medicament.Nom)
+                </td>
+        
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCommande)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantite)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdLotCommande)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CommandeId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.CommandeId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CommandeId">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+</div>
+@section Scripts 
 {
-    <script src="~/js/Datatable/script.js" />
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <script src="~/js/Datatable/script.js"/>
+    <script type="text/javascript"  src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
 
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
@@ -80,11 +85,4 @@
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
-
-        <script>
-            function afficherFactures() {
-                window.location.href = "Factures"; // Replace with your actual commandes route
-            }
-        </script>
-
     }

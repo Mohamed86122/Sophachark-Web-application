@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SophaTemp.Data;
 using SophaTemp.Models;
-using SophaTemp.Viewmodel;
 using SophaTemp.Extensions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SophaTemp.Controllers
 {
@@ -14,59 +15,85 @@ namespace SophaTemp.Controllers
         {
             _context = context;
         }
+
         public IActionResult Index()
         {
             return View();
         }
+
         public IActionResult ShopView()
         {
             ViewBag.Medicaments = _context.Medicaments.ToList();
-
             return View();
         }
-        // Action pour ajouter un produit au panier
+
+        [HttpPost]
         public IActionResult AddToCart(int id)
         {
-            // Récupérer le produit à partir de son ID
-            var medicament = _context.Medicaments.Find(id);
+            var lot = _context.Lots.Find(id);
 
-            // Vérifier si le panier existe dans la session
-            if (HttpContext.Session.GetObject<List<Medicament>>("Cart") == null)
+            var cart = HttpContext.Session.GetObject<List<Lot>>("Cart") ?? new List<Lot>();
+
+            var existingLot = cart.FirstOrDefault(l => l.LotId == id);
+
+            if (existingLot != null)
             {
-                // Créer un nouveau panier s'il n'existe pas
-                List<Medicament> cart = new List<Medicament>();
-                cart.Add(medicament);
-                HttpContext.Session.SetObject("Cart", cart);
+                existingLot.Quantite++;
             }
             else
             {
-                // Ajouter le produit au panier existant
-                var cart = HttpContext.Session.GetObject<List<Medicament>>("Cart");
-                cart.Add(medicament);
-                HttpContext.Session.SetObject("Cart", cart);
+                lot.Quantite = 1;
+                cart.Add(lot);
             }
 
-            // Rediriger vers la page du produit après l'ajout au panier
-            return RedirectToAction("ShopView");
+            HttpContext.Session.SetObject("Cart", cart);
+
+            int totalItems = cart.Sum(l => l.Quantite);
+            return Json(new { totalItems });
+        }
+
+        [HttpPost]
+        public IActionResult AddToWishlist(int id)
+        {
+            var lot = _context.Lots.Find(id);
+
+            var wishlist = HttpContext.Session.GetObject<List<Lot>>("Wishlist") ?? new List<Lot>();
+
+            var existingLot = wishlist.FirstOrDefault(l => l.LotId == id);
+
+            if (existingLot == null)
+            {
+                wishlist.Add(lot);
+            }
+
+            HttpContext.Session.SetObject("Wishlist", wishlist);
+
+            int totalItems = wishlist.Count;
+            return Json(new { totalItems });
         }
 
         public IActionResult ViewCart()
         {
-            // Récupérer le panier depuis la session
-            var cart = HttpContext.Session.GetObject<List<Medicament>>("Cart");
-
-            // Envoyer le panier à la vue partielle
-            return PartialView("_CartPartial", cart);
+            var cart = HttpContext.Session.GetObject<List<Lot>>("Cart");
+            return View(cart);
         }
 
-        // Action pour vider le panier
+        public IActionResult ViewWishlist()
+        {
+            var wishlist = HttpContext.Session.GetObject<List<Lot>>("Wishlist");
+            return View(wishlist);
+        }
+
         public IActionResult ClearCart()
         {
-            // Supprimer le panier de la session
             HttpContext.Session.Remove("Cart");
+            return RedirectToAction("ShopView");
+        }
 
-            // Rediriger vers la page d'accueil ou une autre page appropriée
-            return RedirectToAction("Index");
+        public IActionResult ClearWishlist()
+        {
+            HttpContext.Session.Remove("Wishlist");
+            return RedirectToAction("ShopView");
         }
     }
 }

@@ -4,5 +4,8 @@
     {
         public int LotId { get; set; }
         public int Quantite { get; set; }
+
+        public int MedicamentId { get; set; }
+
     }
 }

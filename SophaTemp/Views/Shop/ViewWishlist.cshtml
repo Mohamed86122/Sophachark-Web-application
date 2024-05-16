@@ -1,0 +1,19 @@
+﻿@model List<SophaTemp.Models.Lot>
+
+<h2>Votre wishlist</h2>
+
+@if (Model != null && Model.Any())
+{
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li>@item.Medicament.Nom - Quantité: @item.Quantite - Prix: @item.PrixVente</li>
+        }
+    </ul>
+}
+else
+{
+    <p>Votre wishlist est vide.</p>
+}
+
+<a href="@Url.Action("ClearWishlist", "Shop")">Vider la wishlist</a>
