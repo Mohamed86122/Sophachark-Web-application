@@ -1,47 +1,102 @@
-﻿@* @{
-    Layout = null;
-} *@
+﻿@model SophaTemp.Viewmodel.LoginVm
 
-@section Style 
-{
-    <link rel="stylesheet" href="~/css/styleauth.css">
-
-    <link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+@{
+   
+    ViewData["Title"] = "Login";
 }
+<style>
+    body {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-position: center;
+        align-items: center;
+    }
 
-<img class="wave" src="~/assets/image/wave.png">
-<div class="container">
-    <div class="img">
-        <img src="~/assets/image/bg.svg">
+    .login-container {
+        width: 600px;
+        background-color: rgba(127, 255, 212, 0.9);
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        text-align: center;
+        margin-left:300px;
+    }
+
+    .login-header img {
+        width: 100px;
+    }
+
+    .login-header h1 {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .form-group {
+        margin-bottom: 13px;
+        text-align: left;
+    }
+
+    input[type="email"], input[type="password"], .btn-login {
+        width: 95%;
+        padding: 10px;
+        border: 1px solid #4CAF50;
+        border-radius: 7px;
+    }
+
+    .btn-login {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+        .btn-login:hover {
+            background-color: #45a049;
+        }
+
+    .forgot-password {
+        display: block;
+        margin-top: 10px;
+        color: #0066cc;
+        text-decoration: none;
+    }
+
+    footer {
+        margin-top: 20px;
+        font-size: 12px;
+        color: #666;
+    }
+</style>
+
+<div class="login-container">
+    <div class="login-header">
+
+        <h1>Veuillez Se Connecter !</h1>
     </div>
-    <div class="login-content">
-        <form action="index.html">
-            <img src="img/avatar.svg">
-            <h2 class="title">Welcome</h2>
-            <div class="input-div one">
-                <div class="i">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="div">
-                    <h5>Username</h5>
-                    <input type="text" class="input">
-                </div>
+    <div class="login-form">
+        <form asp-action="Login" method="post">
+
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" required class="form-control" />
+                <span asp-validation-for="Email"></span>
             </div>
-            <div class="input-div pass">
-                <div class="i">
-                    <i class="fas fa-lock"></i>
-                </div>
-                <div class="div">
-                    <h5>Password</h5>
-                    <input type="password" class="input">
-                </div>
+            <div class="form-group">
+                <label asp-for="MotDePasse"></label>
+                <input asp-for="MotDePasse" required class="form-control" />
+                <span asp-validation-for="MotDePasse"></span>
             </div>
-            <a href="#">Forgot Password?</a>
-            <input type="submit" class="btn" value="Login">
+
+            <div class="form-group form-check">
+                <input type="checkbox" asp-for="RememberMe" id="rememberMe">
+                <label for="rememberMe">Se souvenir de moi</label>
+            </div>
+            <button type="submit" class="btn-login">Se connecter</button>
         </form>
+        <a href="#" class="forgot-password">Mot de passe oublié ?</a>
     </div>
+    <footer>
+        <p>Support: support@sobrus.com | Phone: 05 30 500 500</p>
+    </footer>
 </div>
-@section Scripts {
-    <script src="~/js/main.js"></script>
-}
