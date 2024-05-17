@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SophaTemp.Data;
 using SophaTemp.Mappers;
 using SophaTemp.Services;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,13 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
            });
 
 builder.Services.AddAuthorization();
+
+// Ajouter le service de journalisation
+builder.Services.AddLogging(config =>
+{
+    config.AddConsole();
+    config.AddDebug();
+});
 
 var app = builder.Build();
 
@@ -58,4 +66,5 @@ app.UseEndpoints(endpoints =>
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
 });
+
 app.Run();

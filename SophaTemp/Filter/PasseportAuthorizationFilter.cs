@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
-using SophaTemp.Data;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace SophaTemp.Filter
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class PasseportAuthorizationFilter : Attribute, IAsyncActionFilter
+    public class PasseportAuthorizationFilter : Attribute, IAuthorizationFilter
     {
         private readonly string _passeport;
 
@@ -18,41 +15,23 @@ namespace SophaTemp.Filter
             _passeport = passeport;
         }
 
-        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var dbContext = context.HttpContext.RequestServices.GetRequiredService<AppDbContext>();
+            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<PasseportAuthorizationFilter>>();
+            var userPassport = context.HttpContext.Session.GetString("UserRole");
 
-            var userEmail = context.HttpContext.User.Identity.Name;
-            var user = await dbContext.Personnes
-                                      .Include(u => u.Passeport)
-                                      .FirstOrDefaultAsync(u => u.email == userEmail);
+            // Ajoutez des messages de débogage
+            logger.LogInformation($"User passport in session: {userPassport}, required: {_passeport}");
 
-            if (user != null && user.Passeport != null && user.Passeport.Nom == _passeport)
+            if (userPassport == null || userPassport != _passeport)
             {
-                switch (user.Passeport.Nom)
-                {
-                    case "AdminCommandes":
-                        context.Result = new RedirectToActionResult("Index", "Commande", null);
-                        return;
-                    case "AdminStock":
-                        context.Result = new RedirectToActionResult("Index", "Lot", null);
-                        return;
-                    case "AdminPrincipale":
-                        context.Result = new RedirectToActionResult("Index", "Principal", null);
-                        return;
-                    case "AdminProduit":
-                        context.Result = new RedirectToActionResult("Index", "Produits", null);
-                        return;
-                    default:
-                        context.Result = new RedirectToActionResult("Index", "Home", null);
-                        return;
-                }
-                await next();
+                logger.LogInformation("Accès refusé.");
+                context.HttpContext.Session.SetString("ErrorMessage", "Vous n'êtes pas autorisé à accéder à cette page.");
+                context.Result = new RedirectToActionResult("Login", "Login", new { area = "Admin" });
             }
             else
             {
-                // Redirigez vers la page de login si l'utilisateur n'est pas autorisé
-                context.Result = new RedirectToActionResult("Login", "Account", null);
+                logger.LogInformation("Accès autorisé.");
             }
         }
     }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SophaTemp.Data;
+using SophaTemp.Filter;
 using SophaTemp.Mappers;
 using SophaTemp.Models;
 using SophaTemp.Services;
@@ -14,6 +15,7 @@ using SophaTemp.Viewmodel;
 namespace SophaTemp.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [PasseportAuthorizationFilter("AdminProduits")]
     public class MedicamentsController : Controller
     {
         private readonly AppDbContext _context;
@@ -28,10 +30,8 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Medicaments
         public async Task<IActionResult> Index()
         {
-            List<Medicament> list = await _context.Medicaments.Include(m => m.MedicamentCategoryMedicaments).ToListAsync();
-              return _context.Medicaments != null ? 
-                          View(list ) :
-                          Problem("Entity set 'AppDbContext.Medicaments'  is null.");
+            var medicaments = await _context.Medicaments.ToListAsync();
+            return View(medicaments);
         }
 
         // GET: Admin/Medicaments/Details/5
