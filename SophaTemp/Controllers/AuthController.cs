@@ -4,6 +4,7 @@ using SophaTemp.Viewmodel;
 using SophaTemp.Models;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace SophaTemp.Controllers
 {
@@ -58,7 +59,10 @@ namespace SophaTemp.Controllers
                 return RedirectToAction("Index", "Auth");
             }
 
-            var client = _context.clients.Find(clientId);
+            var client = _context.clients
+                                .Include(c => c.Personne)
+                                .FirstOrDefault(c => c.ClientId == clientId);
+
             if (client == null)
             {
                 return NotFound();
@@ -74,20 +78,21 @@ namespace SophaTemp.Controllers
                 Y = client.Y,
                 Adresse = client.Adresse,
                 EnGarde = client.EnGarde,
-                nom = client.nom,
-                prenom = client.prenom,
-                email = client.email
+                nom = client.Personne.nom,
+                prenom = client.Personne.prenom,
+                email = client.Personne.email
             };
 
             return View(model);
         }
-
         [HttpPost]
         public IActionResult UpdateProfile(ClientVm model)
         {
             if (ModelState.IsValid)
             {
-                var client = _context.clients.Find(model.ClientId);
+                var client = _context.clients
+                                    .Include(c => c.Personne)
+                                    .FirstOrDefault(c => c.ClientId == model.ClientId);
                 if (client == null)
                 {
                     return NotFound();
@@ -100,17 +105,19 @@ namespace SophaTemp.Controllers
                 client.Y = model.Y;
                 client.Adresse = model.Adresse;
                 client.EnGarde = model.EnGarde;
-                client.nom = model.nom;
-                client.prenom = model.prenom;
-                client.email = model.email;
 
+                // Mise à jour des informations de la personne
+                client.Personne.nom = model.nom;
+                client.Personne.prenom = model.prenom;
+                client.Personne.email = model.email;
+                client.Personne.motdepasse = model.motdepasse;
                 _context.SaveChanges();
 
                 // Mettre à jour le nom du client dans la session
                 var session = _httpContextAccessor.HttpContext.Session;
-                session.SetString("ClientName", $"{client.nom} {client.prenom}");
+                session.SetString("ClientName", $"{client.Personne.nom} {client.Personne.prenom}");
 
-                return RedirectToAction("ProfileUpdated");
+                return RedirectToAction("Index", "Auth");
             }
 
             return View(model);

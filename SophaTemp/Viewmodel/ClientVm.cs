@@ -20,7 +20,7 @@ namespace SophaTemp.Viewmodel
         [EmailAddress]
 
         public string email { get; set; }
-
+        [DataType(DataType.Password)]
         public string motdepasse { get; set; }
 
         //public int PasseportId { get; set; }

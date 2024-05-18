@@ -3,44 +3,50 @@
 @{
     ViewData["Title"] = "Update Profile";
 }
+<div class="container mt-5">
 
-<h2>Update Profile</h2>
-
-<form asp-action="UpdateProfile" method="post">
-    <div class="form-group">
-        <label asp-for="nom"></label>
-        <input asp-for="nom" class="form-control" />
-        <span asp-validation-for="nom" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="prenom"></label>
-        <input asp-for="prenom" class="form-control" />
-        <span asp-validation-for="prenom" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="email"></label>
-        <input asp-for="email" class="form-control" />
-        <span asp-validation-for="email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="LibellePharmacie"></label>
-        <input asp-for="LibellePharmacie" class="form-control" />
-        <span asp-validation-for="LibellePharmacie" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Ville"></label>
-        <input asp-for="Ville" class="form-control" />
-        <span asp-validation-for="Ville" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Telephone"></label>
-        <input asp-for="Telephone" class="form-control" />
-        <span asp-validation-for="Telephone" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Adresse"></label>
-        <input asp-for="Adresse" class="form-control" />
-        <span asp-validation-for="Adresse" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Update</button>
-</form>
+    <h2>Update Profile</h2>
+        <form asp-action="UpdateProfile" method="post">
+        <div class="form-group">
+            <label asp-for="nom"></label>
+            <input asp-for="nom" class="form-control" />
+            <span asp-validation-for="nom" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="prenom"></label>
+            <input asp-for="prenom" class="form-control" />
+            <span asp-validation-for="prenom" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="email"></label>
+            <input asp-for="email" class="form-control" />
+            <span asp-validation-for="email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="motdepasse"></label>
+            <input asp-for="motdepasse" class="form-control" />
+            <span asp-validation-for="motdepasse" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LibellePharmacie"></label>
+            <input asp-for="LibellePharmacie" class="form-control" />
+            <span asp-validation-for="LibellePharmacie" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Ville"></label>
+            <input asp-for="Ville" class="form-control" />
+            <span asp-validation-for="Ville" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Telephone"></label>
+            <input asp-for="Telephone" class="form-control" />
+            <span asp-validation-for="Telephone" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Adresse"></label>
+            <input asp-for="Adresse" class="form-control" />
+            <span asp-validation-for="Adresse" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
