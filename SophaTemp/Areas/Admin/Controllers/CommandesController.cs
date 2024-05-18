@@ -13,11 +13,14 @@ using SophaTemp.Viewmodel;
 using SophaTemp.Models;
 using ModelLotSelection = SophaTemp.Models.LotSelection;
 using ViewModelLotSelection = SophaTemp.Viewmodel.LotSelection;
+using SophaTemp.Filter;
 
 
 namespace SophaTemp.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [PasseportAuthorizationFilter("AdminCommandes")]
+
     public class CommandesController : Controller
     {
         private readonly AppDbContext _context;

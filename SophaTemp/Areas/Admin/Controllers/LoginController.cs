@@ -1,77 +1,81 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SophaTemp.Data;
-using SophaTemp.Filter;
 using SophaTemp.Mappers;
-using SophaTemp.Models;
 using SophaTemp.Viewmodel;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace SophaTemp.Controllers
 {
-
-        [Area("Admin")]
-
+    [Area("Admin")]
     public class LoginController : Controller
     {
         private readonly AppDbContext _context;
         private readonly PersonMapper _personMapper;
-        public LoginController(AppDbContext context, PersonMapper mapper) 
+        private readonly ILogger<LoginController> _logger;
+
+
+        public LoginController(AppDbContext context, PersonMapper mapper, ILogger<LoginController> logger)
         {
             _context = context;
             _personMapper = mapper;
-        
+            _logger = logger;
+
         }
 
         [HttpGet]
         public IActionResult Login()
         {
+            // Récupérer le message d'erreur de la session
+            var errorMessage = HttpContext.Session.GetString("ErrorMessage");
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                ModelState.AddModelError("", errorMessage);
+                // Effacer le message d'erreur après l'avoir affiché
+                HttpContext.Session.Remove("ErrorMessage");
+            }
+
+            _logger.LogInformation("Displaying login page.");
             return View();
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> Login(PersonVm model)
+        public IActionResult Login(PersonVm model)
         {
+            _logger.LogInformation("Attempting to log in.");
+
             if (ModelState.IsValid)
             {
-                Personne person = _personMapper.AddMapVM(model);
-
                 var user = _context.Personnes
                     .Include(p => p.Passeport)
-                    .FirstOrDefault(u => u.email.Trim() == person.email.Trim() && u.motdepasse.Trim() == person.motdepasse.Trim());
+                    .FirstOrDefault(u => u.email.Trim() == model.Email.Trim() && u.motdepasse.Trim() == model.MotDePasse.Trim());
 
                 if (user != null)
                 {
-                    //Usage Session
+                    // Stocker les informations de l'utilisateur dans la session
                     HttpContext.Session.SetString("UserId", user.PersonneId.ToString());
                     HttpContext.Session.SetString("UserEmail", user.email);
                     HttpContext.Session.SetString("UserRole", user.Passeport?.Nom ?? "User");
 
-
-                    // Remplissage de l'objet USer Identity
+                    // Redirection
                     string redirectController = user.Passeport?.Nom switch
                     {
-                        "AdminCommandes" => "",
-                        "AdminPrincipale" => "Home",
+                        "AdminCommandes" => "Commandes",
+                        "AdminPrincipal" => "Home",
                         "AdminProduits" => "Medicaments",
                         "AdminStock" => "Lots",
+                        "AdminClients" => "Clients",
                         _ => "Home"
                     };
 
                     return RedirectToAction("Index", redirectController);
                 }
 
-                ModelState.AddModelError("", "Invalid login attempt.");
+                ModelState.AddModelError("", "Tentative de connexion invalide.");
             }
 
             return View(model);
-
         }
-
     }
 }
