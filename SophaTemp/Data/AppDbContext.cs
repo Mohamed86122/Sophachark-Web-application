@@ -37,7 +37,6 @@ namespace SophaTemp.Data
         public DbSet<Client> clients { get; set; }
 
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

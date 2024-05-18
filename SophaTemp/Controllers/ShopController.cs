@@ -2,6 +2,7 @@
 using SophaTemp.Data;
 using SophaTemp.Models;
 using SophaTemp.Extensions;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,32 +11,40 @@ namespace SophaTemp.Controllers
     public class ShopController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ShopController(AppDbContext context)
+        public ShopController(AppDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
-        }
-
-        public IActionResult Index()
-        {
-            return View();
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public IActionResult ShopView()
         {
             ViewBag.Medicaments = _context.Medicaments.ToList();
+            ViewBag.Categories = _context.Categories.ToList();
             return View();
         }
 
         [HttpPost]
         public IActionResult AddToCart(int id)
         {
-            var lot = _context.Lots.Find(id);
+            var session = _httpContextAccessor.HttpContext.Session;
+            int? clientId = session.GetInt32("ClientId");
+            if (clientId == null)
+            {
+                return RedirectToAction("Index", "Auth");
+            }
 
-            var cart = HttpContext.Session.GetObject<List<Lot>>("Cart") ?? new List<Lot>();
+            var lot = _context.Lots.FirstOrDefault(l => l.MedicamentId == id);
+            if (lot == null)
+            {
+                return NotFound();
+            }
 
-            var existingLot = cart.FirstOrDefault(l => l.LotId == id);
+            var cart = session.GetObject<List<Lot>>("Cart") ?? new List<Lot>();
 
+            var existingLot = cart.FirstOrDefault(l => l.MedicamentId == id);
             if (existingLot != null)
             {
                 existingLot.Quantite++;
@@ -46,8 +55,7 @@ namespace SophaTemp.Controllers
                 cart.Add(lot);
             }
 
-            HttpContext.Session.SetObject("Cart", cart);
-
+            session.SetObject("Cart", cart);
             int totalItems = cart.Sum(l => l.Quantite);
             return Json(new { totalItems });
         }
@@ -55,44 +63,73 @@ namespace SophaTemp.Controllers
         [HttpPost]
         public IActionResult AddToWishlist(int id)
         {
-            var lot = _context.Lots.Find(id);
+            var session = _httpContextAccessor.HttpContext.Session;
+            int? clientId = session.GetInt32("ClientId");
+            if (clientId == null)
+            {
+                return RedirectToAction("Index", "Auth");
+            }
 
-            var wishlist = HttpContext.Session.GetObject<List<Lot>>("Wishlist") ?? new List<Lot>();
+            var lot = _context.Lots.FirstOrDefault(l => l.MedicamentId == id);
+            if (lot == null)
+            {
+                return NotFound();
+            }
 
-            var existingLot = wishlist.FirstOrDefault(l => l.LotId == id);
+            var wishlist = session.GetObject<List<Lot>>("Wishlist") ?? new List<Lot>();
 
+            var existingLot = wishlist.FirstOrDefault(l => l.MedicamentId == id);
             if (existingLot == null)
             {
                 wishlist.Add(lot);
             }
 
-            HttpContext.Session.SetObject("Wishlist", wishlist);
-
+            session.SetObject("Wishlist", wishlist);
             int totalItems = wishlist.Count;
             return Json(new { totalItems });
         }
 
         public IActionResult ViewCart()
         {
-            var cart = HttpContext.Session.GetObject<List<Lot>>("Cart");
+            var session = _httpContextAccessor.HttpContext.Session;
+            var cart = session.GetObject<List<Lot>>("Cart") ?? new List<Lot>();
+
+            var lotIds = cart.Select(l => l.MedicamentId).Distinct().ToList();
+            var medicaments = _context.Medicaments
+                .Where(m => lotIds.Contains(m.MedicamentId))
+                .ToDictionary(m => m.MedicamentId, m => new { m.Nom, m.Image });
+
+            ViewBag.Medicaments = medicaments;
+
             return View(cart);
         }
 
         public IActionResult ViewWishlist()
         {
-            var wishlist = HttpContext.Session.GetObject<List<Lot>>("Wishlist");
+            var session = _httpContextAccessor.HttpContext.Session;
+            var wishlist = session.GetObject<List<Lot>>("Wishlist") ?? new List<Lot>();
+
+            var lotIds = wishlist.Select(l => l.MedicamentId).Distinct().ToList();
+            var medicaments = _context.Medicaments
+                .Where(m => lotIds.Contains(m.MedicamentId))
+                .ToDictionary(m => m.MedicamentId, m => new { m.Nom, m.Image });
+
+            ViewBag.Medicaments = medicaments;
+
             return View(wishlist);
         }
 
         public IActionResult ClearCart()
         {
-            HttpContext.Session.Remove("Cart");
+            var session = _httpContextAccessor.HttpContext.Session;
+            session.Remove("Cart");
             return RedirectToAction("ShopView");
         }
 
         public IActionResult ClearWishlist()
         {
-            HttpContext.Session.Remove("Wishlist");
+            var session = _httpContextAccessor.HttpContext.Session;
+            session.Remove("Wishlist");
             return RedirectToAction("ShopView");
         }
     }

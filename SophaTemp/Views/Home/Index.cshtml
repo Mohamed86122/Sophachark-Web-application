@@ -1,8 +1,10 @@
-﻿
-    @{
-        Layout = "~/Views/Shared/_Layout.cshtml";
-    }
-  @section Style {
+﻿@model List<SophaTemp.Models.CategoryMedicament>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style {
     <meta charset="utf-8">
     <meta name="title" content="Meditex">
     <meta property="fb:app_id" content="312" />
@@ -26,104 +28,65 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="~/assets/image/fav/favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="~/assets/image/fav/favicon-16x16.png" sizes="16x16">
+}
 
-  
-  }
-    <!--Start Preloader -->
-     <div class="preloader"></div> 
-    <!--End Preloader -->
-        <!------main-content------>
-        <main class="main-content">
-            <!------main-slider------>
-            <section class="main-slider">
-                <div class="main-slider-carousel main-slider-one owl-carousel owl-theme">
-                    <header>
-                        <div class="section__container header__container">
-                            <div class="header__content">
-                                <h1>SOPHACHARK</h1>
-                                <p>
-                                    Welcome, where exceptional patient experiences are our priority.
-                                    With compassionate care, state-of-the-art facilities, and a
-                                    patient-centered approach, we're dedicated to your well-being. Trust
-                                    us with your health and experience the difference.
-                                </p>
-                                <button class="btn">Voir les médicaments</button>
-                            </div>
-                        </div>
-                    </header>
-                </div>
-            </section>
-            <!------main-slider------>
-            <!-------appointment-section----->
-            <!-------appointment-section----->
-            <!-------appointment-section----->
-            <section class="department_section hm-one">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="heading clearfix">
-                                <h1>La listes des <span>catégories</span></h1>
-                                <p><a href="#"> Voir tous les catégories</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="department_inner">
-                        <div class="row">
-                            <div class="col-lg-12">
-
-                                <div class="department_icon_content">
-                                    <a href="#"><span class="flaticon-brain dep_icon"></span></a>
-                                    <a href="#"> <h2>Psychiatry</h2></a>
-                                    <p>In its ongoing attempts to define, understand, and categorize disorders...</p>
-                                </div>
-                                <div class="department_icon_content">
-                                    <a href="#"><span class="flaticon-eye-drops dep_icon"></span></a>
-                                    <a href="#"><h2>Ophthalmology</h2></a>
-                                    <p>Our mission is to improve quality of life through the enhancement of vision...</p>
-                                </div>
-                                <div class="department_icon_content">
-                                    <a href="#"><span class="flaticon-heart-2 dep_icon"></span></a>
-                                    <a href="#"><h2>Cardiology</h2></a>
-                                    <p>​Our areas of expertise make the department a national cardiac referral centre...</p>
-                                </div>
-                                <div class="department_icon_content">
-                                    <a href="#"><span class="flaticon-bacteria dep_icon"></span></a>
-                                    <a href="#"><h2>Immunology</h2></a>
-                                    <p>The immune system provides the defense for an organism to repel invasion...</p>
-                                </div>
-                                <div class="department_icon_content">
-                                    <a href="#"><span class="flaticon-blood dep_icon"></span></a>
-                                    <a href="#"><h2>Hematology</h2></a>
-                                    <p>
-                                        In the medical field, hemato-
-                                        logy includes the treatment of blood...
-                                    </p>
-                                </div>
-                                <div class="department_icon_content">
-                                    <a href="#"><span class="flaticon-stomach dep_icon"></span></a>
-                                    <a href="#"><h2>Gastroenterology</h2></a>
-                                    <p>With nationally and inter- nationally known experts in gastroenterology...</p>
-                                </div>
-                                <div class="department_icon_content">
-                                    <a href="#"><span class="flaticon-joint dep_icon"></span></a>
-                                    <a href="#"><h2>Orthopedics</h2></a>
-                                    <p>We have a diverse team of clinicians, administrators, and researchers...</p>
-                                </div>
-                                <div class="department_icon_content">
-                                    <a href="#"><span class="flaticon-lung dep_icon"></span></a>
-                                    <a href="#"><h2>Pulmonary</h2></a>
-                                    <p>Medicol is one of the leading medical facilities in America for the diagnosis...</p>
-                                </div>
-
-                            </div>
-                        </div>
+<!--Start Preloader -->
+<div class="preloader"></div>
+<!--End Preloader -->
+<!------main-content------>
+<main class="main-content">
+    <!------main-slider------>
+    <section class="main-slider">
+        <div class="main-slider-carousel main-slider-one owl-carousel owl-theme">
+            <header>
+                <div class="section__container header__container">
+                    <div class="header__content">
+                        <h1>SOPHACHARK</h1>
+                        <p>
+                            Welcome, where exceptional patient experiences are our priority.
+                            With compassionate care, state-of-the-art facilities, and a
+                            patient-centered approach, we're dedicated to your well-being. Trust
+                            us with your health and experience the difference.
+                        </p>
+                        <a href="@Url.Action("ShopView", "Shop")"> <button class="btn">Voir les médicaments</button></a>
                     </div>
                 </div>
-            </section>
-            <!-------department-section----->
-            <!---------welcomen-sec--------->
-            <section class="welcome_section hme-one" style="background:url(assets/image/welcome-hme-1-bg.jpg)">
-                <div class="container">
+            </header>
+        </div>
+    </section>
+    <!------main-slider------>
+    <!-------appointment-section----->
+    <!-------appointment-section----->
+    <!-------appointment-section----->
+    <section class="department_section hm-one">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="heading clearfix">
+                        <h1>La listes des <span>catégories</span></h1>
+                        <p><a href="#"> Voir tous les catégories</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="department_inner">
+                <div class="row">
+                    <div class="col-lg-12">
+                        @foreach (var categorie in ViewBag.Categories)
+                        {
+                            <div class="department_icon_content">
+                                <a href="#"><span class="flaticon-brain dep_icon"></span></a>
+                                <a href="#"> <h2>@categorie.Libelle</h2></a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-------department-section----->
+    <!---------welcomen-sec--------->
+    <section class="welcome_section hme-one" style="background:url(assets/image/welcome-hme-1-bg.jpg)">
+        <div class="container">
             <div class="row">
                 <div class="col-lg-6">
                     <div class="welcome_inner">
@@ -135,7 +98,6 @@
                         <ul>
                             <li><img src="assets/image/1.png" class="img-fluid" alt="Efficacy" /></li>
                             <li><img src="assets/image/2.png" class="img-fluid" alt="Safety" /></li>
-                           
                         </ul>
                         <a href="#" class="theme-btn">CONTACTEZ-NOUS</a>
                     </div>
@@ -144,123 +106,113 @@
                     <!-- Vous pouvez ajouter ici du contenu supplémentaire ou une image représentative du projet -->
                 </div>
             </div>
-                </div>
-            </section>
-            <!---------welcomen-sec--------->
-            
-            <!-------appointment-section----->
-            <section class="testimonial_sec hm-one">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="heading clearfix">
-                                <h1>Feedbacks <span>CLIENTS </span></h1>
-                            </div>
-                        </div>
+        </div>
+    </section>
+    <!---------welcomen-sec--------->
+    <!-------appointment-section----->
+    <section class="testimonial_sec hm-one">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="heading clearfix">
+                        <h1>Feedbacks <span>CLIENTS </span></h1>
                     </div>
-                    <div class="owl-carousel owl-theme two-item">
-
-                        <div class="testimonial_content">
+                </div>
+            </div>
+            <div class="owl-carousel owl-theme two-item">
+                <div class="testimonial_content">
                     <p>"Je suis extrêmement satisfait des services de SOPHACHARK. La livraison est rapide et les médicaments sont toujours en parfait état. Le service client est réactif et très professionnel. Je recommande vivement ! "</p>
-                            <div class="client_details">
-                                <img src="assets/image/test-1.png" class="img-fluid" alt="test" />
-                                <div class="client_in">
-                                    <h6>Said fettah</h6>
-                                    <span>Pharmacie croix rouge</span>
-                                </div>
-                            </div>
+                    <div class="client_details">
+                        <img src="assets/image/test-1.png" class="img-fluid" alt="test" />
+                        <div class="client_in">
+                            <h6>Said fettah</h6>
+                            <span>Pharmacie croix rouge</span>
                         </div>
-                        <div class="testimonial_content">
-                    <p>"J'utilise SOPHACHARK depuis plusieurs mois maintenant et je n'ai jamais été déçue. Les délais de livraison sont respectés et les produits sont toujours conformes à la commande. Bravo à toute l'équipe !"</p>
-                            <div class="client_details">
-                                <img src="assets/image/test-2.png" class="img-fluid" alt="test" />
-                                <div class="client_in">
-                                    <h6>Abdelillah Hafidi</h6>
-                                    <span>Pharmacie sud</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="owl-carousel owl-theme client-carousel">
-
-                        <div class="item"><img src="assets/image/client/client-hm-1.jpg" class="img-fluid" alt="img" /></div>
-                        <div class="item"><img src="assets/image/client/client-hm-2.jpg" class="img-fluid" alt="img" /></div>
-                        <div class="item"><img src="assets/image/client/client-hm-3.jpg" class="img-fluid" alt="img" /></div>
-                        <div class="item"><img src="assets/image/client/client-hm-4.jpg" class="img-fluid" alt="img" /></div>
-                        <div class="item"><img src="assets/image/client/client-hm-5.jpg" class="img-fluid" alt="img" /></div>
-
                     </div>
                 </div>
-            </section>
-
-           
-            
-            <!-------contact-through----->
-            <div class="contact_through">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-3 col-sm-6">
-                            <div class="contact_through_inner">
-                                <span class="flaticon-phone-1 icon"></span>
-                                <p>
-                                    Emergency Cases: <br />
-                                    (052) 611-5711
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6">
-                            <div class="contact_through_inner">
-                                <span class="flaticon-placeholder icon"></span>
-                                <p>
-                                    E7088 Micaela Cliffs, <br />
-                                    Thielshire, OK 95062
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6">
-                            <div class="contact_through_inner">
-                                <span class="flaticon-envelope icon"></span>
-                                <p>
-                                    Email Address<br />
-                                    contact@meditex.com
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6">
-                            <div class="contact_through_inner">
-                                <span class="flaticon-calendar icon"></span>
-                                <p>
-                                    Book Online<br />
-                                    Appointment Now
-                                </p>
-                            </div>
+                <div class="testimonial_content">
+                    <p>"J'utilise SOPHACHARK depuis plusieurs mois maintenant et je n'ai jamais été déçue. Les délais de livraison sont respectés et les produits sont toujours conformes à la commande. Bravo à toute l'équipe !"</p>
+                    <div class="client_details">
+                        <img src="assets/image/test-2.png" class="img-fluid" alt="test" />
+                        <div class="client_in">
+                            <h6>Abdelillah Hafidi</h6>
+                            <span>Pharmacie sud</span>
                         </div>
                     </div>
                 </div>
             </div>
-           
-            <!-------backtotop-------->
-            <a href="#" id="scroll" class="default-bg" style="display: none;"><span></span></a>
-            <!-------backtotop-------->
-            <!------main-content------>
-        </main>
-        <!------main-slider------>
-    </div>
+            <div class="owl-carousel owl-theme client-carousel">
+                <div class="item"><img src="assets/image/client/client-hm-1.jpg" class="img-fluid" alt="img" /></div>
+                <div class="item"><img src="assets/image/client/client-hm-2.jpg" class="img-fluid" alt="img" /></div>
+                <div class="item"><img src="assets/image/client/client-hm-3.jpg" class="img-fluid" alt="img" /></div>
+                <div class="item"><img src="assets/image/client/client-hm-4.jpg" class="img-fluid" alt="img" /></div>
+                <div class="item"><img src="assets/image/client/client-hm-5.jpg" class="img-fluid" alt="img" /></div>
+            </div>
+        </div>
+    </section>
 
-
-
-    <!---------mbile-navbar----->
-    <div class="bsnav-mobile">
-        <div class="bsnav-mobile-overlay"></div>
-        <div class="navbar">
-            <button class="navbar-toggler toggler-spring mobile-toggler"><span class="fa fa-close"></span></button>
+    <!-------contact-through----->
+    <div class="contact_through">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-6">
+                    <div class="contact_through_inner">
+                        <span class="flaticon-phone-1 icon"></span>
+                        <p>
+                            Emergency Cases: <br />
+                            (052) 611-5711
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6">
+                    <div class="contact_through_inner">
+                        <span class="flaticon-placeholder icon"></span>
+                        <p>
+                            E7088 Micaela Cliffs, <br />
+                            Thielshire, OK 95062
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6">
+                    <div class="contact_through_inner">
+                        <span class="flaticon-envelope icon"></span>
+                        <p>
+                            Email Address<br />
+                            contact@meditex.com
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6">
+                    <div class="contact_through_inner">
+                        <span class="flaticon-calendar icon"></span>
+                        <p>
+                            Book Online<br />
+                            Appointment Now
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <!---------mbile-navbar----->
-    <!-----------------------------------script-------------------------------------->
 
-    @section Scripts
+    <!-------backtotop-------->
+    <a href="#" id="scroll" class="default-bg" style="display: none;"><span></span></a>
+    <!-------backtotop-------->
+    <!------main-content------>
+</main>
+<!------main-slider------>
+    </div>
+
+<!---------mbile-navbar----->
+<div class="bsnav-mobile">
+    <div class="bsnav-mobile-overlay"></div>
+    <div class="navbar">
+        <button class="navbar-toggler toggler-spring mobile-toggler"><span class="fa fa-close"></span></button>
+    </div>
+</div>
+<!---------mbile-navbar----->
+<!-----------------------------------script-------------------------------------->
+@section Scripts
     {
     <script src="~/assets/js/jquery-3.3.1.min.js"></script>
     <script src="~/assets/js/popper.min.js"></script>
@@ -279,5 +231,3 @@
     <script src="~/assets/js/gmaps.js"></script>
     <script src="~/assets/js/map-script.js"></script>
 }
-    
-    <!--End Google Map APi-->

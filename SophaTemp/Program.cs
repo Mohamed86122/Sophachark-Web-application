@@ -29,6 +29,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 // Configuration du pipeline de requêtes HTTP
