@@ -188,5 +188,26 @@ namespace SophaTemp.Areas.Admin.Controllers
         {
           return (_context.Lots?.Any(e => e.LotId == id)).GetValueOrDefault();
         }
+
+        
+            public async Task<IActionResult> RPublic(int id)
+        {
+            if (_context.Lots == null)
+            {
+                return Problem("Entity set 'AppDbContext.Lots'  is null.");
+            }
+            var lot = await _context.Lots.FindAsync(id);
+            lot.IsPublic = true;
+            var lotPublic = await _context.Lots.Where(l => l.MedicamentId == lot.MedicamentId && l.IsPublic == true ).FirstOrDefaultAsync();
+
+            if(lotPublic != null)
+            {
+                lotPublic.IsPublic = false;
+            }
+         
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
