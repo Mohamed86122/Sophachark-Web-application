@@ -14,7 +14,7 @@ using SophaTemp.Viewmodel;
 namespace SophaTemp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [PasseportAuthorizationFilter("AdminStock")]
+    [PasseportAuthorizationFilter("AdminCommandes")]
 
     public class LotsController : Controller
     {
@@ -51,16 +51,13 @@ namespace SophaTemp.Areas.Admin.Controllers
 
             return View(lot);
         }
-        public async Task<IActionResult> GetMedicaments(string term)
+
+        [Route("[controller]/[action]/{id}")]
+        public IActionResult GetByMedicamentId(int id)
         {
-            var medicaments = await _context.Medicaments
-                .Where(m => m.Nom.Contains(term))
-                .Select(m => new { label = m.Nom, value = m.MedicamentId })
-                .ToListAsync();
-
-            return Json(medicaments);
+            // Ajout de condiction IsPublic = false
+            return View(_context.Lots.Where(l => l.MedicamentId == id && l.IsPublic == false).ToList());
         }
-
         // GET: Admin/Lots/Create
         public IActionResult Create() 
         {

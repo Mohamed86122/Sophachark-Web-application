@@ -1,0 +1,17 @@
+﻿@model List<Lot>
+@{
+    Layout = null;
+}
+<div class="container m-4">
+    <div class="row">
+        @foreach (var lot in Model)
+        {
+            <div class="card col-md-12 m-1 p-1 lot" data="@lot.LotId">
+                <h2>Lot numéro : @lot.LotId</h2>
+                <h4>Qte actuelle : @lot.Quantite</h4>
+                <h4>Prix vente : <span>@(lot.PrixVente)</span>DH</h4>
+                <input type="number" class="form-control">
+            </div>
+        }
+    </div>
+</div>
