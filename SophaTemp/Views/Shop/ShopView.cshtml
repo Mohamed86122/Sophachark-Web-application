@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "_Layout";
-    var medicaments = ViewBag.Medicaments as List<SophaTemp.Models.Medicament>;
+    var medicaments = ViewBag.showCartItems as List<SophaTemp.Viewmodel.ShowCartItem>;
     var categories = ViewBag.Categories as List<SophaTemp.Models.CategoryMedicament>;
 }
 
@@ -41,10 +41,10 @@
                             @foreach (var medicament in medicaments)
                             {
                                 <div class="product_inner">
-                                    <img src="~/@Url.Content(medicament.Image)" alt="Image du médicament" class="img-fluid" style="max-width:100px; height:auto;">
+                                    <img src="~/@Url.Content(medicament.Medicament.Image)" alt="Image du médicament" class="img-fluid" style="max-width:100px; height:auto;">
                                     <div class="view_text">
-                                        <h2>@medicament.Nom</h2>
-                                        <p>$40.00</p>
+                                        <h2>@medicament.Medicament.Nom</h2>
+                                        <p>@medicament.Prix MAD</p>
                                     </div>
                                 </div>
                             }
@@ -82,15 +82,16 @@
                             <div class="col-md-4 col-sm-6 col-xs-12">
                                 <div class="shop_products_outer">
                                     <div class="image">
-                                        <img src="~/@Url.Content(medicament.Image)" alt="Image du médicament" class="img-fluid" style="max-width:100px; height:auto;">
+                                        <img src="~/@Url.Content(medicament.Medicament.Image)" alt="Image du médicament" class="img-fluid" style="max-width:100px; height:auto;">
                                         <div class="overlay_cart">
-                                            <span class="flaticon-supermarket add-to-cart-icon" data-id="@medicament.MedicamentId"></span><br>
-                                            <span class="flaticon-heart add-to-wishlist-icon" data-id="@medicament.MedicamentId"></span>
+                                            <span class="flaticon-supermarket add-to-cart-icon" data-id="@medicament.Medicament.MedicamentId"></span><br>
+                                            <span class="flaticon-heart add-to-wishlist-icon" data-id="@medicament.Medicament.MedicamentId"></span>
                                         </div>
                                     </div>
                                     <div class="porduct_des">
-                                        <h2><a href="@Url.Action("ProdDetails", "ProductDetails", new { id = medicament.MedicamentId })">@medicament.Nom</a></h2>
-                                        <p>$25.00</p>
+                                        <h2><a href="@Url.Action("ProdDetails", "ProductDetails", new { id = medicament.Medicament.MedicamentId })">@medicament.Medicament.Nom</a></h2>
+                                        <p>@medicament.Prix MAD</p>
+                                        <p>Il reste @medicament.Quantite U</p>
                                     </div>
                                 </div>
                             </div>

@@ -14,7 +14,7 @@ using SophaTemp.Viewmodel;
 namespace SophaTemp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [PasseportAuthorizationFilter("AdminStock")]
+    [PasseportAuthorizationFilter("AdminCommandes")]
 
     public class LotsController : Controller
     {
@@ -51,16 +51,13 @@ namespace SophaTemp.Areas.Admin.Controllers
 
             return View(lot);
         }
-        public async Task<IActionResult> GetMedicaments(string term)
+
+        [Route("[controller]/[action]/{id}")]
+        public IActionResult GetByMedicamentId(int id)
         {
-            var medicaments = await _context.Medicaments
-                .Where(m => m.Nom.Contains(term))
-                .Select(m => new { label = m.Nom, value = m.MedicamentId })
-                .ToListAsync();
-
-            return Json(medicaments);
+            // Ajout de condiction IsPublic = false
+            return View(_context.Lots.Where(l => l.MedicamentId == id && l.IsPublic == false).ToList());
         }
-
         // GET: Admin/Lots/Create
         public IActionResult Create() 
         {
@@ -232,6 +229,27 @@ namespace SophaTemp.Areas.Admin.Controllers
         private bool LotExists(int id)
         {
           return (_context.Lots?.Any(e => e.LotId == id)).GetValueOrDefault();
+        }
+
+        
+            public async Task<IActionResult> RPublic(int id)
+        {
+            if (_context.Lots == null)
+            {
+                return Problem("Entity set 'AppDbContext.Lots'  is null.");
+            }
+            var lot = await _context.Lots.FindAsync(id);
+            lot.IsPublic = true;
+            var lotPublic = await _context.Lots.Where(l => l.MedicamentId == lot.MedicamentId && l.IsPublic == true ).FirstOrDefaultAsync();
+
+            if(lotPublic != null)
+            {
+                lotPublic.IsPublic = false;
+            }
+         
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

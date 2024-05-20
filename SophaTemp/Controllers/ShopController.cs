@@ -5,6 +5,7 @@ using SophaTemp.Extensions;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Linq;
+using SophaTemp.Viewmodel;
 
 namespace SophaTemp.Controllers
 {
@@ -21,42 +22,54 @@ namespace SophaTemp.Controllers
 
         public IActionResult ShopView()
         {
-            ViewBag.Medicaments = _context.Medicaments.ToList();
+            List<Lot> lot = _context.Lots.Where(l => l.IsPublic).ToList();
+            var Medicaments = _context.Medicaments.Where(m => lot.Select(l => l.MedicamentId).Contains(m.MedicamentId));
+            List<ShowCartItem > showCartItems = new List<ShowCartItem>();
+            foreach (Medicament item in Medicaments) {
+                ShowCartItem cartItem = new ShowCartItem();
+                cartItem.Medicament = item;
+                cartItem.Prix = lot.Where(l => l.MedicamentId == item.MedicamentId).First().PrixVente; 
+                cartItem.Quantite = lot.Where(l => l.MedicamentId == item.MedicamentId).First().Quantite;
+                showCartItems.Add(cartItem);
+            }
             ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.showCartItems = showCartItems;
             return View();
         }
 
         [HttpPost]
         public IActionResult AddToCart(int id)
         {
-            var session = _httpContextAccessor.HttpContext.Session;
+            var session = HttpContext.Session;
             int? clientId = session.GetInt32("ClientId");
             if (clientId == null)
             {
                 return RedirectToAction("Index", "Auth");
             }
 
-            var lot = _context.Lots.FirstOrDefault(l => l.MedicamentId == id);
-            if (lot == null)
-            {
-                return NotFound();
-            }
+            var Cartline = new CartLineVm();
+            
 
-            var cart = session.GetObject<List<Lot>>("Cart") ?? new List<Lot>();
+            var cart = session.GetObject<List<CartLineVm>>("Cart") ?? new List<CartLineVm>();
 
-            var existingLot = cart.FirstOrDefault(l => l.MedicamentId == id);
-            if (existingLot != null)
+            var existingCartLine = cart.FirstOrDefault(l => l.idMedicament == id);
+            if (existingCartLine != null)
             {
-                existingLot.Quantite++;
+                existingCartLine.Quantite++;
             }
             else
             {
-                lot.Quantite = 1;
-                cart.Add(lot);
+                Cartline.idMedicament = id;
+                Cartline.Name = _context.Medicaments.Where(medicament => medicament.MedicamentId == id).First().Nom;
+                Cartline.Image = _context.Medicaments.Where(medicament => medicament.MedicamentId == id).First().Image;
+                Cartline.Quantite = 1;
+                Cartline.PrixdeVente = _context.Lots.Where(l => l.IsPublic == true && l.MedicamentId == id).First().PrixVente;
+                cart.Add(Cartline);
             }
 
             session.SetObject("Cart", cart);
-            int totalItems = cart.Sum(l => l.Quantite);
+            session.SetString("Count", cart.Count.ToString());
+            int totalItems = cart.Count();
             return Json(new { totalItems });
         }
 
@@ -91,15 +104,10 @@ namespace SophaTemp.Controllers
 
         public IActionResult ViewCart()
         {
-            var session = _httpContextAccessor.HttpContext.Session;
-            var cart = session.GetObject<List<Lot>>("Cart") ?? new List<Lot>();
+            var session = HttpContext.Session;
+            var cart = session.GetObject<List<CartLineVm>>("Cart") ?? new List<CartLineVm>();
 
-            var lotIds = cart.Select(l => l.MedicamentId).Distinct().ToList();
-            var medicaments = _context.Medicaments
-                .Where(m => lotIds.Contains(m.MedicamentId))
-                .ToDictionary(m => m.MedicamentId, m => new { m.Nom, m.Image });
 
-            ViewBag.Medicaments = medicaments;
 
             return View(cart);
         }

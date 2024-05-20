@@ -11,8 +11,6 @@ using SophaTemp.Data;
 using SophaTemp.Mappers;
 using SophaTemp.Viewmodel;
 using SophaTemp.Models;
-using ModelLotSelection = SophaTemp.Models.LotSelection;
-using ViewModelLotSelection = SophaTemp.Viewmodel.LotSelection;
 using SophaTemp.Filter;
 
 
@@ -39,20 +37,12 @@ namespace SophaTemp.Areas.Admin.Controllers
             return View(await appDbContext.ToListAsync());
         }
 
-        // GET: Admin/Commandes/Lots
-        public async Task<IActionResult> Lots(int medicamentId)
-        {
-            var lots = await _context.Lots
-                                     .Where(l => l.MedicamentId == medicamentId && l.Quantite > 0)
-                                     .ToListAsync();
-            return PartialView("_LotsPartial", lots);
-        }
 
         // GET: Admin/Commandes/Create
         public IActionResult Create()
         {
             ViewData["ClientId"] = new SelectList(_context.clients, "ClientId", "LibellePharmacie");
-            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom");
+            ViewData["MedicamentId"] = _context.Medicaments.ToList();
 
             return View();
         }
@@ -61,100 +51,21 @@ namespace SophaTemp.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CommandeVm commandeVm)
         {
-            if (!string.IsNullOrEmpty(commandeVm.SelectedLotsString))
-            {
-                commandeVm.LotSelections = ParseLotSelections(commandeVm.SelectedLotsString);
-            }
-
-            if (commandeVm.LotSelections == null || !commandeVm.LotSelections.Any())
-            {
-                ModelState.AddModelError("LotSelections", "LotSelections cannot be null or empty.");
-            }
-
             if (ModelState.IsValid)
             {
                 var commande = _commandeMapper.CommandeFromVm(commandeVm);
-
-                foreach (var lotSelection in commandeVm.LotSelections)
-                {
-                    var lot = await _context.Lots.FindAsync(lotSelection.LotId);
-                    if (lot != null && lot.Quantite >= lotSelection.Quantite)
-                    {
-                        lot.Quantite -= lotSelection.Quantite;
-                        _context.Update(lot);
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", $"Quantité insuffisante pour le lot {lotSelection.LotId}.");
-                        ViewData["ClientId"] = new SelectList(_context.clients, "ClientId", "LibellePharmacie", commandeVm.ClientId);
-                        ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", commandeVm.MedicamentId);
-                        return View(commandeVm);
-                    }
-                }
-
-                commande.SelectedLotsString = commandeVm.SelectedLotsString;
                 _context.Add(commande);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
             ViewData["ClientId"] = new SelectList(_context.clients, "ClientId", "LibellePharmacie", commandeVm.ClientId);
-            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", commandeVm.MedicamentId);
+            ViewBag["MedicamentId"] = _context.Medicaments.ToList();
 
             return View(commandeVm);
         }
-        private List<Viewmodel.LotSelection> ParseLotSelections(string selectedLotsString)
-        {
-            var lotSelections = new List<Viewmodel.LotSelection>();
 
-            if (string.IsNullOrWhiteSpace(selectedLotsString))
-            {
-                return lotSelections;
-            }
-
-            var lots = selectedLotsString.Split(';');
-
-            foreach (var lot in lots)
-            {
-                var details = lot.Split(',');
-
-                if (details.Length == 3)
-                {
-                    try
-                    {
-                        var lotIdPart = details[0].Split(':')[1].Trim();
-                        var quantitePart = details[1].Split(':')[1].Trim();
-                        var medicamentIdPart = details[2].Split(':')[1].Trim();
-
-                        var lotId = int.Parse(lotIdPart);
-                        var quantite = int.Parse(quantitePart);
-                        var medicamentId = int.Parse(medicamentIdPart);
-
-                        lotSelections.Add(new Viewmodel.LotSelection
-                        {
-                            LotId = lotId,
-                            Quantite = quantite,
-                            MedicamentId = medicamentId
-                        });
-
-                        // Log de débogage
-                        Console.WriteLine($"Lot ajouté : Lot ID={lotId}, Quantite={quantite}, Medicament ID={medicamentId}");
-                    }
-                    catch (Exception ex)
-                    {
-                        // Ajoutez ici une gestion des erreurs si nécessaire
-                        Console.WriteLine("Erreur de format ou de parsing : " + ex.Message);
-                    }
-                }
-            }
-
-            return lotSelections;
-        }
-
-
-
-
-
+        
         // GET: Admin/Commandes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

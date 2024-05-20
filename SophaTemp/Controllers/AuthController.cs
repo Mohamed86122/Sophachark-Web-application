@@ -32,7 +32,7 @@ namespace SophaTemp.Controllers
                 var client = _context.clients.SingleOrDefault(c => c.email == model.Email && c.motdepasse == model.MotDePasse);
                 if (client != null)
                 {
-                    var session = _httpContextAccessor.HttpContext.Session;
+                    var session = HttpContext.Session;
                     session.SetInt32("ClientId", client.ClientId);
                     session.SetString("ClientName", $"{client.nom} {client.prenom}");
                     return RedirectToAction("ShopView", "Shop");
