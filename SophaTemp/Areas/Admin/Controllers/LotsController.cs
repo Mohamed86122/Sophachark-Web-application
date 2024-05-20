@@ -67,13 +67,40 @@ namespace SophaTemp.Areas.Admin.Controllers
             return View();
         }
 
-      
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(LotAddVm lot)
         {
             if (ModelState.IsValid)
             {
+                // Déboguez les valeurs de MedicamentId et FournisseurId
+                Console.WriteLine($"MedicamentId soumis: {lot.MedicamentId}");
+                Console.WriteLine($"FournisseurId soumis: {lot.FournisseurId}");
+
+                // Vérifiez que le MedicamentId existe dans la table Medicament
+                var medicamentExists = await _context.Medicaments.AnyAsync(m => m.MedicamentId == lot.MedicamentId);
+                if (!medicamentExists)
+                {
+                    ModelState.AddModelError("MedicamentId", "Le médicament spécifié n'existe pas.");
+                }
+
+                // Vérifiez que le FournisseurId existe dans la table Fournisseur
+                var fournisseurExists = await _context.Fournisseurs.AnyAsync(f => f.FournisseurId == lot.FournisseurId);
+                if (!fournisseurExists)
+                {
+                    ModelState.AddModelError("FournisseurId", "Le fournisseur spécifié n'existe pas.");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    // Rechargez les dropdowns s'il y a des erreurs de validation
+                    ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet", lot.FournisseurId);
+                    ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", lot.MedicamentId);
+                    return View(lot);
+                }
+
+                // Mapper et créer le nouveau lot
                 LotsMapper lotsMapper = new LotsMapper();
                 Lot newLot = lotsMapper.LotaddVmLot(lot);
                 _context.Add(newLot);
@@ -82,10 +109,12 @@ namespace SophaTemp.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            // Rechargez les dropdowns s'il y a des erreurs de validation
             ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet", lot.FournisseurId);
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments.OrderBy(m => m.Nom), "MedicamentId", "Nom", lot.MedicamentId);
             return View(lot);
         }
+
 
         // GET: Admin/Lots/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -100,6 +129,7 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+
             ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet", lot.FournisseurId);
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", lot.MedicamentId);
             return View(lot);
@@ -108,6 +138,7 @@ namespace SophaTemp.Areas.Admin.Controllers
         // POST: Admin/Lots/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Admin/Lots/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("LotId,Montant,Quantite,PrixAchat,PrixVente,DateDeProduction,DateDExpedition,MedicamentId,FournisseurId")] Lot lot)
@@ -119,6 +150,17 @@ namespace SophaTemp.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                // Débogage pour vérifier les valeurs soumises
+                Console.WriteLine($"LotId soumis: {lot.LotId}");
+                Console.WriteLine($"Montant soumis: {lot.Montant}");
+                Console.WriteLine($"Quantite soumise: {lot.Quantite}");
+                Console.WriteLine($"PrixAchat soumis: {lot.PrixAchat}");
+                Console.WriteLine($"PrixVente soumis: {lot.PrixVente}");
+                Console.WriteLine($"DateDeProduction soumise: {lot.DateDeProduction}");
+                Console.WriteLine($"DateDExpedition soumise: {lot.DateDExpedition}");
+                Console.WriteLine($"MedicamentId soumis: {lot.MedicamentId}");
+                Console.WriteLine($"FournisseurId soumis: {lot.FournisseurId}");
+
                 try
                 {
                     _context.Update(lot);
@@ -137,10 +179,13 @@ namespace SophaTemp.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            // Rechargez les dropdowns s'il y a des erreurs de validation
             ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet", lot.FournisseurId);
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", lot.MedicamentId);
             return View(lot);
         }
+
 
         // GET: Admin/Lots/Delete/5
         public async Task<IActionResult> Delete(int? id)
