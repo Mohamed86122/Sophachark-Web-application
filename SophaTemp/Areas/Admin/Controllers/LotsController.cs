@@ -136,12 +136,9 @@ namespace SophaTemp.Areas.Admin.Controllers
         }
 
         // POST: Admin/Lots/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        // POST: Admin/Lots/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LotId,Montant,Quantite,PrixAchat,PrixVente,DateDeProduction,DateDExpedition,MedicamentId,FournisseurId")] Lot lot)
+        public async Task<IActionResult> Edit(int id, [Bind("LotId,Montant,Libelle,Quantite,PrixAchat,PrixVente,DateDeProduction,DateDExpedition,MedicamentId,FournisseurId")] Lot lot)
         {
             if (id != lot.LotId)
             {
@@ -150,17 +147,6 @@ namespace SophaTemp.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                // Débogage pour vérifier les valeurs soumises
-                Console.WriteLine($"LotId soumis: {lot.LotId}");
-                Console.WriteLine($"Montant soumis: {lot.Montant}");
-                Console.WriteLine($"Quantite soumise: {lot.Quantite}");
-                Console.WriteLine($"PrixAchat soumis: {lot.PrixAchat}");
-                Console.WriteLine($"PrixVente soumis: {lot.PrixVente}");
-                Console.WriteLine($"DateDeProduction soumise: {lot.DateDeProduction}");
-                Console.WriteLine($"DateDExpedition soumise: {lot.DateDExpedition}");
-                Console.WriteLine($"MedicamentId soumis: {lot.MedicamentId}");
-                Console.WriteLine($"FournisseurId soumis: {lot.FournisseurId}");
-
                 try
                 {
                     _context.Update(lot);
@@ -180,7 +166,6 @@ namespace SophaTemp.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Rechargez les dropdowns s'il y a des erreurs de validation
             ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet", lot.FournisseurId);
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", lot.MedicamentId);
             return View(lot);

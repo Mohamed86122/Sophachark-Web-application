@@ -7,7 +7,41 @@
 {
     <link rel="stylesheet" type="text/css" href="~/css/Datatable/style.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <style>
+       
+        .action-buttons {
+            display: flex;
+            flex-direction: column; 
+        }
 
+            .action-buttons .btn-group {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 5px; 
+            }
+
+                .action-buttons .btn-group a {
+                    flex: 1;
+                    margin-right: 5px; /* Space between buttons in a group */
+                }
+
+                    .action-buttons .btn-group a:last-child {
+                        margin-right: 0; /* Supp margin on the last button in a group */
+                    }
+
+       
+        #monTableau {
+            width: 100%;
+            table-layout: fixed;
+            word-wrap: break-word;
+        }
+
+            
+            #monTableau td, #monTableau th {
+                padding: 10px;
+                text-align: center; 
+            }
+    </style>
 }
 
 <div class="container mt-5">
@@ -38,7 +72,7 @@
                     @Html.DisplayNameFor(model => model.DateDExpedition)
                 </th>
                 <th>
-                    Jours restante : 
+                    Jours restante :
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Medicament)
@@ -50,42 +84,47 @@
             </tr>
         </thead>
         <tbody>
-    @foreach (var item in Model) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Quantite)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PrixAchat)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PrixVente)
-                </td>
-                <td>
-                     <span id="affichageMontant" class="form-control"></span>
-                </td>
-                <td>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantite)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrixAchat)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrixVente)
+                    </td>
+                    <td>
+                        <span id="affichageMontant" class="form-control"></span>
+                    </td>
+                    <td>
                         @item.DateDeProduction.ToString("dd/MM/yyyy")
                     </td>
-                <td>
+                    <td>
                         @item.DateDExpedition.ToString("dd/MM/yyyy")
                     </td>
-                <td>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Medicament.Nom)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Fournisseur.NomComplet)
-                </td>
-                <td>
-                        <a asp-action="Edit" asp-route-id="@item.LotId" class="btn btn-sm btn-success">Edit</a> 
-                        <a asp-action="Details" asp-route-id="@item.LotId" class="btn btn-sm btn-info">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.LotId" class="btn btn-sm btn-danger">Delete</a>
-                        <a asp-action="RPublic" asp-route-id="@item.LotId" class="btn btn-sm btn-danger">Rendre Public </a>
-                </td>
-            </tr>
-    }
+                    <td>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Medicament.Nom)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fournisseur.NomComplet)
+                    </td>
+                    <td class="action-buttons">
+                        <div class="btn-group">
+                            <a asp-action="Edit" asp-route-id="@item.LotId" class="btn btn-sm btn-success">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.LotId" class="btn btn-sm btn-info">Details</a>
+                        </div>
+                        <div class="btn-group">
+                            <a asp-action="Delete" asp-route-id="@item.LotId" class="btn btn-sm btn-danger">Delete</a>
+                            <a asp-action="RPublic" asp-route-id="@item.LotId" class="btn btn-sm btn-outline-success">Rendre Public</a>
+                        </div>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>

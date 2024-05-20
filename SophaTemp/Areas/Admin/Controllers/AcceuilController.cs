@@ -2,17 +2,20 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SophaTemp.Data;
+using SophaTemp.Filter;
 using SophaTemp.Viewmodel;
 using System.Security.Claims;
 
 namespace SophaTemp.Areas.Admin.Controllers
 {   
     [Area("Admin")]
-    public class HomeController : Controller
+    [PasseportAuthorizationFilter("AdminPrincipale")]
+
+    public class AcceuilController : Controller
     {
         private readonly AppDbContext _context;
 
-        public HomeController(AppDbContext context)
+        public AcceuilController(AppDbContext context)
         {
             _context = context;
         }
