@@ -70,12 +70,14 @@
 
                 <div class="form-group">
                     <label asp-for="MedicamentId" class="control-label"></label>
-                    <input id="medicamentAutoComplete" class="form-control" />
+                    <select asp-for="MedicamentId" class="form-control" asp-items="ViewBag.MedicamentId"></select>
+                    <span asp-validation-for="MedicamentId" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="FournisseurId" class="control-label">Fournisseur</label>
+                    <label asp-for="FournisseurId" class="control-label"></label>
                     <select asp-for="FournisseurId" class="form-control" asp-items="ViewBag.FournisseurId"></select>
+                    <span asp-validation-for="FournisseurId" class="text-danger"></span>
                 </div>
             </div>
         </div>
