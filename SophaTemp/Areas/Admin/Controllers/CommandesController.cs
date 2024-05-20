@@ -42,7 +42,7 @@ namespace SophaTemp.Areas.Admin.Controllers
         public IActionResult Create()
         {
             ViewData["ClientId"] = new SelectList(_context.clients, "ClientId", "LibellePharmacie");
-            ViewData["MedicamentId"] = _context.Medicaments.ToList();
+            ViewData["MedicamentId"] = new SelectList(_context.Medicaments.Select(m => new { m.MedicamentId, m.Nom }), "MedicamentId", "Nom");
 
             return View();
         }
@@ -54,13 +54,20 @@ namespace SophaTemp.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var commande = _commandeMapper.CommandeFromVm(commandeVm);
+
+                // Ajouter les lots de commande au contexte
+                foreach (var lotCommande in commande.LotsCommande)
+                {
+                    _context.LotCommandes.Add(lotCommande);
+                }
+
                 _context.Add(commande);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
             ViewData["ClientId"] = new SelectList(_context.clients, "ClientId", "LibellePharmacie", commandeVm.ClientId);
-            ViewBag["MedicamentId"] = _context.Medicaments.ToList();
+            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", commandeVm.MedicamentId);
 
             return View(commandeVm);
         }

@@ -62,8 +62,8 @@ namespace SophaTemp.Areas.Admin.Controllers
         public IActionResult Create() 
         {
             ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet");
-            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom");
-           
+            ViewData["MedicamentId"] = new SelectList(_context.Medicaments.OrderBy(m => m.Nom), "MedicamentId", "Nom");
+
             return View();
         }
 
@@ -111,7 +111,7 @@ namespace SophaTemp.Areas.Admin.Controllers
 
             // Rechargez les dropdowns s'il y a des erreurs de validation
             ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet", lot.FournisseurId);
-            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", lot.MedicamentId);
+            ViewData["MedicamentId"] = new SelectList(_context.Medicaments.OrderBy(m => m.Nom), "MedicamentId", "Nom", lot.MedicamentId);
             return View(lot);
         }
 
