@@ -77,7 +77,6 @@ namespace SophaTemp.Data
                 .WithMany()
                 .HasForeignKey(c => c.PersonneId);
 
-
         }
 
 

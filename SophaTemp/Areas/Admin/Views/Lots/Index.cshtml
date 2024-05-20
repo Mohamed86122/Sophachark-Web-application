@@ -7,7 +7,28 @@
 {
     <link rel="stylesheet" type="text/css" href="~/css/Datatable/style.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <style>
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+        }
 
+            .action-buttons .btn-group {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 5px;
+            }
+
+                .action-buttons .btn-group a {
+                    flex: 1;
+                    margin-right: 5px; /* Space between buttons in a group */
+                }
+
+                    .action-buttons .btn-group a:last-child {
+                        margin-right: 0; /* Supp margin on the last button in a group */
+                    }
+
+    </style>
 }
 
 <div class="container mt-5">
@@ -78,12 +99,16 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Fournisseur.NomComplet)
                 </td>
-                <td>
-                        <a asp-action="Edit" asp-route-id="@item.LotId" class="btn btn-sm btn-success">Edit</a> 
+                <td class="action-buttons">
+                    <div class="btn-group">
+                        <a asp-action="Edit" asp-route-id="@item.LotId" class="btn btn-sm btn-success">Edit</a>
                         <a asp-action="Details" asp-route-id="@item.LotId" class="btn btn-sm btn-info">Details</a>
+                    </div>
+                     <div class="btn-group">
                         <a asp-action="Delete" asp-route-id="@item.LotId" class="btn btn-sm btn-danger">Delete</a>
-                        <a asp-action="RPublic" asp-route-id="@item.LotId" class="btn btn-sm btn-danger">Rendre Public </a>
-                </td>
+                        <a asp-action="RPublic" asp-route-id="@item.LotId" class="btn btn-sm btn-outline-primary">Rendre Public </a>
+                     </div>
+                    </td>
             </tr>
     }
         </tbody>

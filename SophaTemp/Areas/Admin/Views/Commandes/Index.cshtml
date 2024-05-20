@@ -33,9 +33,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Quantite)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IdLotCommande)
-                </th>
+                
                 <th></th>
             </tr>
         </thead>
@@ -58,9 +56,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Quantite)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IdLotCommande)
-                </td>
+               
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.CommandeId">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.CommandeId">Details</a> |

@@ -15,12 +15,7 @@
                 </div>
                 <div class="form-group">
                     <label>Médicament</label>
-                        <select class="form-control" id="medicament">
-                        @foreach (Medicament medicament in ViewBag.MedicamentId)
-                            {
-                                <option value="@medicament.MedicamentId">@medicament.Nom</option>
-                            }
-                        </select>
+                    <select asp-for="MedicamentId" class="form-control" id="medicament" asp-items="ViewBag.MedicamentId"></select>
                 </div>
                 <div class="form-group">
                     <label>Quantité du médicament</label>
@@ -34,7 +29,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="DateCommande"></label>
-                    <input asp-for="DateCommande" class="form-control" />
+                    <input asp-for="DateCommande" class="form-control" type="date" />
                     <span asp-validation-for="DateCommande" class="text-danger"></span>
                     <textarea id="data" asp-for="Data" class="d-none"></textarea>
                 </div>

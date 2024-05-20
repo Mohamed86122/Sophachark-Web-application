@@ -4,6 +4,7 @@ using SophaTemp.Viewmodel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace SophaTemp.Mappers
 {
@@ -23,11 +24,22 @@ namespace SophaTemp.Mappers
                 ClientId = commandeVm.ClientId,
                 DateCommande = commandeVm.DateCommande,
                 Status = commandeVm.Status,
-                Medicament = _context.Medicaments.FirstOrDefault(m => m.MedicamentId == commandeVm.MedicamentId),
-                
+                MedicamentId = commandeVm.MedicamentId,
+                LotsCommande = new List<LotCommande>()
             };
-            commande.Client = _context.clients.FirstOrDefault(c => c.ClientId == commandeVm.ClientId);
 
+            commande.Client = _context.clients.FirstOrDefault(c => c.ClientId == commandeVm.ClientId);
+            commande.Medicament = _context.Medicaments.FirstOrDefault(m => m.MedicamentId == commandeVm.MedicamentId);
+
+            if (!string.IsNullOrEmpty(commandeVm.Data))
+            {
+                var lotCommandeList = JsonConvert.DeserializeObject<List<LotCommande>>(commandeVm.Data);
+                foreach (var lotCommande in lotCommandeList)
+                {
+                    lotCommande.Commande = commande; // Établir la relation
+                    commande.LotsCommande.Add(lotCommande);
+                }
+            }
 
             return commande;
         }

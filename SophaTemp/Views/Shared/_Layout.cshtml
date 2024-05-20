@@ -53,12 +53,7 @@
                                         <a class="nav-link link_hd" href="@Url.Action("Index", "Auth")">Login</a>
                                     </li>
                                 }
-                                else
-                                {
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link link_hd" href="@Url.Action("Logout", "Auth")">Logout</a>
-                                    </li>
-                                }
+          
                             </ul>
                             @if (clientId != null)
                             {
@@ -97,7 +92,7 @@
                                         <li>
                                             <form action="#">
                                                 <div class="form-group">
-                                                    <input name="search" type="text" placeholder="Enter a Keywords">
+                                                    <input name="search" type="text" placeholder="Chercher un médicament">
                                                     <button type="submit" class="theme-btn">GO</button>
                                                 </div>
                                             </form>
@@ -119,12 +114,6 @@
                             <h2>À propos</h2>
                             <div class="footer-text">
                                 <p>Notre mission est d'optimiser l'efficacité, la sécurité et la qualité des produits et services pharmaceutiques.</p>
-                                <ul class="social-media">
-                                    <li><a href="#" target="_blank"><i class="fa fa-facebook-f"></i></a></li>
-                                    <li><a href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#" target="_blank"><i class="fa fa-vimeo"></i></a></li>
-                                    <li><a href="#" target="_blank"><i class="fa fa-wifi"></i></a></li>
-                                </ul>
                             </div>
                         </div>
                     </div>
@@ -153,8 +142,8 @@
                                     <li><a href="#">About Us</a></li>
                                     <li><a href="#">Appointment</a></li>
                                     <li><a href="#">Contact Us</a></li>
-                                    <li><a href="#">Blog</a></li>
-                                    <li><a href="#">Doctors</a></li>
+                                    <li><a href="#">Médicament</a></li>
+                                    <li><a href="#">Catégories médicament</a></li>
                                     <li><a href="#">Gallery</a></li>
                                     <li><a href="#">Timetable</a></li>
                                     <li><a href="#">FAQs</a></li>

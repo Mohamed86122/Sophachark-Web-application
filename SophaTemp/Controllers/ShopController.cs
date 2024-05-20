@@ -76,30 +76,38 @@ namespace SophaTemp.Controllers
         [HttpPost]
         public IActionResult AddToWishlist(int id)
         {
-            var session = _httpContextAccessor.HttpContext.Session;
+            var session = HttpContext.Session;
             int? clientId = session.GetInt32("ClientId");
             if (clientId == null)
             {
                 return RedirectToAction("Index", "Auth");
             }
 
-            var lot = _context.Lots.FirstOrDefault(l => l.MedicamentId == id);
-            if (lot == null)
+            var whishlistline = new WhishlistLineVm();
+
+
+            var whishlists = session.GetObject<List<WhishlistLineVm>>("Whishlist") ?? new List<WhishlistLineVm>();
+
+            var existingwishlistLine = whishlists.FirstOrDefault(l => l.idMedicament == id);
+
+            if (existingwishlistLine != null)
             {
-                return NotFound();
+                existingwishlistLine.Quantite++;
+            }
+            else
+            {
+                whishlistline.idMedicament = id;
+                whishlistline.Name = _context.Medicaments.Where(medicament => medicament.MedicamentId == id).First().Nom;
+                whishlistline.Image = _context.Medicaments.Where(medicament => medicament.MedicamentId == id).First().Image;
+                whishlistline.PrixdeVente = _context.Lots.Where(l => l.IsPublic == true && l.MedicamentId == id).First().PrixVente;
+                whishlists.Add(whishlistline);
             }
 
-            var wishlist = session.GetObject<List<Lot>>("Wishlist") ?? new List<Lot>();
-
-            var existingLot = wishlist.FirstOrDefault(l => l.MedicamentId == id);
-            if (existingLot == null)
-            {
-                wishlist.Add(lot);
-            }
-
-            session.SetObject("Wishlist", wishlist);
-            int totalItems = wishlist.Count;
+            session.SetObject("Wishlist", whishlists);      
+            session.SetString("Count", whishlists.Count.ToString());
+            int totalItems = whishlists.Count;
             return Json(new { totalItems });
+
         }
 
         public IActionResult ViewCart()
@@ -114,17 +122,10 @@ namespace SophaTemp.Controllers
 
         public IActionResult ViewWishlist()
         {
-            var session = _httpContextAccessor.HttpContext.Session;
-            var wishlist = session.GetObject<List<Lot>>("Wishlist") ?? new List<Lot>();
+            var session = HttpContext.Session;
+            var whishlists = session.GetObject<List<WhishlistLineVm>>("Whishlist") ?? new List<WhishlistLineVm>();
 
-            var lotIds = wishlist.Select(l => l.MedicamentId).Distinct().ToList();
-            var medicaments = _context.Medicaments
-                .Where(m => lotIds.Contains(m.MedicamentId))
-                .ToDictionary(m => m.MedicamentId, m => new { m.Nom, m.Image });
-
-            ViewBag.Medicaments = medicaments;
-
-            return View(wishlist);
+            return View(whishlists);
         }
 
         public IActionResult ClearCart()
