@@ -14,6 +14,11 @@
                     <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
                 </div>
                 <div class="form-group">
+                    <label asp-for="LotCommandeId" class="control-label"></label>
+                    <select asp-for="LotCommandeId" class="form-control" asp-items="ViewBag.LotCommandeId"></select>
+                    <span asp-validation-for="LotCommandeId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
                     <label>Médicament</label>
                     <select asp-for="MedicamentId" class="form-control" id="medicament" asp-items="ViewBag.MedicamentId"></select>
                 </div>

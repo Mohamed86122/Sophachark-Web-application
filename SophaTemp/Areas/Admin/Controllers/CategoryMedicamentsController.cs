@@ -72,7 +72,6 @@ namespace SophaTemp.Areas.Admin.Controllers
             return View(category);
         }
 
-        // GET: Admin/CategoryMedicaments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Categories == null)
@@ -85,23 +84,28 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            return View(categoryMedicament);
+
+            var categoryMedicamentVM = new CategoryMedicamentVM
+            {
+                Reference = categoryMedicament.Reference,
+                Libelle = categoryMedicament.Libelle
+            };
+
+            ViewBag.CategoryMedicamentId = id; // Stockez l'ID dans ViewBag
+            return View(categoryMedicamentVM);
         }
 
         // POST: Admin/CategoryMedicaments/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CategoryMedicamentId,Reference,Libelle")] CategoryMedicament categoryMedicament)
+        public async Task<IActionResult> Edit(int id, CategoryMedicamentVM categoryMedicamentVM)
         {
-            if (id != categoryMedicament.CategoryMedicamentId)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
+                var mapper = new CategoryMedicamentMapper();
+                var categoryMedicament = mapper.CategoryMedicamentAddMap(categoryMedicamentVM);
+                categoryMedicament.CategoryMedicamentId = id; // Assignez l'ID
+
                 try
                 {
                     _context.Update(categoryMedicament);
@@ -109,7 +113,7 @@ namespace SophaTemp.Areas.Admin.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryMedicamentExists(categoryMedicament.CategoryMedicamentId))
+                    if (!CategoryMedicamentExists(id))
                     {
                         return NotFound();
                     }
@@ -120,9 +124,10 @@ namespace SophaTemp.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(categoryMedicament);
-        }
 
+            ViewBag.CategoryMedicamentId = id; // Stockez l'ID dans ViewBag pour la vue en cas d'erreur de validation
+            return View(categoryMedicamentVM);
+        }
         // GET: Admin/CategoryMedicaments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

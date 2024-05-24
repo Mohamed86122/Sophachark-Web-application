@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SophaTemp.Data;
 
@@ -11,9 +12,10 @@ using SophaTemp.Data;
 namespace SophaTemp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240521105319_UpdatePropertyFromModelToDb")]
+    partial class UpdatePropertyFromModelToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,9 +89,6 @@ namespace SophaTemp.Migrations
                     b.Property<DateTime>("DateCommande")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("LotCommandeId")
-                        .HasColumnType("int");
-
                     b.Property<int>("MedicamentId")
                         .HasColumnType("int");
 
@@ -103,8 +102,6 @@ namespace SophaTemp.Migrations
                     b.HasKey("CommandeId");
 
                     b.HasIndex("ClientId");
-
-                    b.HasIndex("LotCommandeId");
 
                     b.HasIndex("MedicamentId");
 
@@ -272,6 +269,9 @@ namespace SophaTemp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LotCommandeId"), 1L, 1);
 
+                    b.Property<int>("CommandeId")
+                        .HasColumnType("int");
+
                     b.Property<double>("Frais")
                         .HasColumnType("float");
 
@@ -279,6 +279,8 @@ namespace SophaTemp.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("LotCommandeId");
+
+                    b.HasIndex("CommandeId");
 
                     b.ToTable("LotCommandes");
                 });
@@ -533,12 +535,6 @@ namespace SophaTemp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SophaTemp.Models.LotCommande", "LotCommande")
-                        .WithMany("commandes")
-                        .HasForeignKey("LotCommandeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SophaTemp.Models.Medicament", "Medicament")
                         .WithMany("Commandes")
                         .HasForeignKey("MedicamentId")
@@ -546,8 +542,6 @@ namespace SophaTemp.Migrations
                         .IsRequired();
 
                     b.Navigation("Client");
-
-                    b.Navigation("LotCommande");
 
                     b.Navigation("Medicament");
                 });
@@ -609,6 +603,17 @@ namespace SophaTemp.Migrations
                     b.Navigation("Fournisseur");
 
                     b.Navigation("Medicament");
+                });
+
+            modelBuilder.Entity("SophaTemp.Models.LotCommande", b =>
+                {
+                    b.HasOne("SophaTemp.Models.Commande", "Commande")
+                        .WithMany("LotsCommande")
+                        .HasForeignKey("CommandeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Commande");
                 });
 
             modelBuilder.Entity("SophaTemp.Models.MedicamentCategoryMedicament", b =>
@@ -708,6 +713,11 @@ namespace SophaTemp.Migrations
                     b.Navigation("MedicamentCategoryMedicaments");
                 });
 
+            modelBuilder.Entity("SophaTemp.Models.Commande", b =>
+                {
+                    b.Navigation("LotsCommande");
+                });
+
             modelBuilder.Entity("SophaTemp.Models.Commentaire", b =>
                 {
                     b.Navigation("Reponses");
@@ -721,8 +731,6 @@ namespace SophaTemp.Migrations
             modelBuilder.Entity("SophaTemp.Models.LotCommande", b =>
                 {
                     b.Navigation("Lots");
-
-                    b.Navigation("commandes");
                 });
 
             modelBuilder.Entity("SophaTemp.Models.Medicament", b =>

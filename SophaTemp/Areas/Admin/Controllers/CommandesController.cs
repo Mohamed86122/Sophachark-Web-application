@@ -33,8 +33,11 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Commandes
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Commandes.Include(c => c.Client);
-            return View(await appDbContext.ToListAsync());
+             var commandes = await _context.Commandes
+           .Include(c => c.Client)
+           .Include(c => c.Medicament)
+           .ToListAsync();
+                return View(commandes);
         }
 
 
@@ -43,7 +46,7 @@ namespace SophaTemp.Areas.Admin.Controllers
         {
             ViewData["ClientId"] = new SelectList(_context.clients, "ClientId", "LibellePharmacie");
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments.Select(m => new { m.MedicamentId, m.Nom }), "MedicamentId", "Nom");
-
+            ViewData["LotCommandeId"] = new SelectList(_context.LotCommandes, "LotCommandeId", "LotCommandeId");
             return View();
         }
 
@@ -55,17 +58,12 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 var commande = _commandeMapper.CommandeFromVm(commandeVm);
 
-                // Ajouter les lots de commande au contexte
-                foreach (var lotCommande in commande.LotsCommande)
-                {
-                    _context.LotCommandes.Add(lotCommande);
-                }
 
                 _context.Add(commande);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
+            ViewData["LotCommandeId"] = new SelectList(_context.LotCommandes, "LotCommandeId", "LotCommandeId", commandeVm.LotCommandeId);
             ViewData["ClientId"] = new SelectList(_context.clients, "ClientId", "LibellePharmacie", commandeVm.ClientId);
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", commandeVm.MedicamentId);
 

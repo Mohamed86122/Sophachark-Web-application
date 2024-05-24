@@ -9,6 +9,7 @@ namespace SophaTemp.Viewmodel
         public DateTime DateCommande { get; set; }
         public string Status { get; set; }
 
+        public int LotCommandeId { get; set; }
         public String Data { get; set; }
         public ICollection<Livraison>? Livraisons { get; set; }
 
