@@ -62,7 +62,7 @@ namespace SophaTemp.Controllers
                     string redirectController = user.Passeport?.Nom switch
                     {
                         "AdminCommandes" => "Commandes",
-                        "AdminPrincipal" => "Home",
+                        "AdminPrincipale" => "Acceuil",
                         "AdminProduits" => "Medicaments",
                         "AdminStock" => "Lots",
                         "AdminClients" => "Clients",
