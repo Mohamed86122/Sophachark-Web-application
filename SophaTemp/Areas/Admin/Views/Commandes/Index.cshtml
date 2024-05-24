@@ -33,28 +33,32 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Client.LibellePharmacie)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Medicament.Nom)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateCommande)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.CommandeId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.CommandeId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.CommandeId">Delete</a>
-                    </td>
-                </tr>
-            }
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Client.PersonneId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Medicament.Nom)
+                </td>
+        
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCommande)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantite)
+                </td>
+               
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CommandeId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.CommandeId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CommandeId">Delete</a>
+                </td>
+            </tr>
+    }
         </tbody>
     </table>
 </div>
