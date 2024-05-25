@@ -115,8 +115,6 @@ namespace SophaTemp.Areas.Admin.Controllers
             return View(lot);
         }
 
-
-        // GET: Admin/Lots/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Lots == null)
@@ -130,46 +128,56 @@ namespace SophaTemp.Areas.Admin.Controllers
                 return NotFound();
             }
 
+            LotsMapper mapper = new LotsMapper();
+            LotAddVm model = mapper.LotToAddVm(lot);
+
+            ViewBag.LotId = lot.LotId; // Pass LotId using ViewBag
             ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet", lot.FournisseurId);
-            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", lot.MedicamentId);
-            return View(lot);
+            ViewData["MedicamentId"] = new SelectList(_context.Medicaments.OrderBy(m => m.Nom), "MedicamentId", "Nom", lot.MedicamentId);
+            return View(model);
         }
 
-        // POST: Admin/Lots/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LotId,Montant,Libelle,Quantite,PrixAchat,PrixVente,DateDeProduction,DateDExpedition,MedicamentId,FournisseurId")] Lot lot)
+        public async Task<IActionResult> Edit(int lotId, LotAddVm model)
         {
-            if (id != lot.LotId)
+            if (!ModelState.IsValid)
+            {
+                ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet", model.FournisseurId);
+                ViewData["MedicamentId"] = new SelectList(_context.Medicaments.OrderBy(m => m.Nom), "MedicamentId", "Nom", model.MedicamentId);
+                return View(model);
+            }
+
+            var lot = await _context.Lots.FindAsync(lotId);
+            if (lot == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(lot);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LotExists(lot.LotId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
+            LotsMapper mapper = new LotsMapper();
+            mapper.UpdateLotFromVm(lot, model);
 
-            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet", lot.FournisseurId);
-            ViewData["MedicamentId"] = new SelectList(_context.Medicaments, "MedicamentId", "Nom", lot.MedicamentId);
-            return View(lot);
+            try
+            {
+                _context.Update(lot);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!LotExists(lot.LotId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
+
+
+
 
 
         // GET: Admin/Lots/Delete/5

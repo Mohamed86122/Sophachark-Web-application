@@ -1,4 +1,4 @@
-﻿@model SophaTemp.Models.Lot
+﻿@model SophaTemp.Viewmodel.LotAddVm
 
 @{
     ViewData["Title"] = "Edit";
@@ -11,8 +11,8 @@
         <div class="col-md-6">
             <div class="border p-4 rounded">
                 <form asp-action="Edit" method="post">
+                    <input type="hidden" name="lotId" value="@ViewBag.LotId" />
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="LotId" />
                     <div class="row justify-content-center">
                         <div class="col-md-6">
                             <div class="form-group">
