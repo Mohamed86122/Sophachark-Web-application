@@ -33,5 +33,21 @@ namespace SophaTemp.Mappers
             lot.MedicamentId = model.MedicamentId;
             lot.FournisseurId = model.FournisseurId;
         }
+
+        public LotAddVm LotToAddVm(Lot lot)
+        {
+            return new LotAddVm
+            {
+                Montant = (int)lot.Montant,
+                Libelle = lot.Libelle,
+                Quantite = lot.Quantite,
+                PrixAchat = (int)lot.PrixAchat,
+                PrixVente = (int)lot.PrixVente,
+                DateDeProduction = lot.DateDeProduction,
+                DateDExpedition = lot.DateDExpedition,
+                MedicamentId = lot.MedicamentId,
+                FournisseurId = lot.FournisseurId
+            };
+        }
     }
 }

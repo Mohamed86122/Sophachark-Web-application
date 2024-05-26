@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SophaTemp.Data;
+using SophaTemp.Mappers;
 using SophaTemp.Models;
+using SophaTemp.Viewmodel;
 
 namespace SophaTemp.Areas.Admin.Controllers
 {
@@ -49,7 +51,7 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Personnes/Create
         public IActionResult Create()
         {
-            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "PasseportId");
+            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Nom");
             return View();
         }
 
@@ -58,16 +60,26 @@ namespace SophaTemp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PersonneId,nom,prenom,email,motdepasse,PasseportId")] Personne personne)
+        public async Task<IActionResult> Create(PerViewModel model)
         {
             if (ModelState.IsValid)
             {
+                var passeport = await _context.Passeports.FindAsync(model.PasseportId);
+                if (passeport == null)
+                {
+                    ModelState.AddModelError("PasseportId", "Passeport invalide");
+                    ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Nom", model.PasseportId);
+                    return View(model);
+                }
+
+                PerMapper mapper = new PerMapper();
+                Personne personne = mapper.AddVmtoPerson(model);
                 _context.Add(personne);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "PasseportId", personne.PasseportId);
-            return View(personne);
+            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Nom", model.PasseportId);
+            return View(model);
         }
 
         // GET: Admin/Personnes/Edit/5
@@ -83,24 +95,43 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+
+            PerViewModel model = new PerViewModel
+            {
+                nom = personne.nom,
+                prenom = personne.prenom,
+                email = personne.email,
+                motdepasse = personne.motdepasse,
+                PasseportId = personne.PasseportId
+            };
+
             ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "PasseportId", personne.PasseportId);
-            return View(personne);
+            return View(model);
         }
 
-        // POST: Admin/Personnes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PersonneId,nom,prenom,email,motdepasse,PasseportId")] Personne personne)
+        public async Task<IActionResult> Edit(int id, PerViewModel model)
         {
-            if (id != personne.PersonneId)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
+                var personne = await _context.Personnes.FindAsync(id);
+                if (personne == null)
+                {
+                    return NotFound();
+                }
+
+                var passeport = await _context.Passeports.FindAsync(model.PasseportId);
+                if (passeport == null)
+                {
+                    ModelState.AddModelError("PasseportId", "Passeport invalide");
+                    ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "PasseportId", model.PasseportId);
+                    return View(model);
+                }
+
+                PerMapper mapper = new PerMapper();
+                mapper.UpdatePersonFromVm(model, personne);
+
                 try
                 {
                     _context.Update(personne);
@@ -108,7 +139,7 @@ namespace SophaTemp.Areas.Admin.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PersonneExists(personne.PersonneId))
+                    if (!PersonneExists(id))
                     {
                         return NotFound();
                     }
@@ -119,8 +150,9 @@ namespace SophaTemp.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "PasseportId", personne.PasseportId);
-            return View(personne);
+
+            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "PasseportId", model.PasseportId);
+            return View(model);
         }
 
         // GET: Admin/Personnes/Delete/5
