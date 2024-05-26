@@ -1,24 +1,29 @@
-﻿@model SophaTemp.Models.Passeport
+﻿@model SophaTemp.Viewmodel.PasseportVm
 
 @{
     ViewData["Title"] = "Edit";
 }
 <div class="container mt-5">
-<h1>Edit</h1>
+    <h1>Edit</h1>
 
-<h4>Passeport</h4>
-<hr />
+    <h4>Passeport</h4>
+    <hr />
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="border p-4 rounded">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="PasseportId" />
-            <div class="form-group">
-                <label asp-for="Nom" class="control-label"></label>
-                <input asp-for="Nom" class="form-control" />
-                <span asp-validation-for="Nom" class="text-danger"></span>
-            </div>
+                <form asp-action="Edit" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Nom" value="@ViewBag.PasseportId" />
+                    <div class="form-group">
+                        <label asp-for="Nom" class="control-label"></label>
+                        <input asp-for="Nom" class="form-control" />
+                        <span asp-validation-for="Nom" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="permissions" class="control-label">Permissions</label>
+                        <select asp-for="SelectedpasseportIds" class="form-control" asp-items="ViewBag.Permission" multiple="multiple"></select>
+                    </div>
 
                     <div class="form-group">
                         <input type="submit" value="Save" class="btn btn-outline-primary" />
@@ -26,11 +31,11 @@
                         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
                     </div>
                 </form>
-    </div>
-</div>
+            </div>
+        </div>
 
-
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+        @section Scripts {
+            @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            }
+        }

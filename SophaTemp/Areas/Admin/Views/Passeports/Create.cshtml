@@ -18,7 +18,11 @@
                 <input asp-for="Nom" class="form-control" />
                 <span asp-validation-for="Nom" class="text-danger"></span>
             </div>
-           
+
+                    <div class="form-group">
+                        <label for="permissions" class="control-label">Permissions</label>
+                        <select asp-for="SelectedpasseportIds" class="form-control" asp-items="ViewBag.Permission" multiple="multiple"></select>
+                    </div>
 
                     <div class="form-group">
                         <input type="submit" value="Create" class="btn btn-primary" />
