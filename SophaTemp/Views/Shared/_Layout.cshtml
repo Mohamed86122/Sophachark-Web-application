@@ -16,6 +16,8 @@
     <link rel="stylesheet" type="text/css" href="~/assets/css/responsive.css">
     <link rel="stylesheet" type="text/css" href="~/assets/fonts/font/flaticon.css">
     <link rel="stylesheet" href="~/assets/css/style.css" asp-append-version="true" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     @RenderSection("Style", false)
 </head>
 <body>
@@ -43,21 +45,26 @@
                                 <li class="nav-item dropdown">
                                     <a class="nav-link link_hd" href="@Url.Action("Contact", "Contact")">Contact</a>
                                 </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link link_hd" href="@Url.Action("ShopView", "Shop")">Médicaments</a>
-                                </li>
+                                
                                 
                                 @if (clientId == null)
-                                {
+                                {   <li class="nav-item dropdown">
+                                        <a class="nav-link link_hd" href="@Url.Action("Index", "Auth")">La liste des médicaments</a>
+                                    </li>
                                     <li class="nav-item dropdown">
                                         <a class="nav-link link_hd" href="@Url.Action("Index", "Auth")">Login</a>
                                     </li>
+                                
                                 }
           
                             </ul>
                             @if (clientId != null)
                             {
+                            
                                 <ul class="navbar-nav navbar-mobile ml-auto mr-auto">
+                                    <li class="nav-item dropdown">
+                                    <a class="nav-link link_hd" href="@Url.Action("ShopView", "Shop")">La liste des médicaments</a>
+                                    </li>
                                     <li class="nav-item dropdown">
                                         <a class="nav-link link_hd" href="@Url.Action("ViewCart", "Shop")">
                                             <span class="flaticon-supermarket"></span>
@@ -81,25 +88,27 @@
                                         <a class="dropdown-item" href="@Url.Action("Logout", "Auth")">Logout</a>
                                     </div>
                                 </li>
+                                </ul> 
+                                <ul class="navbar-nav navbar-mobile right-nav ml-auto">
+                                    <li class="nav-item dropdown">
+                                    <a class="nav-link" href="">
+                                            <span class="flaticon-search head-icon"></span>
+                                        </a>
+                                        <ul class="navbar-nav submenu">
+                                            <li>
+                                                <form id="searchForm">
+                                                    <div class="form-group">
+                                                        <input id="searchInput" name="search" type="text" placeholder="Chercher un médicament">
+                                                        <button type="submit" class="theme-btn">GO</button>
+                                                    </div>
+                                                </form>
+                                                <div id="searchResults"></div>
+                                            </li>
+                                        </ul>
+                                    </li>
                                 </ul>
                             }
-                            <ul class="navbar-nav navbar-mobile right-nav ml-auto">
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link" href="#">
-                                        <span class="flaticon-search head-icon"></span>
-                                    </a>
-                                    <ul class="navbar-nav submenu">
-                                        <li>
-                                            <form action="#">
-                                                <div class="form-group">
-                                                    <input name="search" type="text" placeholder="Chercher un médicament">
-                                                    <button type="submit" class="theme-btn">GO</button>
-                                                </div>
-                                            </form>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
+                           
                         </div>
                     </div>
                 </div>
@@ -172,6 +181,48 @@
                 </div>
             </div>
         </div>
+    <script>
+        $(document).ready(function () {
+            $("#searchForm").on("submit", function (e) {
+                e.preventDefault();
+
+                var searchTerm = $("#searchInput").val();
+
+                $.ajax({
+                    url: '@Url.Action("SearchMedicament", "Search")',
+                    type: 'GET',
+                    data: { search: searchTerm },
+                    success: function (response) {
+                        if (response.success) {
+                            var results = response.data;
+                            var resultsContainer = $("#searchResults");
+                            resultsContainer.empty();
+
+                            if (results.length > 0) {
+                                results.forEach(function (item) {
+                                    resultsContainer.append("<div class='search-result-item'>" +
+                                        "<img src='/images/" + item.Image + "' alt='" + item.Nom + "' class='img-thumbnail' style='width:50px;height:50px;' />" +
+                                        "<strong>" + item.Nom + "</strong><br />" +
+                                        "<p>" + item.Description + "</p>" +
+                                        "<p>Prix: " + item.PrixVente + " MAD</p>" +
+                                        "<p>Quantité: " + item.Quantite + "</p>" +
+                                        "</div>");
+                                });
+                            } else {
+                                resultsContainer.append("<div>Aucun résultat trouvé</div>");
+                            }
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Erreur lors de la recherche");
+                    }
+                });
+            });
+        });
+    </script>
+
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
