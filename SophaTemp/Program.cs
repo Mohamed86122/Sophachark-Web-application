@@ -20,7 +20,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IUploadFileService, UploadFileService>();
 builder.Services.AddScoped<CommandeMapper>();
+builder.Services.AddScoped<FactureMapper>();
 builder.Services.AddScoped<PersonMapper>();
+builder.Services.AddScoped<PasseportMapper>();
+
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
            .AddCookie(options =>

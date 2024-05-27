@@ -6,11 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SophaTemp.Data;
+using SophaTemp.Filter;
 using SophaTemp.Models;
 
 namespace SophaTemp.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [PasseportAuthorizationFilter("AdminPrincipale")]
+
     public class PermissionsController : Controller
     {
         private readonly AppDbContext _context;

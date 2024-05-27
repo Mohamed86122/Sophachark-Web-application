@@ -9,14 +9,11 @@ namespace SophaTemp.Mappers
         {
             return new Facture
             {
-                FactureId = model.FactureId,
                 Numero = model.Numero,
                 Montant = model.Montant,
                 DateFacturation = model.DateFacturation,
-                CommandeId = model.CommandeId,
-
+                CommandeId = model.CommandeId
             };
-
         }
     }
 }

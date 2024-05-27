@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SophaTemp.Data;
 using SophaTemp.Mappers;
 using SophaTemp.Viewmodel;
 using System.Linq;
+
 
 namespace SophaTemp.Controllers
 {
@@ -15,24 +17,20 @@ namespace SophaTemp.Controllers
         private readonly PersonMapper _personMapper;
         private readonly ILogger<LoginController> _logger;
 
-
         public LoginController(AppDbContext context, PersonMapper mapper, ILogger<LoginController> logger)
         {
             _context = context;
             _personMapper = mapper;
             _logger = logger;
-
         }
 
         [HttpGet]
         public IActionResult Login()
         {
-            // Récupérer le message d'erreur de la session
             var errorMessage = HttpContext.Session.GetString("ErrorMessage");
             if (!string.IsNullOrEmpty(errorMessage))
             {
                 ModelState.AddModelError("", errorMessage);
-                // Effacer le message d'erreur après l'avoir affiché
                 HttpContext.Session.Remove("ErrorMessage");
             }
 
@@ -41,7 +39,7 @@ namespace SophaTemp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(PersonVm model)
+        public IActionResult Login(LoginVm model)
         {
             _logger.LogInformation("Attempting to log in.");
 
@@ -53,12 +51,10 @@ namespace SophaTemp.Controllers
 
                 if (user != null)
                 {
-                    // Stocker les informations de l'utilisateur dans la session
                     HttpContext.Session.SetString("UserId", user.PersonneId.ToString());
                     HttpContext.Session.SetString("UserEmail", user.email);
                     HttpContext.Session.SetString("UserRole", user.Passeport?.Nom ?? "User");
 
-                    // Redirection
                     string redirectController = user.Passeport?.Nom switch
                     {
                         "AdminCommandes" => "Commandes",
@@ -76,6 +72,18 @@ namespace SophaTemp.Controllers
             }
 
             return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            // Clear the session
+            HttpContext.Session.Clear();
+
+            // Optionally, you can also sign out the user if you are using authentication middleware
+            await HttpContext.SignOutAsync();
+
+            // Redirect to the desired URL
+            return RedirectToAction("Login", "Login", new { area = "Admin" });
         }
     }
 }

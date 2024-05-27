@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SophaTemp.Data;
+using SophaTemp.Filter;
 using SophaTemp.Mappers;
 using SophaTemp.Models;
 using SophaTemp.Viewmodel;
@@ -13,13 +14,18 @@ using SophaTemp.Viewmodel;
 namespace SophaTemp.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [PasseportAuthorizationFilter("AdminCommandes", "AdminPrincipale")]
+
     public class FacturesController : Controller
     {
         private readonly AppDbContext _context;
 
-        public FacturesController(AppDbContext context)
+        private readonly FactureMapper _factureMapper;
+
+        public FacturesController(AppDbContext context, FactureMapper factureMapper)
         {
             _context = context;
+            _factureMapper = factureMapper;
         }
         public async Task<IActionResult> GetCommandes(string term)
         {
@@ -31,7 +37,7 @@ namespace SophaTemp.Areas.Admin.Controllers
 
             var commandes = await _context.Commandes
                 .Where(c => c.CommandeId == numericTerm) // Recherche par CommandeId
-                .Select(c => new {  value = c.CommandeId })
+                .Select(c => new { value = c.CommandeId })
                 .ToListAsync();
 
             return Json(commandes);
@@ -63,8 +69,6 @@ namespace SophaTemp.Areas.Admin.Controllers
 
             return View(facture);
         }
-
-        // GET: Admin/Factures/Create
         public IActionResult Create()
         {
             ViewData["CommandeId"] = new SelectList(_context.Commandes, "CommandeId", "CommandeId");
@@ -72,17 +76,13 @@ namespace SophaTemp.Areas.Admin.Controllers
         }
 
         // POST: Admin/Factures/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(FactureVm factureVm)
         {
             if (ModelState.IsValid)
             {
-                FactureMapper factureMapper = new FactureMapper();
-                Facture newfacture = factureMapper.FactureVmFacture(factureVm);
-
+                Facture newfacture = _factureMapper.FactureVmFacture(factureVm);
 
                 _context.Add(newfacture);
                 await _context.SaveChangesAsync();
@@ -96,11 +96,10 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Factures/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Factures == null)
+            if (id == null)
             {
                 return NotFound();
             }
-
 
             var facture = await _context.Factures.FindAsync(id);
             if (facture == null)
@@ -108,26 +107,29 @@ namespace SophaTemp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            // Assurez-vous de peupler le ViewBag avec les données nécessaires
+            var factureVm = new FactureVm
+            {
+                Numero = facture.Numero,
+                Montant = facture.Montant,
+                DateFacturation = facture.DateFacturation,
+                CommandeId = facture.CommandeId
+            };
+
             ViewData["CommandeId"] = new SelectList(_context.Commandes, "CommandeId", "CommandeId", facture.CommandeId);
-            return View(facture);
+            return View(factureVm);
         }
 
-
         // POST: Admin/Factures/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FactureId,Numero,Montant,DateFacturation,CommandeId")] Facture facture)
+        public async Task<IActionResult> Edit(int id, FactureVm factureVm)
         {
-            if (id != facture.FactureId)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
+                var mapper = new FactureMapper();
+                var facture = mapper.FactureVmFacture(factureVm);
+                facture.FactureId = id; // Assignez l'ID
+
                 try
                 {
                     _context.Update(facture);
@@ -135,7 +137,7 @@ namespace SophaTemp.Areas.Admin.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FactureExists(facture.FactureId))
+                    if (!FactureExists(id))
                     {
                         return NotFound();
                     }
@@ -145,15 +147,13 @@ namespace SophaTemp.Areas.Admin.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-
             }
-            ViewData["CommandeId"] = new SelectList(_context.Commandes, "CommandeId", "CommandeId", facture.CommandeId);
-            return View(facture);
+
+            ViewData["CommandeId"] = new SelectList(_context.Commandes, "CommandeId", "CommandeId", factureVm.CommandeId);
+            return View(factureVm);
         }
 
 
-
-        // GET: Admin/Factures/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Factures == null)
