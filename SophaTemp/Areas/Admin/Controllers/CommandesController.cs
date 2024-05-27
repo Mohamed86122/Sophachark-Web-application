@@ -17,7 +17,7 @@ using SophaTemp.Filter;
 namespace SophaTemp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [PasseportAuthorizationFilter("AdminCommandes")]
+    [PasseportAuthorizationFilter("AdminCommandes", "AdminPrincipale")]
 
     public class CommandesController : Controller
     {

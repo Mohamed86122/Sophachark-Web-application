@@ -14,7 +14,7 @@ using SophaTemp.Viewmodel;
 namespace SophaTemp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [PasseportAuthorizationFilter("AdminCommandes")]
+    [PasseportAuthorizationFilter("AdminCommandes","AdminStock", "AdminPrincipale")]
 
     public class LotsController : Controller
     {

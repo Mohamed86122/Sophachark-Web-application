@@ -9,6 +9,22 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
 
 }
+<style>
+    .logout-btn-container {
+        position: absolute;
+        top: 20px; /* Adjust the top position as needed */
+        right: 20px; /* Adjust the right position as needed */
+    }
+
+</style>
+
+
+<div class="logout-btn-container">
+    <form asp-action="Logout" asp-controller="Login" method="post" style="display:inline;">
+        <button type="submit" class="btn btn-warning">Se Déconnecter</button>
+    </form>
+</div>
+
 <div class="container mt-5">
     <h1>La liste des permissions</h1>
 

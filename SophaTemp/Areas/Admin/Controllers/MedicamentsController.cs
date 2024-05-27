@@ -15,7 +15,7 @@ using SophaTemp.Viewmodel;
 namespace SophaTemp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [PasseportAuthorizationFilter("AdminProduits")]
+    [PasseportAuthorizationFilter("AdminProduits", "AdminPrincipale")]
     public class MedicamentsController : Controller
     {
         private readonly AppDbContext _context;

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SophaTemp.Data;
+using SophaTemp.Filter;
 using SophaTemp.Mappers;
 using SophaTemp.Models;
 using SophaTemp.Viewmodel;
@@ -13,6 +14,7 @@ using SophaTemp.Viewmodel;
 namespace SophaTemp.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [PasseportAuthorizationFilter( "AdminPrincipale")]
     public class PasseportsController : Controller
     {
         private readonly AppDbContext _context;
