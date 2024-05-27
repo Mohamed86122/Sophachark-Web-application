@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SophaTemp.Data;
 using SophaTemp.Models;
+using SophaTemp.Viewmodel;
 using System.Linq;
 
 namespace SophaTemp.Controllers
@@ -33,10 +34,22 @@ namespace SophaTemp.Controllers
                 .Take(4)
                 .ToList();
 
-            ViewBag.RelatedProducts = relatedProducts;
-            ViewBag.PrixVente = lot.PrixVente;
+            var medicamentDetailVm = new MedicamentDetailVm
+            {
+                Nom = medicament.Nom,
+                Description = medicament.Description,
+                Image = medicament.Image,
+                PrixVente = lot.PrixVente,
+                RelatedProducts = relatedProducts.Select(rp => new MedicamentDetailVm
+                {
+                    Nom = rp.Nom,
+                    Description = rp.Description,
+                    Image = rp.Image,
+                    PrixVente = _context.Lots.FirstOrDefault(l => l.MedicamentId == rp.MedicamentId)?.PrixVente ?? 0
+                }).ToList()
+            };
 
-            return View(medicament);
+            return View(medicamentDetailVm);
         }
     }
 }

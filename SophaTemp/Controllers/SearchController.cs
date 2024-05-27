@@ -14,12 +14,6 @@ namespace SophaTemp.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-
 
         [HttpGet]
         public async Task<IActionResult> SearchMedicament(string search)
@@ -45,6 +39,7 @@ namespace SophaTemp.Controllers
 
             return Json(new { success = true, data = results });
         }
+
         [HttpPost]
         public IActionResult PartialSearchResults(string searchResults)
         {

@@ -24,12 +24,15 @@ namespace SophaTemp.Controllers
         {
             List<Lot> lot = _context.Lots.Where(l => l.IsPublic).ToList();
             var Medicaments = _context.Medicaments.Where(m => lot.Select(l => l.MedicamentId).Contains(m.MedicamentId));
-            List<ShowCartItem > showCartItems = new List<ShowCartItem>();
-            foreach (Medicament item in Medicaments) {
-                ShowCartItem cartItem = new ShowCartItem();
-                cartItem.Medicament = item;
-                cartItem.Prix = lot.Where(l => l.MedicamentId == item.MedicamentId).First().PrixVente; 
-                cartItem.Quantite = lot.Where(l => l.MedicamentId == item.MedicamentId).First().Quantite;
+            List<ShowCartItem> showCartItems = new List<ShowCartItem>();
+            foreach (Medicament item in Medicaments)
+            {
+                ShowCartItem cartItem = new ShowCartItem
+                {
+                    Medicament = item,
+                    Prix = lot.First(l => l.MedicamentId == item.MedicamentId).PrixVente,
+                    Quantite = lot.First(l => l.MedicamentId == item.MedicamentId).Quantite
+                };
                 showCartItems.Add(cartItem);
             }
             ViewBag.Categories = _context.Categories.ToList();
@@ -38,7 +41,7 @@ namespace SophaTemp.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddToCart(int id)
+        public IActionResult AddToCart(int id, int quantity = 1)
         {
             var session = HttpContext.Session;
             int? clientId = session.GetInt32("ClientId");
@@ -47,30 +50,33 @@ namespace SophaTemp.Controllers
                 return RedirectToAction("Index", "Auth");
             }
 
-            var Cartline = new CartLineVm();
-            
-
             var cart = session.GetObject<List<CartLineVm>>("Cart") ?? new List<CartLineVm>();
-
             var existingCartLine = cart.FirstOrDefault(l => l.idMedicament == id);
             if (existingCartLine != null)
             {
-                existingCartLine.Quantite++;
+                existingCartLine.Quantite += quantity;
             }
             else
             {
-                Cartline.idMedicament = id;
-                Cartline.Name = _context.Medicaments.Where(medicament => medicament.MedicamentId == id).First().Nom;
-                Cartline.Image = _context.Medicaments.Where(medicament => medicament.MedicamentId == id).First().Image;
-                Cartline.Quantite = 1;
-                Cartline.PrixdeVente = _context.Lots.Where(l => l.IsPublic == true && l.MedicamentId == id).First().PrixVente;
-                cart.Add(Cartline);
+                var medicament = _context.Medicaments.FirstOrDefault(m => m.MedicamentId == id);
+                var lot = _context.Lots.FirstOrDefault(l => l.IsPublic && l.MedicamentId == id);
+                if (medicament != null && lot != null)
+                {
+                    var Cartline = new CartLineVm
+                    {
+                        idMedicament = id,
+                        Name = medicament.Nom,
+                        Image = medicament.Image,
+                        Quantite = quantity,
+                        PrixdeVente = lot.PrixVente
+                    };
+                    cart.Add(Cartline);
+                }
             }
 
             session.SetObject("Cart", cart);
             session.SetString("Count", cart.Count.ToString());
-            int totalItems = cart.Count();
-            return Json(new { totalItems });
+            return Json(new { totalItems = cart.Count });
         }
 
         [HttpPost]
@@ -83,48 +89,46 @@ namespace SophaTemp.Controllers
                 return RedirectToAction("Index", "Auth");
             }
 
-            var whishlistline = new WhishlistLineVm();
-
-
-            var whishlists = session.GetObject<List<WhishlistLineVm>>("Whishlist") ?? new List<WhishlistLineVm>();
-
+            var whishlists = session.GetObject<List<WhishlistLineVm>>("Wishlist") ?? new List<WhishlistLineVm>();
             var existingwishlistLine = whishlists.FirstOrDefault(l => l.idMedicament == id);
-
             if (existingwishlistLine != null)
             {
                 existingwishlistLine.Quantite++;
             }
             else
             {
-                whishlistline.idMedicament = id;
-                whishlistline.Name = _context.Medicaments.Where(medicament => medicament.MedicamentId == id).First().Nom;
-                whishlistline.Image = _context.Medicaments.Where(medicament => medicament.MedicamentId == id).First().Image;
-                whishlistline.PrixdeVente = _context.Lots.Where(l => l.IsPublic == true && l.MedicamentId == id).First().PrixVente;
-                whishlists.Add(whishlistline);
+                var medicament = _context.Medicaments.FirstOrDefault(m => m.MedicamentId == id);
+                var lot = _context.Lots.FirstOrDefault(l => l.IsPublic && l.MedicamentId == id);
+                if (medicament != null && lot != null)
+                {
+                    var whishlistline = new WhishlistLineVm
+                    {
+                        idMedicament = id,
+                        Name = medicament.Nom,
+                        Image = medicament.Image,
+                        Quantite = 1,
+                        PrixdeVente = lot.PrixVente
+                    };
+                    whishlists.Add(whishlistline);
+                }
             }
 
-            session.SetObject("Wishlist", whishlists);      
-            session.SetString("Count", whishlists.Count.ToString());
-            int totalItems = whishlists.Count;
-            return Json(new { totalItems });
-
+            session.SetObject("Wishlist", whishlists);
+            session.SetString("WishlistCount", whishlists.Count.ToString());
+            return Json(new { totalItems = whishlists.Count });
         }
 
         public IActionResult ViewCart()
         {
             var session = HttpContext.Session;
             var cart = session.GetObject<List<CartLineVm>>("Cart") ?? new List<CartLineVm>();
-
-
-
             return View(cart);
         }
 
         public IActionResult ViewWishlist()
         {
             var session = HttpContext.Session;
-            var whishlists = session.GetObject<List<WhishlistLineVm>>("Whishlist") ?? new List<WhishlistLineVm>();
-
+            var whishlists = session.GetObject<List<WhishlistLineVm>>("Wishlist") ?? new List<WhishlistLineVm>();
             return View(whishlists);
         }
 

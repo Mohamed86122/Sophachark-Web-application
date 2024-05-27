@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Index";
+    var commandeVms = ViewBag.CommandeVms as List<SophaTemp.Viewmodel.CommandeVm>;
+
 }
 @section Style {
     <link rel="stylesheet" type="text/css" href="~/css/Datatable/style.css" />
@@ -32,7 +34,7 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().Client.LibellePharmacie)
+                    @Html.DisplayNameFor(model => model.First().Client.ClientId)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.First().Medicament.Nom)
@@ -44,14 +46,19 @@
                 <th>
                     @Html.DisplayNameFor(model => model.First().Status)
                 </th>
-                <th>Actions</th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Quantite)
+                </th>
+                <th>
+                    Actions
+                </th>
             </tr>
         </thead>
         <tbody>
     @foreach (var item in Model) {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Client.PersonneId)
+                    @Html.DisplayFor(modelItem => item.Client.LibellePharmacie)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Medicament.Nom)
@@ -64,16 +71,19 @@
                     @Html.DisplayFor(modelItem => item.Status)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Quantite)
+                        @{
+                            var commandeVm = commandeVms?.FirstOrDefault(vm => vm.ClientId == item.ClientId && vm.MedicamentId == item.MedicamentId && vm.DateCommande == item.DateCommande);
+                            var dataValue = commandeVm?.Data ;
+                        }
+                        @dataValue
                 </td>
                
-                <td>
+                
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.CommandeId" class="btn btn-success btn-sm">Edit</a>
                         <a asp-action="Details" asp-route-id="@item.CommandeId" class="btn btn-info btn-sm">Details</a>
                         <a asp-action="Delete" asp-route-id="@item.CommandeId" class="btn btn-danger btn-sm">Delete</a>
                     </td>
-                </td>
             </tr>
     }
         </tbody>

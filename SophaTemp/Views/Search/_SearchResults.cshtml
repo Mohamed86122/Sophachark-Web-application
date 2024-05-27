@@ -7,13 +7,14 @@
         {
             <div class="col-md-4">
                 <div class="card mb-4">
-                    <img class="card-img-top" src="~/@Url.Content(@item.Image)" alt="@item.Nom">
+                    <img class="card-img-top" src="~/@item.Image" alt="@item.Nom">
                     <div class="card-body">
                         <h5 class="card-title">@item.Nom</h5>
                         <p class="card-text">@item.Description</p>
                         <p class="card-text">Prix: @item.PrixVente MAD</p>
                         <p class="card-text">Quantité: @item.Quantite</p>
-                        <a href="#" class="btn btn-success">Ajouter au panier</a>
+                        <button class="btn btn-success add-to-cart" data-id="@item.MedicamentId">Ajouter au panier</button>
+                        <a href="@Url.Action("ProdDetails", "ProductDetails", new { id = item.MedicamentId })" class="btn btn-info">Voir les détails</a>
                     </div>
                 </div>
             </div>
@@ -24,6 +25,3 @@ else
 {
     <p>Aucun résultat trouvé</p>
 }
-
-}
-

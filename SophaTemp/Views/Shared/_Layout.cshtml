@@ -181,8 +181,14 @@
                 </div>
             </div>
         </div>
+    
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
     <script>
         $(document).ready(function () {
+            // Gestion de la soumission du formulaire de recherche
             $("#searchForm").on("submit", function (e) {
                 e.preventDefault();
 
@@ -206,6 +212,8 @@
                                         "<p>" + item.Description + "</p>" +
                                         "<p>Prix: " + item.PrixVente + " MAD</p>" +
                                         "<p>Quantité: " + item.Quantite + "</p>" +
+                                        "<button class='btn btn-success add-to-cart' data-id='" + item.MedicamentId + "'>Ajouter au panier</button>" +
+                                        "<a href='/ProductDetails/ProdDetails/" + item.MedicamentId + "' class='btn btn-info'>Voir les détails</a>" +
                                         "</div>");
                                 });
                             } else {
@@ -220,12 +228,22 @@
                     }
                 });
             });
+
+            // Gestion de l'ajout au panier
+            $(document).on("click", ".add-to-cart", function () {
+                var medicamentId = $(this).data("id");
+                $.ajax({
+                    url: '@Url.Action("AddToCart", "Shop")',
+                    type: 'POST',
+                    data: { id: medicamentId },
+                    success: function (data) {
+                        var cartIcon = $(".cart-icon");
+                        cartIcon.text(data.totalItems);
+                    }
+                });
+            });
         });
     </script>
 
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

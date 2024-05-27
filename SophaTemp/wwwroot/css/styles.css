@@ -133,10 +133,11 @@ body {
   
 }
 .card:first-child {
-  background-color: #2b4aa0;
+  background-color: white;
 }
-.card:first-child:hover {
-  background-color: #302e2e;
+.card:first-child:hover 
+{
+        background-color: #7895cb;
 }
 .card:nth-child(2) {
   background-color: #f79572;

@@ -31,13 +31,28 @@ namespace SophaTemp.Areas.Admin.Controllers
         }
 
         // GET: Admin/Commandes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CommandeVm vm)
         {
              var commandes = await _context.Commandes
            .Include(c => c.Client)
            .Include(c => c.Medicament)
            .ToListAsync();
-                return View(commandes);
+
+            var commandeVms = commandes.Select(c => new CommandeVm
+            {
+                ClientId = c.ClientId,
+                MedicamentId = c.MedicamentId,
+                DateCommande = c.DateCommande,
+                Status = c.Status,
+                LotCommandeId = c.LotCommandeId,
+                Data = c.Quantite.ToString(),
+                Livraisons = c.Livraisons
+            }).ToList();
+
+            ViewBag.CommandeVms = commandeVms;
+
+
+            return View(commandes);
         }
 
 
