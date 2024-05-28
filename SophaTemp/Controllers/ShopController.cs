@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Linq;
 using SophaTemp.Viewmodel;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
 
 namespace SophaTemp.Controllers
 {
@@ -144,6 +146,52 @@ namespace SophaTemp.Controllers
             var session = _httpContextAccessor.HttpContext.Session;
             session.Remove("Wishlist");
             return RedirectToAction("ShopView");
+        }
+        public IActionResult GenerateOrderReport()
+        {
+            var session = HttpContext.Session;
+            var cart = session.GetObject<List<CartLineVm>>("Cart") ?? new List<CartLineVm>();
+
+            using (var ms = new MemoryStream())
+            {
+                var document = new PdfDocument();
+                var page = document.AddPage();
+                var gfx = XGraphics.FromPdfPage(page);
+                var fontRegular = new XFont("Verdana", 12);
+                var fontBold = new XFont("Verdana", 20);
+
+                gfx.DrawString("Bon de Commande", fontBold, XBrushes.Black, new XRect(0, 0, page.Width, 50), XStringFormats.Center);
+
+                int yPoint = 80;
+                gfx.DrawString($"Date : {System.DateTime.Now.ToString("dd/MM/yyyy")}", fontRegular, XBrushes.Black, new XRect(40, yPoint, page.Width, 50), XStringFormats.TopLeft);
+
+                yPoint += 40;
+
+                gfx.DrawString("Nom du Médicament", fontRegular, XBrushes.Black, new XRect(40, yPoint, page.Width, 50), XStringFormats.TopLeft);
+                gfx.DrawString("Quantité", fontRegular, XBrushes.Black, new XRect(240, yPoint, page.Width, 50), XStringFormats.TopLeft);
+                gfx.DrawString("Prix Unitaire (MAD)", fontRegular, XBrushes.Black, new XRect(340, yPoint, page.Width, 50), XStringFormats.TopLeft);
+                gfx.DrawString("Total (MAD)", fontRegular, XBrushes.Black, new XRect(480, yPoint, page.Width, 50), XStringFormats.TopLeft);
+
+                yPoint += 40;
+
+                foreach (var item in cart)
+                {
+                    gfx.DrawString(item.Name, fontRegular, XBrushes.Black, new XRect(40, yPoint, page.Width, 50), XStringFormats.TopLeft);
+                    gfx.DrawString(item.Quantite.ToString(), fontRegular, XBrushes.Black, new XRect(240, yPoint, page.Width, 50), XStringFormats.TopLeft);
+                    gfx.DrawString(item.PrixdeVente.ToString(), fontRegular, XBrushes.Black, new XRect(340, yPoint, page.Width, 50), XStringFormats.TopLeft);
+                    gfx.DrawString((item.PrixdeVente * item.Quantite).ToString(), fontRegular, XBrushes.Black, new XRect(480, yPoint, page.Width, 50), XStringFormats.TopLeft);
+                    yPoint += 40;
+                }
+
+                gfx.DrawString($"Total : {cart.Sum(item => item.PrixdeVente * item.Quantite)} MAD", fontRegular, XBrushes.Black, new XRect(40, yPoint, page.Width, 50), XStringFormats.TopLeft);
+                yPoint += 20;
+                gfx.DrawString($"Total avec taxe : {cart.Sum(item => item.PrixdeVente * item.Quantite) + 15} MAD", fontRegular, XBrushes.Black, new XRect(40, yPoint, page.Width, 50), XStringFormats.TopLeft);
+
+                document.Save(ms);
+                ms.Position = 0;
+
+                return File(ms.ToArray(), "application/pdf", "OrderReport.pdf");
+            }
         }
     }
 }
