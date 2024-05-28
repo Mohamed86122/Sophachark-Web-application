@@ -23,7 +23,6 @@ namespace SophaTemp.Viewmodel
         [DataType(DataType.Password)]
         public string motdepasse { get; set; }
 
-        public int PasseportId { get; set; }
         public int WhishlistId { get; set; }
 
 

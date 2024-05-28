@@ -27,7 +27,7 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Clients
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.clients.Include(c => c.Passeport).Include(c => c.Whishlist);
+            var appDbContext = _context.clients.Include(c => c.Whishlist);
             return View(await appDbContext.ToListAsync());
         }
 
@@ -40,7 +40,6 @@ namespace SophaTemp.Areas.Admin.Controllers
             }
 
             var client = await _context.clients
-                .Include(c => c.Passeport)
                 .Include(c => c.Whishlist)
                 .FirstOrDefaultAsync(m => m.PersonneId == id);
             if (client == null)
@@ -54,7 +53,6 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Clients/Create
         public IActionResult Create()
         {
-            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Nom");
             ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId");
             return View();
         }
@@ -74,7 +72,6 @@ namespace SophaTemp.Areas.Admin.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Nom", clientVm.PasseportId);
             ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId", clientVm.WhishlistId);
             return View(clientVm);
         }
@@ -107,10 +104,8 @@ namespace SophaTemp.Areas.Admin.Controllers
                 prenom = client.prenom,
                 email = client.email,
                 motdepasse = client.motdepasse,
-                PasseportId = client.PasseportId
             };
 
-            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Nom", clientVm.PasseportId);
             ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId", clientVm.WhishlistId);
             return View(clientVm);
         }
@@ -137,7 +132,6 @@ namespace SophaTemp.Areas.Admin.Controllers
                     prenom = clientVm.prenom,
                     email = clientVm.email,
                     motdepasse = clientVm.motdepasse,
-                    PasseportId = clientVm.PasseportId
                 };
 
                 try
@@ -159,7 +153,6 @@ namespace SophaTemp.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Nom", clientVm.PasseportId);
             ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId", clientVm.WhishlistId);
             return View(clientVm);
         }

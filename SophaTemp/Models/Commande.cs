@@ -18,6 +18,9 @@
         public int MedicamentId { get; set; } 
         public Medicament Medicament { get; set; }
 
+        public virtual ICollection<Facture> Factures { get; set; }
+
+       
         public virtual ICollection<Livraison> Livraisons { get; set; }
 
 

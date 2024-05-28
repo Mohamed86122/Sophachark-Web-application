@@ -21,7 +21,6 @@ namespace SophaTemp.Mappers
                 prenom=model.prenom,
                 email   =model.email,
                 motdepasse=model.motdepasse,
-                PasseportId=model.PasseportId
 
 
             };

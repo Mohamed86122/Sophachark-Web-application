@@ -51,6 +51,26 @@ namespace SophaTemp.Areas.Admin.Controllers
             return View(await appDbContext.ToListAsync());
         }
 
+        public async Task<IActionResult> CommandeDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var commande = await _context.Commandes
+                .Include(c => c.Factures) // Assurez-vous que la propriété "Factures" existe dans la classe "Commande"
+                .FirstOrDefaultAsync(m => m.CommandeId == id);
+
+            if (commande == null)
+            {
+                return NotFound();
+            }
+
+            return View(commande);
+        }
+
+
         // GET: Admin/Factures/Details/5
         public async Task<IActionResult> Details(int? id)
         {
