@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Index";
-    var commandeVms = ViewBag.CommandeVms as List<SophaTemp.Viewmodel.CommandeVm>;
 
 }
 @section Style {
@@ -46,9 +45,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.First().Status)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().Quantite)
-                </th>
+               
                 <th>
                     Actions
                 </th>
@@ -65,18 +62,12 @@
                 </td>
         
                 <td>
-                    @Html.DisplayFor(modelItem => item.DateCommande)
+                        @item.DateCommande.ToString("dd/MM/yyyy")
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Status)
                 </td>
-                <td>
-                        @{
-                            var commandeVm = commandeVms?.FirstOrDefault(vm => vm.ClientId == item.ClientId && vm.MedicamentId == item.MedicamentId && vm.DateCommande == item.DateCommande);
-                            var dataValue = commandeVm?.Data ;
-                        }
-                        @dataValue
-                </td>
+               
                
                 
                     <td>

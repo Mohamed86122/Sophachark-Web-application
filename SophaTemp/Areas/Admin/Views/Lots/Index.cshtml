@@ -144,20 +144,28 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
     <script>
         $(document).ready(function () {
-            $('#monTableau').DataTable(); 
+            $('#monTableau').DataTable();
 
             $('tr').each(function () {
                 var prixAchat = parseFloat($(this).find('td:eq(1)').text());
                 var prixVente = parseFloat($(this).find('td:eq(2)').text());
-                var dateDeProduction = new Date($(this).find('td:eq(4)').text());
-                var dateDExpedition = new Date($(this).find('td:eq(5)').text());
+                var dateDeProductionText = $(this).find('td:eq(4)').text();
+                var dateDExpeditionText = $(this).find('td:eq(5)').text();
 
                 var gain = prixVente - prixAchat;
-                $(this).find('td:eq(3)').text(gain + ' MAD'); 
+                $(this).find('td:eq(3)').text(gain + ' MAD');
 
-                var aujourdHui = new Date(); 
-                var diffTemps = dateDExpedition.getTime() - aujourdHui.getTime(); 
-                var joursRestants = Math.ceil(diffTemps / (1000 * 3600 * 24));
+                // Convert the date format from DD/MM/YYYY to MM/DD/YYYY for JavaScript Date parsing
+                var dateDeProductionParts = dateDeProductionText.split('/');
+                var dateDeProduction = new Date(dateDeProductionParts[2], dateDeProductionParts[1] - 1, dateDeProductionParts[0]);
+
+                var dateDExpeditionParts = dateDExpeditionText.split('/');
+                var dateDExpedition = new Date(dateDExpeditionParts[2], dateDExpeditionParts[1] - 1, dateDExpeditionParts[0]);
+
+                var aujourdHui = new Date();
+                // Ensure that the times are at the start of the day for accurate day difference calculation
+                var timeDiff = dateDExpedition.setHours(0, 0, 0, 0) - aujourdHui.setHours(0, 0, 0, 0);
+                var joursRestants = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
                 if (joursRestants > 0) {
                     $(this).find('td:eq(6)').text(joursRestants + ' jours restants');

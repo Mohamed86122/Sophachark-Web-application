@@ -7,7 +7,6 @@
     {
     <link rel="stylesheet" type="text/css" href="~/css/Datatable/style.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
-
 }
 <style>
     .logout-btn-container {
@@ -15,9 +14,7 @@
         top: 20px; /* Adjust the top position as needed */
         right: 20px; /* Adjust the right position as needed */
     }
-
 </style>
-
 
 <div class="logout-btn-container">
     <form asp-action="Logout" asp-controller="Login" method="post" style="display:inline;">
@@ -37,19 +34,19 @@
         <thead class="thead-dark">
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Reference)
+                    @Html.DisplayNameFor(model => model.First().Reference)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Nom)
+                    @Html.DisplayNameFor(model => model.First().Nom)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Description)
+                    @Html.DisplayNameFor(model => model.First().Description)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Image)
+                    @Html.DisplayNameFor(model => model.First().Image)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.QuantiteEnAlerte)
+                    @Html.DisplayNameFor(model => model.First().QuantiteEnAlerte)
                 </th>
                 <th>Actions</th>
             </tr>
@@ -68,16 +65,15 @@
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
-                        <img src="~/@Url.Content(item.Image)" alt="Image du médicament" class="img-fluid" style="max-width:100px; height:auto;">
+                        <img src="~/@item.Image" alt="Image du médicament" class="img-fluid" style="max-width:100px; height:auto;">
                     </td>
-
                     <td>
                         @Html.DisplayFor(modelItem => item.QuantiteEnAlerte)
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.MedicamentId" class="btn btn-sm btn-success">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.MedicamentId" class="btn btn-sm btn-info">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.MedicamentId" class="btn btn-sm btn-danger">Delete</a>
+                        <br /><a asp-action="Details" asp-route-id="@item.MedicamentId" class="btn btn-sm btn-info">Details</a>
+                        <br /><a asp-action="Delete" asp-route-id="@item.MedicamentId" class="btn btn-sm btn-danger">Delete</a>
                     </td>
                 </tr>
             }
@@ -86,9 +82,7 @@
 </div>
 @section Scripts
     {
-    <script src="~/js/Datatable/script.js" />
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
@@ -98,4 +92,14 @@
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+
+    <script>
+        $(document).ready(function () {
+            $('#monTableau').DataTable(
+                {
+                    "order": [[0, "desc"]] // Order by the first column in descending order
+
+                });
+        });
+    </script>
 }

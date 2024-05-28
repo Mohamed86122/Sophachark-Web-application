@@ -26,13 +26,15 @@ namespace SophaTemp.Areas.Admin.Controllers
             _context = context;
             this.UploadFileService = UploadFileService;
         }
-
         // GET: Admin/Medicaments
         public async Task<IActionResult> Index()
         {
-            var medicaments = await _context.Medicaments.ToListAsync();
+            var medicaments = await _context.Medicaments
+                                            .OrderByDescending(m => m.MedicamentId)
+                                            .ToListAsync();
             return View(medicaments);
         }
+
 
         // GET: Admin/Medicaments/Details/5
         public async Task<IActionResult> Details(int? id)
