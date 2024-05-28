@@ -117,7 +117,7 @@ namespace SophaTemp.Areas.Admin.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Lots == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -128,56 +128,57 @@ namespace SophaTemp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            LotsMapper mapper = new LotsMapper();
-            LotAddVm model = mapper.LotToAddVm(lot);
+            var lotVm = new LotAddVm
+            {
+                Montant = (float)lot.Montant, 
+                Libelle = lot.Libelle,
+                Quantite = lot.Quantite,
+                PrixAchat = (int)lot.PrixAchat, 
+                PrixVente = (int)lot.PrixVente, 
+                DateDeProduction = lot.DateDeProduction,
+                DateDExpedition = lot.DateDExpedition,
+                MedicamentId = lot.MedicamentId,
+                FournisseurId = lot.FournisseurId
+            };
 
-            ViewBag.LotId = lot.LotId; // Pass LotId using ViewBag
             ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet", lot.FournisseurId);
             ViewData["MedicamentId"] = new SelectList(_context.Medicaments.OrderBy(m => m.Nom), "MedicamentId", "Nom", lot.MedicamentId);
-            return View(model);
+            return View(lotVm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int lotId, LotAddVm model)
+        public async Task<IActionResult> Edit(int lotId, LotAddVm lotVm)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet", model.FournisseurId);
-                ViewData["MedicamentId"] = new SelectList(_context.Medicaments.OrderBy(m => m.Nom), "MedicamentId", "Nom", model.MedicamentId);
-                return View(model);
-            }
+                var mapper = new LotsMapper();
+                var lot = mapper.LotaddVmLot(lotVm);
+                lot.LotId = lotId; // Assignez l'ID
 
-            var lot = await _context.Lots.FindAsync(lotId);
-            if (lot == null)
-            {
-                return NotFound();
-            }
-
-            LotsMapper mapper = new LotsMapper();
-            mapper.UpdateLotFromVm(lot, model);
-
-            try
-            {
-                _context.Update(lot);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LotExists(lot.LotId))
+                try
                 {
-                    return NotFound();
+                    _context.Update(lot);
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    throw;
+                    if (!LotExists(lotId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction(nameof(Index));
+
+            ViewData["FournisseurId"] = new SelectList(_context.Fournisseurs.OrderBy(f => f.NomComplet), "FournisseurId", "NomComplet", lotVm.FournisseurId);
+            ViewData["MedicamentId"] = new SelectList(_context.Medicaments.OrderBy(m => m.Nom), "MedicamentId", "Nom", lotVm.MedicamentId);
+            return View(lotVm);
         }
-
-
-
 
 
         // GET: Admin/Lots/Delete/5
