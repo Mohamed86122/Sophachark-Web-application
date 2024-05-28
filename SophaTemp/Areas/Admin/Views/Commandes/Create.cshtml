@@ -127,7 +127,9 @@
                 if (details.length > 0) {
                     $("#details").html("<tr><th>Médicament</th><th>Numero lot</th><th>Prix</th><th>Qte</th><th>Total</th><th>Actions</th></tr>")
                     details.forEach(line => {
-                        $("#details").append("<tr><td>" + line.medicament + "</td><td>" + line.lot + "</td><td>" + line.prix + " DH</td><td>" + line.qte + " Unité</td><td>" + line.total + " DH</td><td>???</td></tr>")
+                        var row = "<tr><td>" + line.medicament + "</td><td>" + line.lot + "</td><td>" + line.prix + " DH</td><td>" + line.qte + " Unité</td><td>" + line.total + " DH</td><td><button class='btn btn-danger btn-sm delete-line'>Supprimer</button></td></tr>";
+                        $("#details").append(row);
+
                     });
                 }
 
@@ -139,7 +141,11 @@
                     $("#form").submit();
                 }
 
+
             })
+            $(document).on('click', '.delete-line', function () {
+                $(this).closest('tr').remove();
+            });
         })
     </script>
 }
