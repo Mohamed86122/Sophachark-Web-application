@@ -60,7 +60,13 @@ namespace SophaTemp.Data
                 .WithMany(m => m.MedicamentCategoryMedicaments)
                 .HasForeignKey(mcm => mcm.MedicamentId);
 
-             
+            modelBuilder.Entity<Commande>()
+       .HasMany(c => c.Factures)
+       .WithOne(f => f.Commande)
+       .HasForeignKey(f => f.CommandeId);
+
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<MedicamentCategoryMedicament>()
                 .HasOne(mcm => mcm.CategoryMedicament)
                 .WithMany(cm => cm.MedicamentCategoryMedicaments)

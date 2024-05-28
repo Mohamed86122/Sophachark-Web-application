@@ -1,4 +1,4 @@
-﻿@model SophaTemp.Models.Commande
+﻿@model SophaTemp.Viewmodel.CommandeDetailsVm
 
 @{
     ViewData["Title"] = "Details";
@@ -10,14 +10,14 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <dl class="row">
-                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Client)</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.Client.LibellePharmacie)</dd>
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.ClientNom)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.ClientNom)</dd>
 
                 <dt class="col-sm-4">@Html.DisplayNameFor(model => model.DateCommande)</dt>
                 <dd class="col-sm-8">@Html.DisplayFor(model => model.DateCommande)</dd>
 
-                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Medicament)</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.Medicament.Nom)</dd>
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicamentNom)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.MedicamentNom)</dd>
 
                 <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Status)</dt>
                 <dd class="col-sm-8">@Html.DisplayFor(model => model.Status)</dd>

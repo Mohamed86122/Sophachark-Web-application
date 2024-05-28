@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SophaTemp.Data;
 using SophaTemp.Filter;
 using SophaTemp.Mappers;
@@ -16,7 +15,6 @@ namespace SophaTemp.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [PasseportAuthorizationFilter("AdminClients", "AdminPrincipale")]
-
     public class ClientsController : Controller
     {
         private readonly AppDbContext _context;
@@ -29,13 +27,9 @@ namespace SophaTemp.Areas.Admin.Controllers
         // GET: Admin/Clients
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.clients.Include(c => c.Passeport).Include(c => c.Whishlist);
+            var appDbContext = _context.clients.Include(c => c.Whishlist);
             return View(await appDbContext.ToListAsync());
         }
-        //DatatTable 
-        [HttpGet]
-
-
 
         // GET: Admin/Clients/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -46,7 +40,6 @@ namespace SophaTemp.Areas.Admin.Controllers
             }
 
             var client = await _context.clients
-                .Include(c => c.Passeport)
                 .Include(c => c.Whishlist)
                 .FirstOrDefaultAsync(m => m.PersonneId == id);
             if (client == null)
@@ -63,13 +56,6 @@ namespace SophaTemp.Areas.Admin.Controllers
             ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId");
             return View();
         }
-        
-        private int GetNewPersonId()
-        {
-            
-            return 0; // Laisser SQL Server générer automatiquement la valeur de l'identifiant
-
-        }
 
         // POST: Admin/Clients/Create
         [HttpPost]
@@ -81,18 +67,15 @@ namespace SophaTemp.Areas.Admin.Controllers
                 ClientMapper clientMapper = new ClientMapper();
                 Client newclient = clientMapper.ClientVmClient(clientVm);
 
-                // Assignez l'Id de la personne
-                newclient.PersonneId = GetNewPersonId();
-
                 _context.clients.Add(newclient);
                 await _context.SaveChangesAsync();
-                
-                // Rediriger vers l'index des clients après avoir ajouté avec succès un nouveau client
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "Whishlist");
+            ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId", clientVm.WhishlistId);
             return View(clientVm);
         }
+
         // GET: Admin/Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -106,25 +89,51 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-/*            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Nom", client.PasseportId);
-*/            ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId", client.WhishlistId);
-            return View(client);
+
+            var clientVm = new ClientVm
+            {
+                LibellePharmacie = client.LibellePharmacie,
+                Ville = client.Ville,
+                Telephone = client.Telephone,
+                X = client.X,
+                Y = client.Y,
+                Adresse = client.Adresse,
+                EnGarde = client.EnGarde,
+                WhishlistId = client.WhishlistId,
+                nom = client.nom,
+                prenom = client.prenom,
+                email = client.email,
+                motdepasse = client.motdepasse,
+            };
+
+            ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId", clientVm.WhishlistId);
+            return View(clientVm);
         }
 
         // POST: Admin/Clients/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LibellePharmacie,Ville,Telephone,X,Y,Adresse,EnGarde,WhishlistId,PersonneId,nom,prenom,email,motdepasse")] Client client)
+        public async Task<IActionResult> Edit(int id, ClientVm clientVm)
         {
-            if (id != client.PersonneId)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
+                var client = new Client
+                {
+                    PersonneId = id,
+                    LibellePharmacie = clientVm.LibellePharmacie,
+                    Ville = clientVm.Ville,
+                    Telephone = clientVm.Telephone,
+                    X = clientVm.X,
+                    Y = clientVm.Y,
+                    Adresse = clientVm.Adresse,
+                    EnGarde = clientVm.EnGarde,
+                    WhishlistId = clientVm.WhishlistId,
+                    nom = clientVm.nom,
+                    prenom = clientVm.prenom,
+                    email = clientVm.email,
+                    motdepasse = clientVm.motdepasse,
+                };
+
                 try
                 {
                     _context.Update(client);
@@ -143,9 +152,9 @@ namespace SophaTemp.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PasseportId"] = new SelectList(_context.Passeports, "PasseportId", "Nom", client.PasseportId);
-            ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId", client.WhishlistId);
-            return View(client);
+
+            ViewData["WhishlistId"] = new SelectList(_context.Whishlists, "WhishlistId", "WhishlistId", clientVm.WhishlistId);
+            return View(clientVm);
         }
 
         // GET: Admin/Clients/Delete/5

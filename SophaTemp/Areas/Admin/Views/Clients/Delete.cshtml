@@ -57,10 +57,10 @@
             @Html.DisplayFor(model => model.EnGarde)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Whishlist)
+            @Html.DisplayNameFor(model => model.WhishlistId)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Whishlist.WhishlistId)
+            @Html.DisplayFor(model => model.WhishlistId)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.nom)
@@ -87,10 +87,10 @@
             @Html.DisplayFor(model => model.motdepasse)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Passeport)
+                        @Html.DisplayNameFor(model => model.PasseportId)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Passeport.PasseportId)
+            @Html.DisplayFor(model => model.PasseportId)
         </dd>
                     <form asp-action="Delete">
                         <input type="hidden" asp-for="PersonneId" />

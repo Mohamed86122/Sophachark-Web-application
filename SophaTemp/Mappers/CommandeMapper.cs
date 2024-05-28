@@ -26,6 +26,7 @@ namespace SophaTemp.Mappers
                 Status = commandeVm.Status,
                 MedicamentId = commandeVm.MedicamentId,
                 LotCommandeId = commandeVm.LotCommandeId
+                //Quantite = commandeVm.Quantite,
 
             };
 

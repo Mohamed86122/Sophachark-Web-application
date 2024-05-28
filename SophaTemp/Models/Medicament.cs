@@ -8,6 +8,7 @@
         public string Description { get; set; }
         public string Image { get; set; }
         public int QuantiteEnAlerte { get; set; }
+        //public int Quantite { get; set; }
 
         // Propriétés de navigation
         public virtual ICollection<Whishlist> Whishlists { get; set; }
