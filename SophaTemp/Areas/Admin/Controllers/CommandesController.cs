@@ -51,7 +51,6 @@ namespace SophaTemp.Areas.Admin.Controllers
 
             ViewBag.CommandeVms = commandeVms;
 
-
             return View(commandes);
         }
 
@@ -72,7 +71,6 @@ namespace SophaTemp.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var commande = _commandeMapper.CommandeFromVm(commandeVm);
-
                 _context.Add(commande);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -176,38 +174,37 @@ namespace SophaTemp.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //Button Details Commande dans facture
+        // Button Details Commande dans facture
         [HttpGet("Details/{id}")]
         public async Task<IActionResult> Details(int? id)
-{
-    if (id == null)
-    {
-        return NotFound();
-    }
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-    var commande = await _context.Commandes
-        .Include(c => c.Client) // Inclure les informations du client
-        .Include(c => c.Medicament) // Inclure les informations du médicament
-        .FirstOrDefaultAsync(m => m.CommandeId == id);
+            var commande = await _context.Commandes
+                .Include(c => c.Client) // Inclure les informations du client
+                .Include(c => c.Medicament) // Inclure les informations du médicament
+                .FirstOrDefaultAsync(m => m.CommandeId == id);
 
-    if (commande == null)
-    {
-        return NotFound();
-    }
+            if (commande == null)
+            {
+                return NotFound();
+            }
 
-    var viewModel = new CommandeDetailsVm
-    {
-        CommandeId = commande.CommandeId,
-        DateCommande = commande.DateCommande,
-        Status = commande.Status,
-        Quantite = commande.Quantite,
-        ClientNom = commande.Client.nom,
-        MedicamentNom = commande.Medicament.Nom
-    };
+            var viewModel = new CommandeDetailsVm
+            {
+                CommandeId = commande.CommandeId,
+                DateCommande = commande.DateCommande,
+                Status = commande.Status,
+                Quantite = commande.Quantite,
+                ClientNom = commande.Client.nom,
+                MedicamentNom = commande.Medicament.Nom
+            };
 
-    return View(viewModel);
-}
-
+            return View(viewModel);
+        }
 
         private bool CommandeExists(int id)
         {

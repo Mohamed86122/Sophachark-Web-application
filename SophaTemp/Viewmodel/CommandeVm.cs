@@ -8,7 +8,6 @@ namespace SophaTemp.Viewmodel
         public int MedicamentId { get; set; }
         public DateTime DateCommande { get; set; }
         public string Status { get; set; }
-        //public int Quantite { get; set; } // Assurez-vous que cette propriété existe
         public int LotCommandeId { get; set; }
         public String Data { get; set; }
         public ICollection<Livraison>? Livraisons { get; set; }
