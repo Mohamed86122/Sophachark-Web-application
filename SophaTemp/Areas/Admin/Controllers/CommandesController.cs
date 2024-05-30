@@ -70,23 +70,6 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 var commande = _commandeMapper.CommandeFromVm(commandeVm);
 
-                // Convertir les détails de la commande à partir de la propriété `Data`
-                if (!string.IsNullOrEmpty(commandeVm.Data))
-                {
-                    var details = JsonConvert.DeserializeObject<List<CommandeDetailVm>>(commandeVm.Data);
-                    if (details != null)
-                    {
-                        foreach (var detail in details)
-                        {
-                            var lot = await _context.Lots.FindAsync(detail.LotId);
-                            if (lot != null)
-                            {
-                                lot.Quantite -= detail.Quantite; // Mettre à jour la quantité du lot
-                            }
-                        }
-                    }
-                }
-
                 _context.Add(commande);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -217,53 +200,10 @@ namespace SophaTemp.Areas.Admin.Controllers
                 MedicamentNom = commande.Medicament.Nom
             };
 
-            return View(viewModel);
-        }
-        // Autres actions du contrôleur...
+    return View(viewModel);
+}
 
-        [HttpGet("GenerateInvoice/{id}")]
-        public async Task<IActionResult> GenerateInvoice(int id)
-        {
-            var commande = await _context.Commandes
-                .Include(c => c.Client) // Inclure les informations du client
-                .Include(c => c.Medicament) // Inclure les informations du médicament
-                .FirstOrDefaultAsync(m => m.CommandeId == id);
 
-            if (commande == null)
-            {
-                return NotFound();
-            }
-
-            using (var ms = new MemoryStream())
-            {
-                var document = new PdfDocument();
-                var page = document.AddPage();
-                var gfx = XGraphics.FromPdfPage(page);
-                var fontRegular = new XFont("Verdana", 12, XFontStyleEx.Regular);
-                var fontBold = new XFont("Verdana", 20, XFontStyleEx.Bold);
-                var pen = new XPen(XColors.Black, 1); // Pen for the border
-
-                gfx.DrawString("Facture", fontBold, XBrushes.Black, new XRect(0, 0, page.Width, 50), XStringFormats.Center);
-
-                int yPoint = 80;
-                gfx.DrawString($"Pharmacie : {commande.Client.nom}", fontRegular, XBrushes.Black, new XRect(40, yPoint, page.Width, 50), XStringFormats.TopLeft);
-                yPoint += 20;
-                gfx.DrawString($"Date : {commande.DateCommande.ToString("dd/MM/yyyy")}", fontRegular, XBrushes.Black, new XRect(40, yPoint, page.Width, 50), XStringFormats.TopLeft);
-                yPoint += 20;
-                gfx.DrawString($"Médicament : {commande.Medicament.Nom}", fontRegular, XBrushes.Black, new XRect(40, yPoint, page.Width, 50), XStringFormats.TopLeft);
-                yPoint += 20;
-                gfx.DrawString($"Quantité : 350 ", fontRegular, XBrushes.Black, new XRect(40, yPoint, page.Width, 50), XStringFormats.TopLeft);
-                yPoint += 20;
-                gfx.DrawString($"Status : {commande.Status}", fontRegular, XBrushes.Black, new XRect(40, yPoint, page.Width, 50), XStringFormats.TopLeft);
-
-                yPoint += 40;
-
-                document.Save(ms);
-                ms.Position = 0;
-
-                return File(ms.ToArray(), "application/pdf", "Invoice.pdf");
-            }
-        }
         private bool CommandeExists(int id)
         {
             return (_context.Commandes?.Any(e => e.CommandeId == id)).GetValueOrDefault();
