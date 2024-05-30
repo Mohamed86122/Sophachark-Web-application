@@ -56,30 +56,29 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            var medicament =
-                $("#medicament").change(function () {
-                    medicament = $("#medicament :selected").text();
-                    $.ajax({
-                        url: "/Lots/GetByMedicamentId/" + $(this).val(),
-                        method: "GET",
-                        success: function (data) {
-                            $("#lotDisplay").html(data);
-                            if ($(".lot").length > 0) {
-                                $("#AddLine").show();
-                            }
-                        },
-                        error: function () {
-                            $("#lotDisplay").html("Un problème au moment de chargement des lots");
-                        },
-                        beforeSend: function () {
-                            $("#loader").fadeIn(200);
-                            $("#AddLine").hide();
-                        },
-                        complete: function () {
-                            $("#loader").fadeOut(200);
+            var medicament = $("#medicament").change(function () {
+                medicament = $("#medicament :selected").text();
+                $.ajax({
+                    url: "/Lots/GetByMedicamentId/" + $(this).val(),
+                    method: "GET",
+                    success: function (data) {
+                        $("#lotDisplay").html(data);
+                        if ($(".lot").length > 0) {
+                            $("#AddLine").show();
                         }
-                    })
-                });
+                    },
+                    error: function () {
+                        $("#lotDisplay").html("Un problème au moment de chargement des lots");
+                    },
+                    beforeSend: function () {
+                        $("#loader").fadeIn(200);
+                        $("#AddLine").hide();
+                    },
+                    complete: function () {
+                        $("#loader").fadeOut(200);
+                    }
+                })
+            });
 
             var max = 0;
             $("#max").keyup(function () {
@@ -98,10 +97,7 @@
                         alert("Le système a changé la Quantité sasie car vous avez depassé la Quantité Totale");
                     }
                 })
-
-
             })
-
 
             var details = [];
             $("#AddLine").click(function () {
@@ -113,7 +109,7 @@
                     var id = $(this).attr("data");
                     if (qte && qte != "0") {
                         chaine += id + ";" + qte + ";";
-                        var total = qte + prix;
+                        var total = qte * prix;
                         details.push({ "medicament": medicament, "lot": id, "prix": prix, "qte": qte, "total": total });
                     }
                 });
@@ -129,10 +125,8 @@
                     details.forEach(line => {
                         var row = "<tr><td>" + line.medicament + "</td><td>" + line.lot + "</td><td>" + line.prix + " DH</td><td>" + line.qte + " Unité</td><td>" + line.total + " DH</td><td><button class='btn btn-danger btn-sm delete-line'>Supprimer</button></td></tr>";
                         $("#details").append(row);
-
                     });
                 }
-
             }
 
             $("#AddCommande").click(function () {
@@ -140,11 +134,12 @@
                     $("#data").val(JSON.stringify(details));
                     $("#form").submit();
                 }
-
-
             })
             $(document).on('click', '.delete-line', function () {
                 $(this).closest('tr').remove();
+                // Remove the corresponding line from the details array
+                var index = $(this).closest('tr').index();
+                details.splice(index - 1, 1); // Adjust index because of the header row
             });
         })
     </script>

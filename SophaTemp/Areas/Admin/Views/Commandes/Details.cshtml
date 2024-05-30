@@ -10,26 +10,27 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <dl class="row">
-                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.ClientNom)</dt>
+                <dt class="col-sm-4">Pharmacie </dt>
                 <dd class="col-sm-8">@Html.DisplayFor(model => model.ClientNom)</dd>
 
-                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.DateCommande)</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.DateCommande)</dd>
+                <dt class="col-sm-4">Date de Commande </dt>
+                <dd class="col-sm-8">@Model.DateCommande.ToString("dd/MM/yyyy")</dd>
 
-                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicamentNom)</dt>
+                <dt class="col-sm-4">Médicament</dt>
                 <dd class="col-sm-8">@Html.DisplayFor(model => model.MedicamentNom)</dd>
 
                 <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Status)</dt>
                 <dd class="col-sm-8">@Html.DisplayFor(model => model.Status)</dd>
 
                 <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Quantite)</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.Quantite)</dd>
-            </dl>   
+                <dd class="col-sm-8">350</dd>
+            </dl>
         </div>
     </div>
 
     <div class="text-center mt-4">
         <a asp-action="Edit" asp-route-id="@Model.CommandeId" class="btn btn-primary">Edit</a>
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <a asp-action="GenerateInvoice" asp-route-id="@Model.CommandeId" class="btn btn-success">Générer la facture</a>
     </div>
 </div>

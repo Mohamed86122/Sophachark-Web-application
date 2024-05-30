@@ -152,6 +152,14 @@ namespace SophaTemp.Controllers
             var session = HttpContext.Session;
             var cart = session.GetObject<List<CartLineVm>>("Cart") ?? new List<CartLineVm>();
 
+            int? clientId = session.GetInt32("ClientId");
+            string clientName = session.GetString("ClientName");
+            if (clientId == null)
+            {
+                return RedirectToAction("Index", "Auth");
+            }
+
+
             using (var ms = new MemoryStream())
             {
                 var document = new PdfDocument();
@@ -159,13 +167,18 @@ namespace SophaTemp.Controllers
                 var gfx = XGraphics.FromPdfPage(page);
                 var fontRegular = new XFont("Verdana", 12);
                 var fontBold = new XFont("Verdana", 20);
+                var pen = new XPen(XColors.Black, 1); 
 
-                gfx.DrawString("Bon de Commande", fontBold, XBrushes.Black, new XRect(0, 0, page.Width, 50), XStringFormats.Center);
+                gfx.DrawString("Bon de Commandes", fontBold, XBrushes.Black, new XRect(0, 0, page.Width, 50), XStringFormats.Center);
 
                 int yPoint = 80;
-                gfx.DrawString($"Date : {System.DateTime.Now.ToString("dd/MM/yyyy")}", fontRegular, XBrushes.Black, new XRect(40, yPoint, page.Width, 50), XStringFormats.TopLeft);
+                gfx.DrawString($"Pharmacie : {clientName}", fontRegular, XBrushes.Black, new XRect(40, yPoint, page.Width, 50), XStringFormats.TopLeft);
+                yPoint += 20;
+                gfx.DrawString($"Date de la commande : {System.DateTime.Now.ToString("dd/MM/yyyy")}", fontRegular, XBrushes.Black, new XRect(40, yPoint, page.Width, 50), XStringFormats.TopLeft);
 
                 yPoint += 40;
+
+                gfx.DrawRectangle(XBrushes.LightGreen, new XRect(40, yPoint, page.Width - 80, 40));
 
                 gfx.DrawString("Nom du Médicament", fontRegular, XBrushes.Black, new XRect(40, yPoint, page.Width, 50), XStringFormats.TopLeft);
                 gfx.DrawString("Quantité", fontRegular, XBrushes.Black, new XRect(240, yPoint, page.Width, 50), XStringFormats.TopLeft);
@@ -176,6 +189,7 @@ namespace SophaTemp.Controllers
 
                 foreach (var item in cart)
                 {
+                    gfx.DrawRectangle(pen, new XRect(40, yPoint, page.Width - 80, 40));
                     gfx.DrawString(item.Name, fontRegular, XBrushes.Black, new XRect(40, yPoint, page.Width, 50), XStringFormats.TopLeft);
                     gfx.DrawString(item.Quantite.ToString(), fontRegular, XBrushes.Black, new XRect(240, yPoint, page.Width, 50), XStringFormats.TopLeft);
                     gfx.DrawString(item.PrixdeVente.ToString(), fontRegular, XBrushes.Black, new XRect(340, yPoint, page.Width, 50), XStringFormats.TopLeft);
@@ -194,4 +208,4 @@ namespace SophaTemp.Controllers
             }
         }
     }
-}
+}   
