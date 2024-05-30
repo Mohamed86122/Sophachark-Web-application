@@ -1,0 +1,31 @@
+﻿@model IEnumerable<SophaTemp.Controllers.ContactMessage>
+
+@{
+    Layout = "_AdminLayout";
+}
+
+<h2>Messages de Contact</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Téléphone</th>
+            <th>Message</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var message in Model)
+        {
+            <tr>
+                <td>@message.Name</td>
+                <td>@message.Email</td>
+                <td>@message.Phone</td>
+                <td>@message.Message</td>
+                <td>@message.Date</td>
+            </tr>
+        }
+    </tbody>
+</table>

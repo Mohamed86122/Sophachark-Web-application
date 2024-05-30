@@ -21,7 +21,7 @@
                     <div class="categories">
                         <h2 class="sub_head">Categories</h2>
                         <ul>
-                            <li><a href="#">All Categories<span>(8)</span></a></li>
+                            <li><a href="#">All Categories<span>@categories.Count()</span></a></li>
                             @foreach (var categorie in categories)
                             {
                                 <li><a href="#">@categorie.Libelle</a></li>
@@ -51,7 +51,7 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="products_showing">
-                                    <p>22 résultats</p>
+                                    <p>@medicaments.Count() résultat  </p>
                                 </div>
                             </div>
                         </div>

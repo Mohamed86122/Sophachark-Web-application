@@ -28,7 +28,7 @@ namespace SophaTemp.Controllers
                 .Where(l => l.Medicament.Nom.Contains(search) && l.IsPublic)
                 .Select(l => new SearchVm
                 {
-                    MedicamentId = l.Medicament.MedicamentId,
+                    MedicamentId = l.Medicament.MedicamentId, // Inclure l'ID du médicament
                     Nom = l.Medicament.Nom,
                     Description = l.Medicament.Description,
                     Image = l.Medicament.Image,
@@ -39,12 +39,20 @@ namespace SophaTemp.Controllers
 
             return Json(new { success = true, data = results });
         }
-
-        [HttpPost]
-        public IActionResult PartialSearchResults(string searchResults)
+        [HttpGet]
+        public async Task<IActionResult> GetMedicamentSuggestions(string term)
         {
-            var results = JsonConvert.DeserializeObject<List<SearchVm>>(searchResults);
-            return PartialView("_SearchResults", results);
+            var suggestions = await _context.Medicaments
+                .Where(m => m.Nom.Contains(term))
+                .Select(m => new
+                {
+                    label = m.Nom,
+                    value = m.MedicamentId
+                })
+                .ToListAsync();
+
+            return Json(suggestions);
         }
+
     }
 }

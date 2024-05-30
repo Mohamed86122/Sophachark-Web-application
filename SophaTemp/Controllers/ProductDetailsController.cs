@@ -36,6 +36,7 @@ namespace SophaTemp.Controllers
 
             var medicamentDetailVm = new MedicamentDetailVm
             {
+                MedicamentId = medicament.MedicamentId,
                 Nom = medicament.Nom,
                 Description = medicament.Description,
                 Image = medicament.Image,

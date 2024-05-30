@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SophaTemp.Viewmodel.SearchVm>
+﻿@* @model IEnumerable<SophaTemp.Viewmodel.SearchVm>
 
 @if (Model.Any())
 {
@@ -7,7 +7,6 @@
         {
             <div class="col-md-4">
                 <div class="card mb-4">
-                    <img class="card-img-top" src="~/@item.Image" alt="@item.Nom">
                     <div class="card-body">
                         <h5 class="card-title">@item.Nom</h5>
                         <p class="card-text">@item.Description</p>
@@ -25,3 +24,24 @@ else
 {
     <p>Aucun résultat trouvé</p>
 }
+@section Scripts 
+{
+    <script src="~/assets/js/jquery-3.3.1.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.add-to-cart').click(function () {
+                var medicamentId = $(this).data('id');
+                $.ajax({
+                    url: '@Url.Action("AddToCart", "Shop")',
+                type: 'POST',
+                data: { id: medicamentId },
+                success: function (data) {
+                    var cartIcon = $('.cart-icon');
+                    cartIcon.text(data.totalItems);
+                }
+            });
+        });
+        
+    </script>
+} *@

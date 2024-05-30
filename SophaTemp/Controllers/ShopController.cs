@@ -159,7 +159,6 @@ namespace SophaTemp.Controllers
                 return RedirectToAction("Index", "Auth");
             }
 
-
             using (var ms = new MemoryStream())
             {
                 var document = new PdfDocument();
@@ -167,7 +166,7 @@ namespace SophaTemp.Controllers
                 var gfx = XGraphics.FromPdfPage(page);
                 var fontRegular = new XFont("Verdana", 12);
                 var fontBold = new XFont("Verdana", 20);
-                var pen = new XPen(XColors.Black, 1); 
+                var pen = new XPen(XColors.Black, 1);
 
                 gfx.DrawString("Bon de Commandes", fontBold, XBrushes.Black, new XRect(0, 0, page.Width, 50), XStringFormats.Center);
 
@@ -201,11 +200,20 @@ namespace SophaTemp.Controllers
                 yPoint += 20;
                 gfx.DrawString($"Total avec taxe : {cart.Sum(item => item.PrixdeVente * item.Quantite) + 15} MAD", fontRegular, XBrushes.Black, new XRect(40, yPoint, page.Width, 50), XStringFormats.TopLeft);
 
+                // Ajouter la signature à droite
+                yPoint += 40;
+                gfx.DrawString("Signature : ", fontRegular, XBrushes.Black, new XRect(page.Width - 200, yPoint, page.Width - 40, 50), XStringFormats.TopLeft);
+                gfx.DrawLine(pen, new XPoint(page.Width - 120, yPoint + 20), new XPoint(page.Width - 40, yPoint + 20));
+
                 document.Save(ms);
                 ms.Position = 0;
 
-                return File(ms.ToArray(), "application/pdf", "OrderReport.pdf");
+                string fileName = $"{clientName.Replace(" ", " ")}_PHARMACIE.pdf"; // Remplace les espaces par des underscores
+
+                return File(ms.ToArray(), "application/pdf", fileName);
             }
         }
+
+
     }
 }   

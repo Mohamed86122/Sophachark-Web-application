@@ -1,94 +1,76 @@
-﻿    @{
-        // Le contenu spécifique à la vue ici
-        Layout = "_Layout";
-    } 
+﻿@model SophaTemp.Controllers.ContactMessage
 
+@{
+    Layout = "_Layout";
+}
 
-            <div class="contact_address">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-12">
-                            <div class="contact_address_inner">
-                                <div class="contact_our_office">
-                                    <h2>Notre <span>dépôt </span></h2>
-                                    <p>
-                                        Travaux publique <br />
-                                        OUJDA
-                                    </p>
-                                </div>
-                                <div class="contact_get_in_touch">
-                                    <h2><span>Contact</span></h2>
-                                    <div class="mail">
-                                        <p>
-                                            Notre mail<br />
-                                            <a href="">contact@sopha.com</a>
-                                        </p>
-                                    </div>
-                                    <div class="phone">
-                                        <p>
-                                            Numéro de telephone<br />
-                                            <a href="#" class="phne">0666666</a>
-                                        </p>
-                                    </div>
-                                </div>
-                                
-                            </div>
+<div class="contact_address">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="contact_address_inner">
+                    <div class="contact_our_office">
+                        <h2>Notre <span>dépôt </span></h2>
+                        <p>Travaux publique <br /> OUJDA</p>
+                    </div>
+                    <div class="contact_get_in_touch">
+                        <h2><span>Contact</span></h2>
+                        <div class="mail">
+                            <p>
+                                Notre mail<br />
+                                <a href="mailto:contact@sopha.com">contact@sopha.com</a>
+                            </p>
                         </div>
-                        <div class="col-lg-8 col-md-8 col-sm-12">
-                            <div class="contact_pg_form">
-                                <form id="contact-form" method="post" action="" role="form">
-
-                                    <div class="messages"></div>
-
-                                    <div class="controls">
-
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-
-                                                    <input id="form_name" type="text" name="name" placeholder="Votre nom" required="required" data-error="NameFirstname is required.">
-                                                    <div class="help-block with-errors"></div>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-
-                                                    <input id="form_email" type="email" name="email" placeholder=" Email *" required="required" data-error=" Email is required.">
-                                                    <div class="help-block with-errors"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-
-                                                    <input id="form_phone" type="text" name="phone" placeholder="Numéro de télephone *" required="required" data-error="Phone is required.">
-                                                    <div class="help-block with-errors"></div>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-
-                                                    <textarea id="form_message" name="message" placeholder="Entrer votre message " rows="6" required="required" data-error="Please, leave us a message."></textarea>
-                                                    <div class="help-block with-errors"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <input type="submit" class="theme-btn btn-send" value="Envoyer">
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                </form>
-
-                            </div>
+                        <div class="phone">
+                            <p>
+                                Numéro de téléphone<br />
+                                <a href="tel:0666666" class="phne">0666666</a>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="col-lg-8 col-md-8 col-sm-12">
+                <div class="contact_pg_form">
+                    <form id="contact-form" method="post" action="@Url.Action("Contact", "Contact")" role="form">
+                        <div class="messages"></div>
+                        <div class="controls">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input id="form_name" type="text" name="Name" placeholder="Votre nom" required="required" data-error="NameFirstname is required.">
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input id="form_email" type="email" name="Email" placeholder="Email *" required="required" data-error="Email is required.">
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <input id="form_phone" type="text" name="Phone" placeholder="Numéro de téléphone *" required="required" data-error="Phone is required.">
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <textarea id="form_message" name="Message" placeholder="Entrez votre message" rows="6" required="required" data-error="Please, leave us a message."></textarea>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="submit" class="theme-btn btn-send" value="Envoyer">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
             <!------------contact_address--------------->
 <!-------contact-through----->
 <div class="contact_through">
