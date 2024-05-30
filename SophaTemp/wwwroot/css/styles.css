@@ -132,6 +132,9 @@ body {
 {
   
 }
+.class {
+    background-color: blueviolet !important;
+}
 .card:first-child {
   background-color: white;
 }
