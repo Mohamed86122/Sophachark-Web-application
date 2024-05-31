@@ -1,7 +1,8 @@
-﻿@model List<SophaTemp.Models.CategoryMedicament>
-
+﻿
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var categories = ViewBag.Categories as List<SophaTemp.Models.CategoryMedicament>;
+
 }
 
 @section Style {
@@ -55,31 +56,8 @@
     <!-------appointment-section----->
     <!-------appointment-section----->
     <!-------appointment-section----->
-    <section class="department_section hm-one">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="heading clearfix">
-                        <h1>La listes des <span>catégories</span></h1>
-                        <p><a href="#"> Voir tous les catégories</a></p>
-                    </div>
-                </div>
-            </div>
-            <div class="department_inner">
-                <div class="row">
-                    <div class="col-lg-12">
-                        @foreach (var categorie in ViewBag.Categories)
-                        {
-                            <div class="department_icon_content">
-                                <a href="#"><span class="flaticon-brain dep_icon"></span></a>
-                                <a href="#"> <h2>@categorie.Libelle</h2></a>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    @await Html.PartialAsync("_CategoriesPartial", categories)
+
     <!-------department-section----->
     
     <!-------appointment-section----->

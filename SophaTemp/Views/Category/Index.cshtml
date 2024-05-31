@@ -1,0 +1,16 @@
+﻿@model IEnumerable<SophaTemp.Models.CategoryMedicament>
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<h1>Categories</h1>
+
+<ul>
+    @foreach (var category in Model)
+    {
+        <li>
+            <a href="@Url.Action("MedicationsByCategory", "Category", new { id = category.CategoryMedicamentId })">@category.Libelle</a>
+        </li>
+    }
+</ul>

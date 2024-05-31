@@ -4,6 +4,12 @@
     ViewData["Title"] = "Votre Whishlist";
 }
 
+@section Style
+{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+}
+
 <section class="h-100 h-custom" style="background-color: #eee;">
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -41,6 +47,7 @@
                                                     <div style="width: 80px;">
                                                         <h5 class="mb-0">@item.PrixdeVente MAD</h5>
                                                     </div>
+                                                    <a href="@Url.Action("ClearWishlist", new { id = item.idMedicament })">Vider </a>
                                                     <a href="@Url.Action("RemoveFromWishlist", new { id = item.idMedicament })" style="color: #cecece;"><i class="fa-solid fa-trash"></i></a>
                                                 </div>
                                             </div>

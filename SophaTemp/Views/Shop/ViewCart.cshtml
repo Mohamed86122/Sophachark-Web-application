@@ -22,7 +22,7 @@
 
                                 <div class="d-flex justify-content-between align-items-center mb-4">
                                     <div>
-                                        <p class="mb-1">Panier</p>
+                                        <p class="mb-1">Votre Panier</p>
                                         <p class="mb-0">Vous avez @Model?.Count() article </p>
                                     </div>
                                    
@@ -51,6 +51,7 @@
                                                             <h5 class="mb-0">@item.PrixdeVente MAD  </h5>
                                                         </div>
                                                     <a href="@Url.Action("RemoveFromCart", new { id = item.idMedicament })" style="color: #cecece;"><i class="fa-solid fa-trash"></i></a>
+                                                    <a href="@Url.Action("ClearCart", new { id = item.idMedicament })" >Vider</a>
                                                     </div>
                                                 </div>
                                             </div>

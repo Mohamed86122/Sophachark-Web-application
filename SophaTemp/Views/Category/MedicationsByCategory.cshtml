@@ -1,9 +1,9 @@
-﻿
+﻿@model SophaTemp.ViewModels.CategoryMedicationsViewModel
+
 @{
     Layout = "_Layout";
-    var medicaments = ViewBag.showCartItems as List<SophaTemp.Viewmodel.ShowCartItem>;
-    var categories = ViewBag.Categories as List<SophaTemp.Models.CategoryMedicament>;
-
+    var medicaments = Model.Medications;
+    var categories = Model.Categories;
 }
 
 <section class="shop_">
@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="heading">
-                    <h1>La liste des médicaments</h1>
+                    <h1>Médicaments dans la catégorie @Model.Category.Libelle</h1>
                 </div>
             </div>
         </div>
@@ -19,9 +19,9 @@
             <div class="col-lg-3">
                 <div class="shop_left_bar">
                     <div class="categories">
-                        <h2 class="sub_head">Categories</h2>
+                        <h2 class="sub_head">Catégories</h2>
                         <ul>
-                            <li><a href="#">All Categories<span>@categories.Count()</span></a></li>
+                            <li><a href="@Url.Action("ShopView", "Shop")">Toutes les catégories <span>@categories.Count()</span></a></li>
                             @foreach (var categorie in categories)
                             {
                                 <li><a href="@Url.Action("MedicationsByCategory", "Category", new { id = categorie.CategoryMedicamentId })">@categorie.Libelle</a></li>
@@ -29,15 +29,15 @@
                         </ul>
                     </div>
                     <div class="widget_view_products">
-                        <h2 class="sub_head">Viewed Products</h2>
+                        <h2 class="sub_head">Produits consultés</h2>
                         <div class="view_products">
                             @foreach (var medicament in medicaments)
                             {
                                 <div class="product_inner">
-                                    <img src="~/@Url.Content(medicament.Medicament.Image)" alt="Image du médicament" class="img-fluid" style="max-width:100px; height:auto;">
+                                    <img src="~/@Url.Content(medicament.Image)" alt="Image du médicament" class="img-fluid" style="max-width:100px; height:auto;">
                                     <div class="view_text">
-                                        <h2>@medicament.Medicament.Nom</h2>
-                                        <p>@medicament.Prix MAD</p>
+                                        <h2>@medicament.Nom</h2>
+                                        <p>@medicament.QuantiteEnAlerte U</p>
                                     </div>
                                 </div>
                             }
@@ -51,7 +51,7 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="products_showing">
-                                    <p>@medicaments.Count() résultat  </p>
+                                    <p>@medicaments.Count() résultats</p>
                                 </div>
                             </div>
                         </div>
@@ -62,16 +62,16 @@
                             <div class="col-md-4 col-sm-6 col-xs-12">
                                 <div class="shop_products_outer">
                                     <div class="image">
-                                        <img src="~/@Url.Content(medicament.Medicament.Image)" alt="Image du médicament" class="img-fluid" style="max-width:100px; height:auto;">
+                                        <img src="~/@Url.Content(medicament.Image)" alt="Image du médicament" class="img-fluid" style="max-width:100px; height:auto;">
                                         <div class="overlay_cart">
-                                            <span class="flaticon-supermarket add-to-cart-icon" data-id="@medicament.Medicament.MedicamentId"></span><br>
-                                            <span class="flaticon-heart add-to-wishlist-icon" data-id="@medicament.Medicament.MedicamentId"></span>
+                                            <span class="flaticon-supermarket add-to-cart-icon" data-id="@medicament.MedicamentId"></span><br>
+                                            <span class="flaticon-heart add-to-wishlist-icon" data-id="@medicament.MedicamentId"></span>
                                         </div>
                                     </div>
                                     <div class="porduct_des">
-                                        <h2><a href="@Url.Action("ProdDetails", "ProductDetails", new { id = medicament.Medicament.MedicamentId })">@medicament.Medicament.Nom</a></h2>
-                                        <p>@medicament.Prix MAD</p>
-                                        <p>Il reste @medicament.Quantite U</p>
+                                        <h2><a href="@Url.Action("ProdDetails", "ProductDetails", new { id = medicament.MedicamentId })">@medicament.Nom</a></h2>
+                                        <p>@medicament.QuantiteEnAlerte U</p>
+                                        <p>Il reste @medicament.QuantiteEnAlerte U</p>
                                     </div>
                                 </div>
                             </div>
@@ -83,19 +83,6 @@
     </div>
 </section>
 
-<!-------contact-through----->
-<!-------backtotop-------->
-<a href="#" id="scroll" class="default-bg" style="display: none;"><span></span></a>
-<!-------backtotop-------->
-<!---------mbile-navbar----->
-<div class="bsnav-mobile">
-    <div class="bsnav-mobile-overlay"></div>
-    <div class="navbar">
-        <button class="navbar-toggler toggler-spring mobile-toggler"><span class="fa fa-close"></span></button>
-    </div>
-</div>
-<!---------mbile-navbar----->
-<!-----------------------------------script-------------------------------------->
 @section Scripts
     {
     <script src="~/assets/js/jquery-3.3.1.min.js"></script>
@@ -109,11 +96,6 @@
     <script src="~/assets/js/validator.min.js"></script>
     <script src="~/assets/js/contact.js"></script>
     <script src="~/assets/js/script.js"></script>
-
-    <!--Google Map APi Key-->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHzPSV2jshbjI8fqnC_C4L08ffnj5EN3A"></script>
-    <script src="~/assets/js/gmaps.js"></script>
-    <script src="~/assets/js/map-script.js"></script>
 
     <script>
         $(document).ready(function () {

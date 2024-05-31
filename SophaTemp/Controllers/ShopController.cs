@@ -141,6 +141,36 @@ namespace SophaTemp.Controllers
             return RedirectToAction("ShopView");
         }
 
+        public IActionResult RemoveFromCart(int id)
+        {
+            var session = _httpContextAccessor.HttpContext.Session;
+            var cart = session.GetObject<List<CartLineVm>>("Cart") ?? new List<CartLineVm>();
+
+            var itemToRemove = cart.FirstOrDefault(c => c.idMedicament == id);
+            if (itemToRemove != null)
+            {
+                cart.Remove(itemToRemove);
+            }
+
+            session.SetObject("Cart", cart);
+            return RedirectToAction("ViewCart");
+        }
+        public IActionResult RemoveFromWishlist(int id)
+        {
+            var session = _httpContextAccessor.HttpContext.Session;
+            var wishlist = session.GetObject<List<WhishlistLineVm>>("Wishlist") ?? new List<WhishlistLineVm>();
+
+            var itemToRemove = wishlist.FirstOrDefault(w => w.idMedicament == id);
+            if (itemToRemove != null)
+            {
+                wishlist.Remove(itemToRemove);
+            }
+
+            session.SetObject("Wishlist", wishlist);
+            var totalItems = wishlist.Count;
+            return Json(new { totalItems });
+        }
+
         public IActionResult ClearWishlist()
         {
             var session = _httpContextAccessor.HttpContext.Session;
