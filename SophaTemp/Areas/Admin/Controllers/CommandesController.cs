@@ -140,7 +140,6 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
             var commande = await _context.Commandes
                 .Include(c => c.Client)
                 .FirstOrDefaultAsync(m => m.CommandeId == id);
@@ -148,11 +147,8 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
             return View(commande);
         }
-
-        // POST: Admin/Commandes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -166,7 +162,6 @@ namespace SophaTemp.Areas.Admin.Controllers
             {
                 _context.Commandes.Remove(commande);
             }
-
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
